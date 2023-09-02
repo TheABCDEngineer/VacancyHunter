@@ -45,8 +45,31 @@ class VacancyRepositoryImpl(
         }
     }
 
-    override suspend fun getSimilarVacanciesByParams(params: List<String>): Outcome<List<VacancyShortSimilar>> {
-        val response = networkClient.getSimilarVacanciesByParams(dto = SimilarVacanciesRequest(params))
+    override suspend fun getSimilarVacanciesById(searchParams: SimilarityParams): Outcome<List<VacancyShortSimilar>> {
+        val response = networkClient.getSimilarVacanciesById(dto = SimilarVacanciesRequest(searchParams))
+        return when (response.resultCode) {
+
+            NetworkResultCode.SUCCESS -> {
+                if (response.data != null) {
+                    val similarVacancies = similarVacanciesMapper(response.data!!.similarVacanciesList)
+                    Outcome.Success(data = similarVacancies)
+                } else {
+                    Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
+                }
+            }
+
+            NetworkResultCode.CONNECTION_ERROR -> {
+                Outcome.Error(status = NetworkResultCode.CONNECTION_ERROR, data = null)
+            }
+
+            else -> {
+                Outcome.Error(status = NetworkResultCode.UNKNOWN_ERROR, data = null)
+            }
+        }
+    }
+
+    override suspend fun getSimilarVacanciesByProfRoles(params: SimilarityParams): Outcome<List<VacancyShortSimilar>> {
+        val response = networkClient.getSimilarVacanciesByProfRoles(dto = SimilarVacanciesRequest(params))
         return when (response.resultCode) {
 
             NetworkResultCode.SUCCESS -> {

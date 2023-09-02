@@ -8,7 +8,11 @@ import ru.practicum.android.diploma.root.domain.model.Outcome
 interface VacancyRepository {
     suspend fun getVacancyById(id: String): Outcome<VacancyDetails>
 
-    suspend fun getSimilarVacanciesByParams(params: List<String>): Outcome<List<VacancyShortSimilar>>
+    suspend fun getSimilarVacanciesById(searchParams: SimilarityParams): Outcome<List<VacancyShortSimilar>>
+
+    suspend fun getSimilarVacanciesByProfRoles(params: SimilarityParams): Outcome<List<VacancyShortSimilar>>
 
     suspend fun getSimilarityParams(id: String): Outcome<SimilarityParams>
+
+
 }
