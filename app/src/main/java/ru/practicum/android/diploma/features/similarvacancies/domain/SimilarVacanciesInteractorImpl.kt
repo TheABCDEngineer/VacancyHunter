@@ -12,16 +12,17 @@ class SimilarVacanciesInteractorImpl(
 ) : SimilarVacanciesInteractor {
     override suspend fun getSimilarVacancies(vacancyId: String): Flow<Outcome<List<VacancyShortSimilar>>> = flow {
 
-        val searchParams = mutableListOf<String>(vacancyId)
-
         val similarityParams = getSimilarityParams(id = vacancyId)
 
-        similarityParams.data?.let {
-            // pass desirable similarity parameters from parameters model
-            searchParams.addAll(similarityParams.data.profRoles)
+        val searchParams = similarityParams.data ?: SimilarityParams(vacancyId = vacancyId, null)
+
+        if (searchParams.profRoles == null) {
+            vacancyRepository.getSimilarVacanciesById(searchParams)
+        } else {
+            vacancyRepository.getSimilarVacanciesByProfRoles(searchParams)
         }
 
-        val outcome = vacancyRepository.getSimilarVacanciesByParams(searchParams.toList())
+        val outcome = vacancyRepository.getSimilarVacanciesByProfRoles(searchParams)
         emit(outcome)
     }
 
