@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.root.data.network.HeadHunterApi
 import ru.practicum.android.diploma.root.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.root.data.network.NetworkSearch
+import ru.practicum.android.diploma.root.data.network.ResponseProcessor
 import ru.practicum.android.diploma.root.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 
@@ -56,11 +57,16 @@ val dataModule = module {
         SimilarVacanciesMapper()
     }
 
+    single<ResponseProcessor> {
+        ResponseProcessor()
+    }
+
     single<VacancyRepository> {
         VacancyRepositoryImpl(
             detailsMapper = get(),
             simParamsMapper = get(),
             similarVacanciesMapper = get(),
+            responseProcessor = get(),
             networkClient = get(),
             gson = get())
     }
