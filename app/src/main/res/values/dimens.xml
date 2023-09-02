@@ -7,4 +7,5 @@
     <dimen name="vac_detail_image_dimens">48dp</dimen>
     <dimen name="vac_detail_horizontal_margin">16dp</dimen>
     <dimen name="vac_detail_card_text_margin">8dp</dimen>
+    <dimen name="margin_logo_txt_similar_vacancy">12dp</dimen>
 </resources>
