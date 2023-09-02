@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.features.vacancydetails.domain.models.Vacanc
 import ru.practicum.android.diploma.root.data.network.NetworkSearch
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.root.domain.VacancyRepository
+import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class VacancyRepositoryImpl(
     private val detailsMapper: VacancyDetailsMapper,

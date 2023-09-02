@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.root.data
+package ru.practicum.android.diploma.root.domain.model
 
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 

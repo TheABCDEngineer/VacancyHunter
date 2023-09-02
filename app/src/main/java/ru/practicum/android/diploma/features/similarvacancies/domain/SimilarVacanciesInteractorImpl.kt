@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.features.similarvacancies.domain.models.SimilarityParams
 import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
-import ru.practicum.android.diploma.root.data.Outcome
+import ru.practicum.android.diploma.root.domain.model.Outcome
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 
 class SimilarVacanciesInteractorImpl(

@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.features.vacancydetails.domain.VacancyDetail
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsEvent
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsState
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
-import ru.practicum.android.diploma.root.data.Outcome
+import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class VacancyDetailsViewModel(
     private val sharingInteractor: SharingInteractor,
