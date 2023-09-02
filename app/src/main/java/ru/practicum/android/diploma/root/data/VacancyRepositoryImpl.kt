@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyD
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsRequest
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 import ru.practicum.android.diploma.root.data.network.NetworkSearch
-import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
+import ru.practicum.android.diploma.root.data.network.processResponse
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 import ru.practicum.android.diploma.root.domain.model.Outcome
 
@@ -23,94 +23,27 @@ class VacancyRepositoryImpl(
 ) : VacancyRepository {
     override suspend fun getVacancyById(id: String): Outcome<VacancyDetails> {
         val response = networkClient.getVacancyById(dto = VacancyDetailsRequest(id))
-
-        return when (response.resultCode) {
-
-            NetworkResultCode.SUCCESS -> {
-                if (response.data != null) {
-                    val vacancyDetails = detailsMapper(response.data!!)
-                    Outcome.Success(data = vacancyDetails)
-                } else {
-                    Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
-                }
-            }
-
-            NetworkResultCode.CONNECTION_ERROR -> {
-                Outcome.Error(status = NetworkResultCode.CONNECTION_ERROR, data = null)
-            }
-
-            else -> {
-                Outcome.Error(status = NetworkResultCode.UNKNOWN_ERROR, data = null)
-            }
-        }
+        return processResponse(response, detailsMapper)
     }
 
-    override suspend fun getSimilarVacanciesById(searchParams: SimilarityParams): Outcome<List<VacancyShortSimilar>> {
-        val response = networkClient.getSimilarVacanciesById(dto = SimilarVacanciesRequest(searchParams))
-        return when (response.resultCode) {
-
-            NetworkResultCode.SUCCESS -> {
-                if (response.data != null) {
-                    val similarVacancies = similarVacanciesMapper(response.data!!.similarVacanciesList)
-                    Outcome.Success(data = similarVacancies)
-                } else {
-                    Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
-                }
-            }
-
-            NetworkResultCode.CONNECTION_ERROR -> {
-                Outcome.Error(status = NetworkResultCode.CONNECTION_ERROR, data = null)
-            }
-
-            else -> {
-                Outcome.Error(status = NetworkResultCode.UNKNOWN_ERROR, data = null)
-            }
-        }
+    override suspend fun getSimilarVacanciesById(
+        searchParams: SimilarityParams
+    ): Outcome<List<VacancyShortSimilar>> {
+        val response =
+            networkClient.getSimilarVacanciesById(dto = SimilarVacanciesRequest(searchParams))
+        return processResponse(response, similarVacanciesMapper)
     }
 
-    override suspend fun getSimilarVacanciesByProfRoles(params: SimilarityParams): Outcome<List<VacancyShortSimilar>> {
-        val response = networkClient.getSimilarVacanciesByProfRoles(dto = SimilarVacanciesRequest(params))
-        return when (response.resultCode) {
-
-            NetworkResultCode.SUCCESS -> {
-                if (response.data != null) {
-                    val similarVacancies = similarVacanciesMapper(response.data!!.similarVacanciesList)
-                    Outcome.Success(data = similarVacancies)
-                } else {
-                    Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
-                }
-            }
-
-            NetworkResultCode.CONNECTION_ERROR -> {
-                Outcome.Error(status = NetworkResultCode.CONNECTION_ERROR, data = null)
-            }
-
-            else -> {
-                Outcome.Error(status = NetworkResultCode.UNKNOWN_ERROR, data = null)
-            }
-        }
+    override suspend fun getSimilarVacanciesByProfRoles(
+        params: SimilarityParams
+    ): Outcome<List<VacancyShortSimilar>> {
+        val response =
+            networkClient.getSimilarVacanciesByProfRoles(dto = SimilarVacanciesRequest(params))
+        return processResponse(response, similarVacanciesMapper)
     }
 
     override suspend fun getSimilarityParams(id: String): Outcome<SimilarityParams> {
         val response = networkClient.getVacancyById(dto = VacancyDetailsRequest(id))
-        return when (response.resultCode) {
-
-            NetworkResultCode.SUCCESS -> {
-                if (response.data != null) {
-                    val similarityParams = simParamsMapper(response.data!!)
-                    Outcome.Success(data = similarityParams)
-                } else {
-                    Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
-                }
-            }
-
-            NetworkResultCode.CONNECTION_ERROR -> {
-                Outcome.Error(status = NetworkResultCode.CONNECTION_ERROR, data = null)
-            }
-
-            else -> {
-                Outcome.Error(status = NetworkResultCode.UNKNOWN_ERROR, data = null)
-            }
-        }
+        return processResponse(response, simParamsMapper)
     }
 }

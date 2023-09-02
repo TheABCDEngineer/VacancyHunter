@@ -4,10 +4,10 @@ import ru.practicum.android.diploma.features.similarvacancies.domain.models.Vaca
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsDto
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
 
-class SimilarVacanciesMapper : (List<VacancyDetailsDto>) -> List<VacancyShortSimilar> {
+class SimilarVacanciesMapper : (SimilarVacanciesResponse) -> List<VacancyShortSimilar> {
 
-    override fun invoke(dtoList: List<VacancyDetailsDto>): List<VacancyShortSimilar> {
-        return dtoList.map { vacancy ->
+    override fun invoke(dto: SimilarVacanciesResponse): List<VacancyShortSimilar> {
+        return dto.similarVacanciesList.map { vacancy ->
             VacancyShortSimilar(
                 vacancyId = vacancy.vacancyId,
                 vacancyName = vacancy.vacancyName ?: "",
