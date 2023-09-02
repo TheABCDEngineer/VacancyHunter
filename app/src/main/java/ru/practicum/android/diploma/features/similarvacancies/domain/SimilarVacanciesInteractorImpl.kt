@@ -21,7 +21,7 @@ class SimilarVacanciesInteractorImpl(
             searchParams.addAll(similarityParams.data.profRoles)
         }
 
-        val outcome = vacancyRepository.getSimilarByParams(searchParams.toList())
+        val outcome = vacancyRepository.getSimilarVacanciesByParams(searchParams.toList())
         emit(outcome)
     }
 
