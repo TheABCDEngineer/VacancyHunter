@@ -1,3 +1,5 @@
 package ru.practicum.android.diploma.features.similarvacancies.data.models
 
-data class SimilarVacanciesRequest(val paramsList: List<String>)
+import ru.practicum.android.diploma.features.similarvacancies.domain.models.SimilarityParams
+
+data class SimilarVacanciesRequest(val params: SimilarityParams)
