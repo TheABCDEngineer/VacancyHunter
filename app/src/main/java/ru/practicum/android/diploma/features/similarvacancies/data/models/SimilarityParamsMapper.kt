@@ -12,10 +12,10 @@ class SimilarityParamsMapper : (VacancyDetailsDto) -> SimilarityParams {
         )
     }
 
-    private fun getProfRoles(profRoles: List<VacancyDetailsDto.ProfRole>?): List<String> {
+    private fun getProfRoles(profRoles: List<VacancyDetailsDto.ProfRole>?): List<String>? {
         return profRoles?.map {
             it.profRoleId
-        } ?: emptyList()
+        }
     }
 
 }
