@@ -12,7 +12,7 @@ class VacancyViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
     private val employerArtworkView: ImageView = itemView.findViewById(R.id.employer_artwork)
-    private val employerTitleView: TextView = itemView.findViewById(R.id.employer_title)
+    private val jobTitleView: TextView = itemView.findViewById(R.id.job_title)
     private val vacancyDetailsView: TextView = itemView.findViewById(R.id.vacancy_details)
 
     fun bind(model: VacancyScreenModel) {
@@ -22,7 +22,7 @@ class VacancyViewHolder(
             .placeholder(R.drawable.employer_placeholder)
             .into(employerArtworkView)
 
-        employerTitleView.text = model.employer
+        jobTitleView.text = model.job
         vacancyDetailsView.text = model.details
     }
 }
