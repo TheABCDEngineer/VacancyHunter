@@ -43,7 +43,7 @@ data class VacancyDetailsDto(
 
     ) {
         data class LogoUrls(
-            @SerializedName("90") val logoUrl90: String
+            @SerializedName("original") val logoOriginal: String
         )
     }
 

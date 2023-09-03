@@ -12,7 +12,7 @@ class SimilarVacanciesMapper : (SimilarVacanciesResponse) -> List<VacancyShortSi
                 vacancyId = vacancy.vacancyId,
                 vacancyName = vacancy.vacancyName ?: "",
                 salary = getSalary(vacancy.salary),
-                logoUrl = vacancy.employer?.logoUrls?.logoUrl90 ?: "",
+                logoUrl = vacancy.employer?.logoUrls?.logoOriginal ?: "",
                 employerName = vacancy.employer?.employerName ?: "",
                 employerArea = vacancy.vacancyArea?.area ?: ""
             )
