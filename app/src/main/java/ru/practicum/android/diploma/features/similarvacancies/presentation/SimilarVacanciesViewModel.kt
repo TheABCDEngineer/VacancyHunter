@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.similarvacancies.domain.SimilarVacanciesInteractor
 import ru.practicum.android.diploma.features.similarvacancies.presentation.models.SimilarVacanciesState
-import ru.practicum.android.diploma.features.similarvacancies.presentation.models.SimilarVacancyUiMapper
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 
 class SimilarVacanciesViewModel(
