@@ -11,13 +11,15 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.App
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.features.filters.domain.models.Filter
-import ru.practicum.android.diploma.features.search.domain.model.QueryError
 import ru.practicum.android.diploma.features.search.domain.model.ResponseModel
 import ru.practicum.android.diploma.features.search.domain.repository.SearchVacancyRepository
 import ru.practicum.android.diploma.features.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.features.search.presentation.SearchingCleanerState
+import ru.practicum.android.diploma.root.data.Outcome
+import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.root.domain.repository.FilterRepository
 import ru.practicum.android.diploma.root.presentation.model.VacancyScreenModel
+import ru.practicum.android.diploma.util.isInternetConnected
 
 class SearchViewModel(
     private val vacancyRepository: SearchVacancyRepository,
@@ -44,11 +46,13 @@ class SearchViewModel(
             if (text.isEmpty()) SearchingCleanerState.INACTIVE else SearchingCleanerState.ACTIVE
         searchingCleanerState.postValue(cleanerState)
 
+        if (!isConnected()) return
+
         if (text == previousSearchingRequest || text.isEmpty()) return
         previousSearchingRequest = text
 
         val filter = filterRepository.getFilter()
-        runSearching(App.CLICK_DEBOUNCE_DELAY_MILLIS,text, filter)
+        runSearching(App.CLICK_DEBOUNCE_DELAY_MILLIS, text, filter)
     }
 
     fun onSearchingFieldClean() {
@@ -67,28 +71,37 @@ class SearchViewModel(
             searchJob = null
         }
     }
-    private fun handleSearchingResponse(response: ResponseModel) {
-        if (response.resultVacancyList.isNotEmpty()) {
-            vacancyFeed.postValue(response.resultVacancyList)
-        }
+
+    private fun handleSearchingResponse(response: Outcome<ResponseModel>) {
+        val vacancyList = ArrayList<VacancyScreenModel>()
         var screenState = SearchScreenState.RESPONSE_RESULTS
         var chipMessage = ""
-        when (response.error) {
-            QueryError.NO_ERRORS -> {
-                chipMessage =
-                    context.getString(R.string.found) + " " + modifyToStringVacancyQuantity(
-                        response.resultVacancyList.size
-                    )
+
+        if (response is Outcome.Success && response.data != null) {
+            vacancyList.addAll(response.data.resultVacancyList)
+        }
+
+        when (response.status!!) {
+            NetworkResultCode.SUCCESS -> {
+                if (vacancyList.isNotEmpty()) {
+                    vacancyFeed.postValue(vacancyList)
+                    chipMessage =
+                        context.getString(R.string.found) + " " + modifyToStringVacancyQuantity(
+                            vacancyList.size
+                        )
+                }
+                if (vacancyList.isEmpty()) {
+                    screenState = SearchScreenState.EMPTY_RESULT
+                    chipMessage = context.getString(R.string.no_such_vacancies)
+                }
             }
-            QueryError.NO_RESULTS -> {
-                screenState = SearchScreenState.EMPTY_RESULT
-                chipMessage = context.getString(R.string.no_such_vacancies)
-            }
-            QueryError.SOMETHING_WENT_WRONG -> {
+
+            else -> {
                 screenState = SearchScreenState.SOMETHING_WENT_WRONG
                 chipMessage = context.getString(R.string.something_went_wrong)
             }
         }
+
         searchScreenState.postValue(screenState)
         this.chipMessage.postValue(chipMessage)
 
@@ -101,5 +114,12 @@ class SearchViewModel(
             else -> context.getString(R.string.vacancy_many)
         }
         return "$quantity $ending"
+    }
+
+    private fun isConnected(): Boolean {
+        if (isInternetConnected(context)) return true
+        searchScreenState.postValue(SearchScreenState.SOMETHING_WENT_WRONG)
+        chipMessage.postValue(context.getString(R.string.no_internet_connection))
+        return false
     }
 }

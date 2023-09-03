@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.root.data
 
 import com.google.gson.Gson
+import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsDto
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsRequest
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 import ru.practicum.android.diploma.root.data.network.NetworkSearch
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
+import ru.practicum.android.diploma.root.data.network.models.Response
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 
 class VacancyRepositoryImpl(
@@ -14,13 +16,13 @@ class VacancyRepositoryImpl(
     val gson: Gson
 ) : VacancyRepository {
     override suspend fun getVacancyById(id: String): Outcome<VacancyDetails> {
-        val response = networkClient.getVacancyById(dto = VacancyDetailsRequest(id))
+        //val response = networkClient.getVacancyById(dto = VacancyDetailsRequest(id))
+        val response = networkClient.executeRequest(request = VacancyDetailsRequest(id))
 
         return when (response.resultCode) {
-
             NetworkResultCode.SUCCESS -> {
                 if (response.data != null) {
-                    val vacancyDetails = detailsMapper(response.data!!)
+                    val vacancyDetails = detailsMapper(response.data!! as VacancyDetailsDto)
                     Outcome.Success(data = vacancyDetails)
                 } else {
                     Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
