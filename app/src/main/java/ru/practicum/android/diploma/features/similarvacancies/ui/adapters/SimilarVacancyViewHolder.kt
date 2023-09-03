@@ -7,6 +7,9 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ListItemVacancySimilarBinding
 import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
+import ru.practicum.android.diploma.root.presentation.ui.CurrencySymbol
+import java.text.NumberFormat
+import java.util.Locale
 
 
 class SimilarVacancyViewHolder(
@@ -52,32 +55,47 @@ class SimilarVacancyViewHolder(
         if (salaryObj == null) return ""
         val from = salaryObj.salaryLowerBoundary
         val to = salaryObj.salaryUpperBoundary
-        val currency = salaryObj.salaryCurrency
+        val currencySymbol = getCurrencySymbol(salaryObj.salaryCurrency)
 
-        when {
-            currency.isNullOrEmpty() -> return ""
+        return when {
 
-            from != null && to != null -> return String.format(
-                this.itemView.context.getString(R.string.salary_from_to),
-                from,
-                to,
-                currency
-            )
+            from != null && to != null -> {
+                String.format(
+                    this.itemView.context.getString(R.string.salary_from_to),
+                    formatNumber(from),
+                    formatNumber(to),
+                    currencySymbol
+                )
+            }
 
-            from != null && to == null -> return String.format(
-                this.itemView.context.getString(R.string.salary_from),
-                from,
-                currency
-            )
+            from != null && to == null -> {
+                String.format(
+                    this.itemView.context.getString(R.string.salary_from),
+                    formatNumber(from),
+                    currencySymbol
+                )
+            }
 
-            from == null && to != null -> return String.format(
-                this.itemView.context.getString(R.string.salary_to),
-                to,
-                currency
-            )
+            from == null && to != null -> {
+                String.format(
+                    this.itemView.context.getString(R.string.salary_to),
+                    formatNumber(to),
+                    currencySymbol
+                )
+            }
+
+            else -> this.itemView.context.getString(R.string.no_salary)
         }
-
-        return ""
     }
 
+    private fun getCurrencySymbol(currencyStr: String?): String {
+        return currencyStr?.let {
+            CurrencySymbol.getCurrencySymbol(it)
+        } ?: ""
+    }
+
+    private fun formatNumber(number: Int): String {
+        val formatInstance = NumberFormat.getNumberInstance(Locale.getDefault())
+        return formatInstance.format(number)
+    }
 }
