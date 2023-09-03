@@ -3,12 +3,9 @@ package ru.practicum.android.diploma.features.filters.presentation.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -19,8 +16,8 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.FilterScreenState
+import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.viewModel.FiltersViewModel
-import java.util.Locale
 
 class FiltersFragment : Fragment() {
     private var _binding: FragmentFiltersBinding? = null
@@ -47,6 +44,12 @@ class FiltersFragment : Fragment() {
         setMainScreenListeners()
         setIndustryScreenListeners()
         customizeRecyclerView()
+
+        viewModel.industriesScreenState.observe(viewLifecycleOwner) {
+            renderIndustry(it)
+        }
+
+        viewModel.getIndustries()
     }
 
     override fun onDestroy() {
@@ -129,6 +132,14 @@ class FiltersFragment : Fragment() {
         }
     }
 
+    private fun renderIndustry(state: IndustryScreenState) {
+        when (state) {
+            is IndustryScreenState.Content -> showIndustryContent(state.industries)
+            is IndustryScreenState.Error -> showIndustryError()
+            is IndustryScreenState.Loading -> showIndustryLoading()
+        }
+    }
+
     private fun showMain() {
         binding.filterMainLayout.visibility = View.VISIBLE
         binding.filterIndustryLayout.visibility = View.GONE
@@ -139,9 +150,23 @@ class FiltersFragment : Fragment() {
         binding.filterIndustryLayout.visibility = View.VISIBLE
         binding.filterIndustrySearchField.text.clear()
 
-        industriesAdapter.industries = viewModel.getIndustries()
+        // TODO industry
+    }
+
+    private fun showIndustryContent(industries: List<Industry>) {
+        industriesAdapter.industries = industries.toMutableList()
         industriesAdapter.notifyDataSetChanged()
     }
+
+    private fun showIndustryError() {
+
+    }
+
+    private fun showIndustryLoading() {
+
+    }
+
+
 
     private fun showWorkPlace() {
 

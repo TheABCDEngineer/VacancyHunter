@@ -5,6 +5,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesResponse
 import ru.practicum.android.diploma.features.search.data.network.dto.VacancyResponse
+import ru.practicum.android.diploma.features.filters.data.dto.IndustryDto
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsDto
 
 interface HeadHunterApi {
@@ -25,5 +26,7 @@ interface HeadHunterApi {
 
     @GET("/vacancies")
     suspend fun getVacancyListByParameters(@Query("text") text: String): VacancyResponse
-
+  
+    @GET("/industries")
+    suspend fun getIndustries(): List<IndustryDto>
 }

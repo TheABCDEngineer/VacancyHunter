@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesRequest
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesResponse
+import ru.practicum.android.diploma.features.filters.data.dto.IndustryDto
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsDto
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsRequest
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
@@ -60,6 +61,22 @@ class RetrofitNetworkClient(
                     dto.params.profRoles!![0]
                 )
                 Response(resultCode = NetworkResultCode.SUCCESS, response )
+
+            } catch (e: Throwable) {
+                Response(resultCode = NetworkResultCode.SERVER_ERROR, data = null)
+            }
+        }
+    }
+    
+    override suspend fun getIndustries(): Response<List<IndustryDto>> {
+        if (isConnected() == false) {
+            return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)
+        }
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = api.getIndustries()
+                Response(resultCode = NetworkResultCode.SUCCESS, response)
             } catch (e: Throwable) {
                 Response(resultCode = NetworkResultCode.SERVER_ERROR, data = null)
             }
