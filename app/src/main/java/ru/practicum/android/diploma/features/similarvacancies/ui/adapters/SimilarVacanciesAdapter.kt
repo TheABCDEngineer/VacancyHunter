@@ -7,9 +7,10 @@ import ru.practicum.android.diploma.databinding.ListItemVacancySimilarBinding
 import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
 
 class SimilarVacanciesAdapter(
-    private val vacancies: List<VacancyShortSimilar>,
     private val clickListener: ListItemClickListener
 ) : RecyclerView.Adapter<SimilarVacancyViewHolder>() {
+
+    private val vacancies = ArrayList<VacancyShortSimilar>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilarVacancyViewHolder {
 
@@ -29,8 +30,14 @@ class SimilarVacanciesAdapter(
         return vacancies.size
     }
 
+    fun updateAdapter(newVacancyList: List<VacancyShortSimilar>) {
+        vacancies.clear()
+        vacancies.addAll(newVacancyList)
+        notifyDataSetChanged()
+    }
+
     interface ListItemClickListener {
-        fun onListItemClick(vacancyId: String)
+        fun onListItemClick(vacancy: VacancyShortSimilar)
     }
 
 }

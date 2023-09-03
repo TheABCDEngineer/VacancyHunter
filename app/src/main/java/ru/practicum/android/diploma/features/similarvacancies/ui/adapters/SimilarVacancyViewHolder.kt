@@ -64,7 +64,7 @@ class SimilarVacancyViewHolder(
 
 
         itemView.setOnClickListener {
-            clickListener.onListItemClick(vacancyId = vacancy.vacancyId)
+            clickListener.onListItemClick(vacancy = vacancy)
         }
     }
 
