@@ -10,6 +10,7 @@
         android:layout_width="@dimen/vac_detail_image_dimens"
         android:layout_height="@dimen/vac_detail_image_dimens"
         android:contentDescription="@string/logo_image"
+        android:background="@drawable/logo_border"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/placeholder" />
