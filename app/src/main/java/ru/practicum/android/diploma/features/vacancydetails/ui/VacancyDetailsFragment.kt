@@ -84,13 +84,15 @@ class VacancyDetailsFragment : Fragment() {
 
         binding.favButton.setOnClickListener { }
 
-        binding.similarVacanciesButton.setOnClickListener { }
-
+        binding.similarVacanciesButton.setOnClickListener {
+            findNavController().navigate(R.id.action_vacancyDetailsFragment_to_similarVacanciesFragment,
+                createArgs(vacancy.vacancyId)
+            )
+        }
 
         binding.email.setOnClickListener {
             viewModel.composeEmail(vacancy.contactsEmail, vacancy.vacancyName)
         }
-
 
     }
 
