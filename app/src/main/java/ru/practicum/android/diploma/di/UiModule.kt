@@ -8,6 +8,7 @@ import ru.practicum.android.diploma.features.vacancydetails.presentation.Vacancy
 import ru.practicum.android.diploma.features.search.presentation.viewModel.SearchViewModel
 import ru.practicum.android.diploma.features.vacancydetails.ui.ExternalNavigator
 import ru.practicum.android.diploma.features.filters.presentation.viewModel.FiltersViewModel
+import ru.practicum.android.diploma.features.similarvacancies.presentation.SimilarVacanciesViewModel
 
 val uiModule = module {
 
@@ -26,6 +27,11 @@ val uiModule = module {
     single<ExternalNavigator> {
         ExternalNavigator()
     }
-    
+
     viewModelOf(::SearchViewModel).bind()
+
+    viewModel<SimilarVacanciesViewModel> {
+        SimilarVacanciesViewModel(interactor = get())
+    }
+
 }

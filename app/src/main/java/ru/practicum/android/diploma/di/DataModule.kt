@@ -9,14 +9,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.features.filters.data.models.FiltersMapper
 import ru.practicum.android.diploma.features.search.data.SearchVacancyRepositoryImplNetwork
+import ru.practicum.android.diploma.features.search.data.network.NetworkClient
+import ru.practicum.android.diploma.features.search.data.network.NetworkClientImplRetrofit
 import ru.practicum.android.diploma.features.search.domain.repository.SearchVacancyRepository
+import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesMapper
+import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarityParamsMapper
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
+import ru.practicum.android.diploma.root.data.DataConverter
 import ru.practicum.android.diploma.root.data.FilterImplSharedPreference
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.root.data.network.HeadHunterApi
 import ru.practicum.android.diploma.root.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.root.data.network.NetworkSearch
+import ru.practicum.android.diploma.root.data.network.ResponseProcessor
 import ru.practicum.android.diploma.root.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 import ru.practicum.android.diploma.root.domain.repository.FilterRepository
@@ -60,12 +66,34 @@ val dataModule = module {
         VacancyDetailsUiMapper()
     }
 
+    single<SimilarityParamsMapper> {
+        SimilarityParamsMapper()
+    }
+
+    single<SimilarVacanciesMapper> {
+        SimilarVacanciesMapper()
+    }
+
+    single<ResponseProcessor> {
+        ResponseProcessor()
+    }
+
     single<VacancyRepository> {
-        VacancyRepositoryImpl(detailsMapper = get(), networkClient = get(), gson = get())
+        VacancyRepositoryImpl(
+            detailsMapper = get(),
+            simParamsMapper = get(),
+            similarVacanciesMapper = get(),
+            responseProcessor = get(),
+            networkClient = get(),
+            gson = get())
     }
 
     singleOf(::FilterImplSharedPreference).bind<FilterRepository>()
 
+    singleOf(::DataConverter).bind()
+
+    singleOf(::NetworkClientImplRetrofit).bind<NetworkClient>()
+    
     single<FiltersMapper> {
         FiltersMapper()
     }

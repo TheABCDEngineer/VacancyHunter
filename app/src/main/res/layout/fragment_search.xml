@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        app:layout_constraintTop_toTopOf="@id/search_edit_field"/>
+        app:layout_constraintTop_toTopOf="@id/search_edit_field"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     <ImageView
         android:layout_width="wrap_content"

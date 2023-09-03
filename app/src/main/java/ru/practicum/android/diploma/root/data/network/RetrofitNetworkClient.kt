@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesRequest
+import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesResponse
 import ru.practicum.android.diploma.features.filters.data.dto.IndustryDto
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsDto
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsRequest
@@ -32,6 +34,40 @@ class RetrofitNetworkClient(
         }
     }
 
+    override suspend fun getSimilarVacanciesById(dto: SimilarVacanciesRequest): Response<SimilarVacanciesResponse> {
+        if (isConnected() == false) {
+            return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = api.getSimilarVacanciesById(
+                    dto.params.vacancyId
+                )
+                Response(resultCode = NetworkResultCode.SUCCESS, response )
+            } catch (e: Throwable) {
+                Response(resultCode = NetworkResultCode.SERVER_ERROR, data = null)
+            }
+        }
+    }
+
+    override suspend fun getSimilarVacanciesByProfRoles(dto: SimilarVacanciesRequest): Response<SimilarVacanciesResponse> {
+        if (isConnected() == false) {
+            return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = api.getSimilarVacanciesByProfRoles(
+                    dto.params.vacancyId,
+                    dto.params.profRoles!![0]
+                )
+                Response(resultCode = NetworkResultCode.SUCCESS, response )
+
+            } catch (e: Throwable) {
+                Response(resultCode = NetworkResultCode.SERVER_ERROR, data = null)
+            }
+        }
+    }
+    
     override suspend fun getIndustries(): Response<List<IndustryDto>> {
         if (isConnected() == false) {
             return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)

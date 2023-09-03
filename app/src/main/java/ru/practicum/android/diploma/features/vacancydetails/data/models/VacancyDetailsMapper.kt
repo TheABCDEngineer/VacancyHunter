@@ -26,10 +26,10 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
         )
     }
 
-    private fun getSkillsList(keySkills: List<VacancyDetailsDto.KeySkill>): List<String> {
-        return keySkills.map {
+    private fun getSkillsList(keySkills: List<VacancyDetailsDto.KeySkill>?): List<String> {
+        return keySkills?.map {
             it.skillName
-        }
+        } ?: emptyList()
     }
 
     private fun getPhones(phones: List<VacancyDetailsDto.Phone>?): List<String> {
