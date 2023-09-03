@@ -16,9 +16,9 @@ class DataConverter(
             artworkUrl = dto.employer.logoUrls?.logoUrl90,
             jobTitle = dto.jobTitle,
             region = dto.region.area,
-            salaryFrom = dto.salary.from,
-            salaryTo = dto.salary.to,
-            salaryCurrency = dto.salary.currency,
+            salaryFrom = dto.salary?.from,
+            salaryTo = dto.salary?.to,
+            salaryCurrency = dto.salary?.currency,
         )
     }
     fun map(model: VacancyShortModel): VacancyScreenModel {
@@ -35,12 +35,12 @@ class DataConverter(
         var salary = salaryFrom + salaryTo + currency
         if (salaryFrom.isEmpty() && salaryTo.isEmpty()) salary = context.getString(R.string.no_salary)
 
-        val details = "${model.jobTitle}, ${model.region}\n" + salary
+        val details = "${model.employer}, ${model.region}\n" + salary
 
         return VacancyScreenModel(
             id = model.id,
             artworkUrl = model.artworkUrl ?: "",
-            employer = model.employer,
+            job = model.jobTitle,
             details = details
         )
     }

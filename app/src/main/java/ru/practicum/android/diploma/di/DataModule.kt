@@ -8,6 +8,8 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.features.search.data.SearchVacancyRepositoryImplNetwork
+import ru.practicum.android.diploma.features.search.data.network.NetworkClient
+import ru.practicum.android.diploma.features.search.data.network.NetworkClientImplRetrofit
 import ru.practicum.android.diploma.features.search.domain.repository.SearchVacancyRepository
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
@@ -67,4 +69,6 @@ val dataModule = module {
     singleOf(::FilterImplSharedPreference).bind<FilterRepository>()
 
     singleOf(::DataConverter).bind()
+
+    singleOf(::NetworkClientImplRetrofit).bind<NetworkClient>()
 }

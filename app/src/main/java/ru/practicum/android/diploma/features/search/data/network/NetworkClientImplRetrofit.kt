@@ -1,18 +1,19 @@
-package ru.practicum.android.diploma.root.data.network
+package ru.practicum.android.diploma.features.search.data.network
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.features.search.data.network.dto.ShortVacancyRequest
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsRequest
+import ru.practicum.android.diploma.root.data.network.HeadHunterApi
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.root.data.network.models.Response
 import ru.practicum.android.diploma.util.isInternetConnected
 
-class RetrofitNetworkClient(
+class NetworkClientImplRetrofit(
     private val api: HeadHunterApi,
     private val context: Context
-) : NetworkSearch {
+) : NetworkClient {
     override suspend fun executeRequest(request: Any): Response<Any> {
         if (!isInternetConnected(context)) {
             return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)

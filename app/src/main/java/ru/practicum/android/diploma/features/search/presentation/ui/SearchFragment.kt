@@ -34,9 +34,11 @@ class SearchFragment : Fragment() {
             App.CLICK_DEBOUNCE_DELAY_MILLIS,
             lifecycleScope,
             false
-        ) {vacancyId: String ->
-            findNavController().navigate(R.id.action_searchFragment_to_vacancyDetailsFragment)
-            VacancyDetailsFragment.createArgs(vacancyId)
+        ) { vacancyId: String ->
+            findNavController().navigate(
+                R.id.action_searchFragment_to_vacancyDetailsFragment,
+                VacancyDetailsFragment.createArgs(vacancyId)
+            )
         }
     )
 
@@ -45,12 +47,13 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchBinding.inflate(inflater,container,false)
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding?.vacancyFeed?.adapter = rwAdapter
         configureObservers()
         configureSearchingField()
     }
@@ -82,7 +85,7 @@ class SearchFragment : Fragment() {
             false
         }
 
-        searchingCleaner?.setOnClickListener{
+        searchingCleaner?.setOnClickListener {
             editField?.setText("")
             viewModel.onSearchingFieldClean()
         }
@@ -97,6 +100,9 @@ class SearchFragment : Fragment() {
         }
         viewModel.chipMessageObserve().observe(viewLifecycleOwner) { message ->
             updateChip(message)
+        }
+        viewModel.vacancyFeedObserve().observe(viewLifecycleOwner) { vacancyList ->
+            updateFeed(vacancyList)
         }
     }
 
