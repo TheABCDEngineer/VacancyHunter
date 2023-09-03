@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
+import ru.practicum.android.diploma.features.filters.domain.FiltersInteractor
+import ru.practicum.android.diploma.features.filters.domain.FiltersInteractorImpl
 import ru.practicum.android.diploma.features.vacancydetails.domain.SharingInteractor
 import ru.practicum.android.diploma.features.vacancydetails.domain.SharingInteractorImpl
 import ru.practicum.android.diploma.features.vacancydetails.domain.VacancyDetailsInteractor
@@ -14,6 +16,10 @@ val domainModule = module {
 
     factory<VacancyDetailsInteractor> {
         VacancyDetailsInteractorImpl(vacancyRepository = get())
+    }
+
+    single<FiltersInteractor> {
+        FiltersInteractorImpl(get())
     }
 
 }

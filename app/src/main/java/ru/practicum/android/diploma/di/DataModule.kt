@@ -7,6 +7,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.practicum.android.diploma.features.filters.data.models.FiltersMapper
 import ru.practicum.android.diploma.features.search.data.SearchVacancyRepositoryImplNetwork
 import ru.practicum.android.diploma.features.search.domain.repository.SearchVacancyRepository
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
@@ -64,4 +65,8 @@ val dataModule = module {
     }
 
     singleOf(::FilterImplSharedPreference).bind<FilterRepository>()
+
+    single<FiltersMapper> {
+        FiltersMapper()
+    }
 }
