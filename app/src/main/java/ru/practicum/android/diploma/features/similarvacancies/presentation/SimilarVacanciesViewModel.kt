@@ -21,28 +21,18 @@ class SimilarVacanciesViewModel(
             _state.postValue(SimilarVacanciesState.Loading)
 
             interactor.getSimilarVacancies(vacancyId).collect {
-                when (it.status) {
-                    NetworkResultCode.SUCCESS -> {
-                        if (it.data == null) {
-                            _state.postValue(SimilarVacanciesState.NothingFound)
-                        } else {
-                            _state.postValue(
-                                SimilarVacanciesState.Content(it.data)
-                            )
-                        }
+                when {
+                    (it.data == null) && (it.status == NetworkResultCode.CONNECTION_ERROR) -> {
+                        _state.postValue(SimilarVacanciesState.Error(NetworkResultCode.CONNECTION_ERROR))
                     }
 
-                    NetworkResultCode.CONNECTION_ERROR -> _state.postValue(
-                        SimilarVacanciesState.Error(
-                            NetworkResultCode.CONNECTION_ERROR
-                        )
-                    )
+                    (it.data == null) -> _state.postValue(SimilarVacanciesState.Error(null))
 
-                    else -> _state.postValue(SimilarVacanciesState.Error(null))
+                    it.data.isEmpty() -> _state.postValue(SimilarVacanciesState.NothingFound)
+
+                    else -> _state.postValue(SimilarVacanciesState.Content(it.data))
                 }
             }
         }
-
     }
-
 }
