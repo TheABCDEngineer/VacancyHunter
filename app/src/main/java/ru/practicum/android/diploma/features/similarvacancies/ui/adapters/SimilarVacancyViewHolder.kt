@@ -1,12 +1,8 @@
 package ru.practicum.android.diploma.features.similarvacancies.ui.adapters
 
-import android.graphics.drawable.Drawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestListener
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ListItemVacancySimilarBinding
 import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
@@ -30,37 +26,11 @@ class SimilarVacancyViewHolder(
 
         Glide.with(binding.logoImage)
             .load(vacancy.logoUrl)
-            .centerCrop()
+            .centerInside()
             .transform(RoundedCorners(dpToPx(R.dimen.logo_corner_radius)))
-            .placeholder(R.drawable.placeholder)
-            .addListener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: com.bumptech.glide.request.target.Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: com.bumptech.glide.request.target.Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    binding.logoImage.setPadding(
-                        R.dimen.logo_padding_with_image,
-                        R.dimen.logo_padding_with_image,
-                        R.dimen.logo_padding_with_image,
-                        R.dimen.logo_padding_with_image
-                    )
-                    return false
-                }
-            }
-            )
+            .placeholder(R.drawable.padded_logo_placeholder)
             .into(binding.logoImage)
+
 
 
         itemView.setOnClickListener {
@@ -69,8 +39,8 @@ class SimilarVacancyViewHolder(
     }
 
     private fun formatTitle(title: String, area: String): String {
-        val list = listOf(title, area).map { it.isNotEmpty() }
-        return list.joinToString { ", " }
+        val list = listOf(title, area).filter { it.isNotEmpty() }
+        return list.joinToString(", ")
     }
 
     private fun dpToPx(dp: Int): Int {
