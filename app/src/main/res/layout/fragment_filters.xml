@@ -249,7 +249,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Выбор отрасли"
+                android:text="@string/industry_header"
                 android:textColor="?attr/colorOnPrimary" />
         </LinearLayout>
 
@@ -269,7 +269,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded_rectangle"
                 android:backgroundTint="?attr/colorSecondary"
-                android:hint="Введите отрасль"
+                android:hint="@string/enter_industry"
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:lines="1"
@@ -287,13 +287,33 @@
                 android:src="@drawable/search_lens_icon" />
         </FrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/filter_industries_recyclerView"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:height="0dp" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/filter_industries_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:height="0dp"
+                tools:listitem="@layout/filter_industry_list_view" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/font_medium_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="16dp"
+                android:elevation="0dp"
+                android:paddingVertical="20dp"
+                android:text="@string/choose"
+                android:textAllCaps="false"
+                android:textColor="@color/yp_white"
+                app:backgroundTint="@color/yp_blue"
+                app:cornerRadius="12dp" />
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>
