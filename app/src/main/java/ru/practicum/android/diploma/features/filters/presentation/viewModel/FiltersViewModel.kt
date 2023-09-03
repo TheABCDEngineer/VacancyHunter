@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.filters.domain.FiltersInteractor
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
-import ru.practicum.android.diploma.root.data.Outcome
+import ru.practicum.android.diploma.root.domain.model.Outcome
 import java.util.Locale
 
 class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewModel() {

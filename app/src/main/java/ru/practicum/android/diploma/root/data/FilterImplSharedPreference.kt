@@ -5,6 +5,7 @@ import ru.practicum.android.diploma.features.filters.domain.models.Filter
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.root.data.network.NetworkSearch
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
+import ru.practicum.android.diploma.root.domain.model.Outcome
 import ru.practicum.android.diploma.root.domain.repository.FilterRepository
 
 class FilterImplSharedPreference(
