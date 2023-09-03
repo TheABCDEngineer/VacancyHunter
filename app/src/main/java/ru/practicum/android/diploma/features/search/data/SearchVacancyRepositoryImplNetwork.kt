@@ -7,8 +7,8 @@ import ru.practicum.android.diploma.features.search.data.network.dto.VacancyResp
 import ru.practicum.android.diploma.features.search.domain.model.ResponseModel
 import ru.practicum.android.diploma.features.search.domain.repository.SearchVacancyRepository
 import ru.practicum.android.diploma.root.data.DataConverter
-import ru.practicum.android.diploma.root.data.Outcome
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
+import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class SearchVacancyRepositoryImplNetwork(
     private val networkClient: NetworkClient,

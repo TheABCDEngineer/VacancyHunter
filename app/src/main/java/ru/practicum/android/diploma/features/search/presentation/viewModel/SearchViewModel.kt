@@ -15,8 +15,8 @@ import ru.practicum.android.diploma.features.search.domain.model.ResponseModel
 import ru.practicum.android.diploma.features.search.domain.repository.SearchVacancyRepository
 import ru.practicum.android.diploma.features.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.features.search.presentation.SearchingCleanerState
-import ru.practicum.android.diploma.root.data.Outcome
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
+import ru.practicum.android.diploma.root.domain.model.Outcome
 import ru.practicum.android.diploma.root.domain.repository.FilterRepository
 import ru.practicum.android.diploma.root.presentation.model.VacancyScreenModel
 import ru.practicum.android.diploma.util.isInternetConnected

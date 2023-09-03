@@ -27,10 +27,23 @@
         android:id="@+id/vacancyDetailsFragment"
         android:name="ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment"
         android:label="VacancyDetailsFragment"
-        tools:layout="@layout/fragment_vacancydetails"/>
+        tools:layout="@layout/fragment_vacancydetails">
+        <action
+            android:id="@+id/action_vacancyDetailsFragment_to_similarVacanciesFragment"
+            app:destination="@id/similarVacanciesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/filtersFragment"
         android:name="ru.practicum.android.diploma.features.filters.presentation.ui.FiltersFragment"
         android:label="fragment_filters"
         tools:layout="@layout/fragment_filters" />
+    <fragment
+        android:id="@+id/similarVacanciesFragment"
+        android:name="ru.practicum.android.diploma.features.similarvacancies.ui.SimilarVacanciesFragment"
+        android:label="SimilarVacanciesFragment"
+        tools:layout="@layout/fragment_similar_vacancies" >
+        <action
+            android:id="@+id/action_similarVacanciesFragment_to_vacancyDetailsFragment"
+            app:destination="@id/vacancyDetailsFragment" />
+    </fragment>
 </navigation>

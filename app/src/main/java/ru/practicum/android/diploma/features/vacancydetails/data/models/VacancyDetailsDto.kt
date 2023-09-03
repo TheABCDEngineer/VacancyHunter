@@ -14,9 +14,10 @@ data class VacancyDetailsDto(
     @SerializedName("schedule") val scheduleType: ScheduleType?,
     @SerializedName("description") val vacancyDesc: String?,
     @SerializedName("branded_description") val vacancyBrandedDesc: String?,
-    @SerializedName("key_skills") val keySkills: List<KeySkill>,
+    @SerializedName("key_skills") val keySkills: List<KeySkill>?,
     @SerializedName("contacts") val contacts: Contacts?,
-    @SerializedName("response_url") val responseUrl: String?
+    @SerializedName("response_url") val responseUrl: String?,
+    @SerializedName("professional_roles") val profRoles: List<ProfRole>?
 
 ) {
 
@@ -64,6 +65,10 @@ data class VacancyDetailsDto(
 
     data class VacancyArea(
         @SerializedName("name") val area: String
+    )
+
+    data class  ProfRole(
+        @SerializedName("id") val profRoleId: String
     )
 
 }
