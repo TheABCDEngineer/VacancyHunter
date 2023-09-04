@@ -54,6 +54,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.vacancyFeed?.adapter = rwAdapter
+        binding?.filterButton?.setOnClickListener{
+            findNavController().navigate(R.id.action_searchFragment_to_filtersFragment)
+        }
         configureObservers()
         configureSearchingField()
     }
