@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.features.similarvacancies.presentation.models
 
-import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 
 sealed class SimilarVacanciesState {
@@ -13,7 +12,7 @@ sealed class SimilarVacanciesState {
     ) : SimilarVacanciesState()
 
     data class Content(
-        val similarVacancies: List<VacancyShortSimilar>,
+        val similarVacancies: List<VacancySimilarShortUiModel>,
     ) : SimilarVacanciesState()
 
 }

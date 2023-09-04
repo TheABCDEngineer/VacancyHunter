@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSimilarVacanciesBinding
-import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
 import ru.practicum.android.diploma.features.similarvacancies.presentation.SimilarVacanciesViewModel
 import ru.practicum.android.diploma.features.similarvacancies.presentation.models.SimilarVacanciesState
+import ru.practicum.android.diploma.features.similarvacancies.presentation.models.VacancySimilarShortUiModel
 import ru.practicum.android.diploma.features.similarvacancies.ui.adapters.SimilarVacanciesAdapter
 import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
@@ -28,9 +28,9 @@ class SimilarVacanciesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var adapter: SimilarVacanciesAdapter? = null
-    private lateinit var onListItemClickDebounce: (VacancyShortSimilar) -> Unit
+    private lateinit var onListItemClickDebounce: (VacancySimilarShortUiModel) -> Unit
 
-    private lateinit var foundVacancies: List<VacancyShortSimilar>
+    private lateinit var foundVacancies: List<VacancySimilarShortUiModel>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +64,7 @@ class SimilarVacanciesFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        onListItemClickDebounce = debounce<VacancyShortSimilar>(
+        onListItemClickDebounce = debounce<VacancySimilarShortUiModel>(
             CLICK_DEBOUNCE_DELAY_MILLIS,
             viewLifecycleOwner.lifecycleScope,
             true
@@ -78,7 +78,7 @@ class SimilarVacanciesFragment : Fragment() {
 
         adapter = SimilarVacanciesAdapter(
             object : SimilarVacanciesAdapter.ListItemClickListener {
-                override fun onListItemClick(vacancy: VacancyShortSimilar) {
+                override fun onListItemClick(vacancy: VacancySimilarShortUiModel) {
                     onListItemClickDebounce(vacancy)
                 }
             }
@@ -99,7 +99,7 @@ class SimilarVacanciesFragment : Fragment() {
 
     }
 
-    private fun renderContent(similarVacancies: List<VacancyShortSimilar>) {
+    private fun renderContent(similarVacancies: List<VacancySimilarShortUiModel>) {
         foundVacancies = similarVacancies
         adapter?.updateAdapter(foundVacancies)
     }
