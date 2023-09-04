@@ -10,7 +10,7 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
             vacancyId = dto.vacancyId,
             vacancyName = dto.vacancyName ?: "",
             salary = getSalary(dto.salary),
-            logoUrl = dto.employer?.logoUrls?.logoUrl90 ?: "",
+            logoUrl = dto.employer?.logoUrls?.logoOriginal ?: "",
             employerName = dto.employer?.employerName ?: "",
             employerArea = dto.vacancyArea?.area ?: "",
             experienceReq = dto.experience?.experience ?: "",

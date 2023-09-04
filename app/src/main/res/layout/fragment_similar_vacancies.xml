@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageButton
         android:id="@+id/returnArrow"
@@ -40,13 +40,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/similarVacanciesList"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginVertical="20dp"
         android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/returnArrow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/list_item_vacancy_similar"
-        tools:itemCount="2"/>
+        tools:itemCount="10"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
