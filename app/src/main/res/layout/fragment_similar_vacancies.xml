@@ -37,17 +37,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/nothingFoundPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="223dp"
+        android:layout_marginHorizontal="16dp"
+        android:contentDescription="@string/placeholder_image"
+        android:src="@drawable/img_placeholder_nothing_found"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/placeholderMessage"
+        style="@style/font_medium_22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/empty_list"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nothingFoundPlaceholder" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/similarVacanciesList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginVertical="20dp"
         android:layout_marginHorizontal="16dp"
-        app:layout_constraintTop_toBottomOf="@id/returnArrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginVertical="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/list_item_vacancy_similar"
-        tools:itemCount="10"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/returnArrow"
+        tools:itemCount="10"
+        tools:listitem="@layout/list_item_vacancy_similar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
