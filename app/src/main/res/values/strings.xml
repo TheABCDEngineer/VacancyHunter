@@ -35,6 +35,7 @@
     <string name="enter_sum">Введите сумму</string>
     <string name="expected_salary">Ожидаемая ЗП</string>
     <string name="filters_settings">Настройки фильтрации</string>
+    <string name="no_internet_connection">Отсутствует подключение к интернету</string>
     <string name="salary_from_to">От %s до %s %s</string>
     <string name="salary_from">От %s %s</string>
     <string name="salary_to">До %s %s</string>
