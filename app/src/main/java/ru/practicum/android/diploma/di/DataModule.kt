@@ -16,7 +16,6 @@ import ru.practicum.android.diploma.features.search.domain.repository.SearchVaca
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesMapper
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarityParamsMapper
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
-import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
 import ru.practicum.android.diploma.root.data.DataConverter
 import ru.practicum.android.diploma.root.data.FilterImplSharedPreference
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
@@ -62,10 +61,6 @@ val dataModule = module {
     }
 
     singleOf(::SearchVacancyRepositoryImplNetwork).bind<SearchVacancyRepository>()
-
-    single<VacancyDetailsUiMapper> {
-        VacancyDetailsUiMapper()
-    }
 
     single<SimilarityParamsMapper> {
         SimilarityParamsMapper()
