@@ -1,15 +1,18 @@
 package ru.practicum.android.diploma.features.vacancydetails.presentation.models
 
+import android.content.Context
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
+import ru.practicum.android.diploma.root.presentation.ui.SalaryFormat
 
-class VacancyDetailsUiMapper : (VacancyDetails) -> VacancyDetailsUiModel {
+class VacancyDetailsUiMapper(private val context: Context) :
+        (VacancyDetails) -> VacancyDetailsUiModel {
 
     override fun invoke(model: VacancyDetails): VacancyDetailsUiModel {
         return VacancyDetailsUiModel(
             vacancyId = model.vacancyId,
             vacancyName = model.vacancyName,
-            salary = model.salary?.let { formatSalaryString(it) } ?: "",
+            salary = formatSalaryString(model.salary),
             logoUrl = model.logoUrl,
             employerName = model.employerName,
             employerArea = model.employerArea,
@@ -34,7 +37,7 @@ class VacancyDetailsUiMapper : (VacancyDetails) -> VacancyDetailsUiModel {
     }
 
     private fun chooseDescription(vacancyDescription: String, vacancyBrandedDesc: String): String {
-        return if (vacancyBrandedDesc.isNotEmpty()) return vacancyBrandedDesc else vacancyDescription
+        return if (vacancyBrandedDesc.isNotEmpty()) vacancyBrandedDesc else vacancyDescription
     }
 
     private fun formatEmploymentTypes(employmentType: String, scheduleType: String): String {
@@ -43,14 +46,9 @@ class VacancyDetailsUiMapper : (VacancyDetails) -> VacancyDetailsUiModel {
             .joinToString(", ")
     }
 
-    private fun formatSalaryString(salaryObj: Salary): String {
-        val salaryString = ""
-//        if (salaryObj.salaryCurrency.isNullOrEmpty()) {
-//            return ""
-//        } else if (salaryObj.salaryLowerBoundary != null) {
-//            return ""
-//        }
-        return salaryString
+    private fun formatSalaryString(salaryObj: Salary?): String {
+        if (salaryObj == null) return ""
+        return SalaryFormat.formatSalaryString(salaryObj, context)
     }
 
 }
