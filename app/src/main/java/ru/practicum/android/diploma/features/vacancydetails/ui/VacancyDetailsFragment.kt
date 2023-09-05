@@ -77,7 +77,6 @@ class VacancyDetailsFragment : Fragment() {
         phonesAdapter = null
     }
 
-
     private fun render(screenState: VacancyDetailsState) {
         when (screenState) {
             is VacancyDetailsState.Content -> renderContent(screenState.vacancy)
@@ -91,15 +90,67 @@ class VacancyDetailsFragment : Fragment() {
         setPhonesAdapter()
         binding.progressBar.isVisible = false
 
-        if (vacancy.vacancyName.isNotEmpty()) {
-            binding.vacancyName.text = vacancy.vacancyName
-            binding.vacancyName.isVisible = true
+        renderVacancyName()
+        renderSalary()
+        renderEmployerCard()
+        renderExperience()
+        renderEmployment()
+        renderDescription()
+        renderKeySkills()
+        renderContacts()
 
+        binding.similarVacanciesButton.isVisible = isInternetConnected(requireContext())
+
+    }
+
+    private fun renderContacts() {
+        if (vacancy.contactsPhones.isNotEmpty() || vacancy.contactsName.isNotEmpty() || vacancy.contactsEmail.isNotEmpty()) {
+            binding.contactsTitle.isVisible = true
         }
-        if (vacancy.salary.isNotEmpty()) {
-            binding.salary.text = vacancy.salary
-            binding.salary.isVisible = true
+        if (vacancy.contactsName.isNotEmpty()) {
+            binding.contactsName.text = vacancy.contactsName
+            binding.contactsPersonTitle.isVisible = true
+            binding.contactsName.isVisible = true
         }
+        if (vacancy.contactsEmail.isNotEmpty()) {
+            binding.email.text = vacancy.contactsEmail
+            binding.emailTitle.isVisible = true
+            binding.email.isVisible = true
+        }
+    }
+
+    private fun renderKeySkills() {
+        if (vacancy.keySkills.isNotEmpty()) {
+            binding.keySkills.text = vacancy.keySkills
+            binding.keySkillsTitle.isVisible = true
+            binding.keySkills.isVisible = true
+        }
+    }
+
+    private fun renderDescription() {
+        if (vacancy.vacancyDescription.isNotEmpty()) {
+            binding.vacancyDescription.text = vacancy.vacancyDescription
+            binding.descriptionTitle.isVisible = true
+            binding.vacancyDescription.isVisible = true
+        }
+    }
+
+    private fun renderEmployment() {
+        if (vacancy.employmentTypes.isNotEmpty()) {
+            binding.employment.text = vacancy.employmentTypes
+            binding.employment.isVisible = true
+        }
+    }
+
+    private fun renderExperience() {
+        if (vacancy.experience.isNotEmpty()) {
+            binding.experience.text = vacancy.experience
+            binding.experienceReq.isVisible = true
+            binding.experience.isVisible = true
+        }
+    }
+
+    private fun renderEmployerCard() {
         if (vacancy.logoUrl.isNotEmpty()) {
             Glide.with(binding.logoImage)
                 .load(vacancy.logoUrl)
@@ -116,39 +167,20 @@ class VacancyDetailsFragment : Fragment() {
             binding.city.text = vacancy.employerArea
             binding.city.isVisible = true
         }
-        if (vacancy.experience.isNotEmpty()) {
-            binding.experience.text = vacancy.experience
-            binding.experienceReq.isVisible = true
-            binding.experience.isVisible = true
-        }
-        if (vacancy.employmentTypes.isNotEmpty()) {
-            binding.employment.text = vacancy.employmentTypes
-            binding.employment.isVisible = true
-        }
-        if (vacancy.vacancyDescription.isNotEmpty()) {
-            binding.vacancyDescription.text = vacancy.vacancyDescription
-            binding.descriptionTitle.isVisible = true
-            binding.vacancyDescription.isVisible = true
-        }
-        if (vacancy.keySkills.isNotEmpty()) {
-            binding.keySkills.text = vacancy.keySkills
-            binding.keySkillsTitle.isVisible = true
-            binding.keySkills.isVisible = true
-        }
-        if (vacancy.contactsPhones.isNotEmpty() ||
-            vacancy.contactsName.isNotEmpty() ||
-            vacancy.contactsEmail.isNotEmpty()
-        ) {
-            binding.contactsTitle.isVisible = true
-        }
-        if (vacancy.contactsName.isNotEmpty()) {
-            binding.contactsName.text = vacancy.contactsName
-            binding.contactsPersonTitle.isVisible = true
-            binding.contactsName.isVisible = true
-        }
+    }
 
-        binding.similarVacanciesButton.isVisible = isInternetConnected(requireContext())
+    private fun renderSalary() {
+        if (vacancy.salary.isNotEmpty()) {
+            binding.salary.text = vacancy.salary
+            binding.salary.isVisible = true
+        }
+    }
 
+    private fun renderVacancyName() {
+        if (vacancy.vacancyName.isNotEmpty()) {
+            binding.vacancyName.text = vacancy.vacancyName
+            binding.vacancyName.isVisible = true
+        }
     }
 
     private fun setPhonesAdapter() {
@@ -263,7 +295,6 @@ class VacancyDetailsFragment : Fragment() {
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
         private const val ARGS_VACANCY_ID = "ARGS_VACANCY_ID"
-        fun createArgs(id: String): Bundle =
-            bundleOf(ARGS_VACANCY_ID to id)
+        fun createArgs(id: String): Bundle = bundleOf(ARGS_VACANCY_ID to id)
     }
 }
