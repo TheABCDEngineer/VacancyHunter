@@ -28,7 +28,7 @@ class SearchFragment : Fragment() {
     private var binding: FragmentSearchBinding? = null
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val rwAdapter = VacancyAdapter(
+    private val rvAdapter = VacancyAdapter(
         vacancyList = ArrayList(),
         onItemClickedAction = debounce(
             App.CLICK_DEBOUNCE_DELAY_MILLIS,
@@ -53,7 +53,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.vacancyFeed?.adapter = rwAdapter
+        binding?.vacancyFeed?.adapter = rvAdapter
         binding?.filterButton?.setOnClickListener{
             findNavController().navigate(R.id.action_searchFragment_to_filtersFragment)
         }
@@ -122,7 +122,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun updateFeed(vacancyList: ArrayList<VacancyScreenModel>) {
-        rwAdapter.updateItems(vacancyList)
+        rvAdapter.updateItems(vacancyList)
     }
 
     private fun updateChip(text: String) {

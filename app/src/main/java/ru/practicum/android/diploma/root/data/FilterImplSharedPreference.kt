@@ -17,7 +17,7 @@ class FilterImplSharedPreference(
     }
 
     override fun getFilter(): Filter {//MOCK!
-        return Filter(null,null,null,null,null)
+        return Filter(null,null, null,null,false)
     }
 
     override suspend fun getIndustries(): Outcome<List<Industry>> {
