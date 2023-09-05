@@ -28,7 +28,7 @@ data class VacancyDetailsDto(
     data class Contacts(
         @SerializedName("email") val contactsEmail: String?,
         @SerializedName("name") val contactsName: String?,
-        @SerializedName("phones") val phones: List<Phone>?
+        @SerializedName("phones") val phones: List<PhoneDto>?
     )
 
     data class SalaryDto(
@@ -55,8 +55,9 @@ data class VacancyDetailsDto(
         @SerializedName("name") val experience: String
     )
 
-    data class Phone(
-        @SerializedName("formatted") val phoneNumber: String
+    data class PhoneDto(
+        @SerializedName("formatted") val phoneNumber: String?,
+        @SerializedName("comment") val comment: String?
     )
 
     data class ScheduleType(

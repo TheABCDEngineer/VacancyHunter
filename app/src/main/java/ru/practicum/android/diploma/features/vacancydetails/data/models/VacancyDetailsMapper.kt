@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.features.vacancydetails.data.models
 
+import ru.practicum.android.diploma.features.vacancydetails.domain.models.ContactPhone
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 
@@ -32,9 +33,12 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
         } ?: emptyList()
     }
 
-    private fun getPhones(phones: List<VacancyDetailsDto.Phone>?): List<String> {
+    private fun getPhones(phones: List<VacancyDetailsDto.PhoneDto>?): List<ContactPhone> {
         return phones?.map {
-            it.phoneNumber
+            ContactPhone(
+                phoneNumber = it.phoneNumber ?: "",
+                phoneComment = it.comment ?: ""
+            )
         } ?: emptyList()
     }
 
