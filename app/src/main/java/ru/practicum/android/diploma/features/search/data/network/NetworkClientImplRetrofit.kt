@@ -32,7 +32,16 @@ class NetworkClientImplRetrofit(
     private suspend fun provideRequest(request: Any): Any {
         return when (request) {
             is VacancyDetailsRequest -> api.getVacancyById(vacancyId = request.id)
-            is ShortVacancyRequest -> api.getVacancyListByParameters(request.path)
+            is ShortVacancyRequest -> {
+                api.getVacancyListByParameters(
+                    requestJob = request.requestJob,
+                    countryId = request.countryId,
+                    regionId = request.regionId,
+                    industryId = request.industryId,
+                    salary = request.salary,
+                    isSalary = request.isSalary.toString()
+                )
+            }
             else -> {}
         }
     }

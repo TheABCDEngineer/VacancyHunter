@@ -21,11 +21,15 @@ interface HeadHunterApi {
         @Query("professional_role") role: String
         ): SimilarVacanciesResponse
 
-//    @GET("/vacancies?{params}")
-//    suspend fun getVacancyListByParameters(@Path("params") parameters: String): VacancyResponse
-
     @GET("/vacancies")
-    suspend fun getVacancyListByParameters(@Query("text") text: String): VacancyResponse
+    suspend fun getVacancyListByParameters(
+        @Query("text") requestJob: String,
+        @Query("country") countryId: String?,
+        @Query("area") regionId: String?,
+        @Query("industry") industryId: String?,
+        @Query("salary") salary: String?,
+        @Query("only_with_salary") isSalary: String
+    ): VacancyResponse
   
     @GET("/industries")
     suspend fun getIndustries(): List<IndustryDto>
