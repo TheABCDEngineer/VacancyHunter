@@ -23,7 +23,7 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
             contactsName = dto.contacts?.contactsName ?: "",
             contactsEmail = dto.contacts?.contactsEmail ?: "",
             contactsPhones = getPhones(dto.contacts?.phones),
-            responseUrl = dto.responseUrl ?: ""
+            responseUrl = dto.alternateUrl ?: ""
         )
     }
 

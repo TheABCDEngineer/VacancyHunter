@@ -16,7 +16,7 @@ data class VacancyDetailsDto(
     @SerializedName("branded_description") val vacancyBrandedDesc: String?,
     @SerializedName("key_skills") val keySkills: List<KeySkill>?,
     @SerializedName("contacts") val contacts: Contacts?,
-    @SerializedName("response_url") val responseUrl: String?,
+    @SerializedName("alternate_url") val alternateUrl: String?,
     @SerializedName("professional_roles") val profRoles: List<ProfRole>?
 
 ) {
