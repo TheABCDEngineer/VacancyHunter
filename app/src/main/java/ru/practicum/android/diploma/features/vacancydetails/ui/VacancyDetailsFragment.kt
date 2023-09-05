@@ -247,7 +247,8 @@ class VacancyDetailsFragment : Fragment() {
             vacancy.vacancyName,
             vacancy.salary,
             vacancy.employerName,
-            vacancy.employerArea
+            vacancy.employerArea,
+            vacancy.shareVacancyUrl
         )
         viewModel.generateShareText(strings)
     }
