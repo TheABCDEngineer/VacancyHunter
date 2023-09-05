@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.features.vacancydetails.ui
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -129,7 +130,10 @@ class VacancyDetailsFragment : Fragment() {
 
     private fun renderDescription() {
         if (vacancy.vacancyDescription.isNotEmpty()) {
-            binding.vacancyDescription.text = vacancy.vacancyDescription
+
+            binding.vacancyDescription.text =
+                Html.fromHtml(vacancy.vacancyDescription, Html.FROM_HTML_MODE_COMPACT)
+
             binding.descriptionTitle.isVisible = true
             binding.vacancyDescription.isVisible = true
         }
