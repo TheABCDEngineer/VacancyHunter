@@ -44,5 +44,8 @@
     <string name="choose">Выбрать</string>
     <string name="placeholder_image">Изображение в случае если ничего не найдено</string>
     <string name="empty_list">Список пуст</string>
-
+    <string name="team_members">Над приложением работали</string>
+    <string name="team_1">TheABCDEngineer</string>
+    <string name="team_2">InnaLapwa</string>
+    <string name="team_3">pogonat</string>
 </resources>
