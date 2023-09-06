@@ -14,7 +14,7 @@ class ExternalNavigator {
     }
 
     fun getEmailIntent(email: Email): Intent {
-        val emailIntent = Intent(Intent.ACTION_SEND)
+        val emailIntent = Intent(Intent.ACTION_SENDTO)
         emailIntent.data = Uri.parse("mailto:")
         emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email.address))
         email.subject?.let { emailIntent.putExtra(Intent.EXTRA_SUBJECT, email.subject) }

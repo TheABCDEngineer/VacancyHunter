@@ -42,5 +42,11 @@
     <string name="industry_header">Выбор отрасли</string>
     <string name="enter_industry">Введите отрасль</string>
     <string name="choose">Выбрать</string>
+    <string name="placeholder_image">Image displaying when nothing found</string>
+    <string name="empty_list">Список пуст</string>
+    <string name="team_members">Над приложением работали</string>
+    <string name="team_1">TheABCDEngineer</string>
+    <string name="team_2">InnaLapwa</string>
+    <string name="team_3">pogonat</string>
 
 </resources>

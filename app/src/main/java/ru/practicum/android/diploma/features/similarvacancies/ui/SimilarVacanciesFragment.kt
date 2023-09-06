@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -49,18 +51,56 @@ class SimilarVacanciesFragment : Fragment() {
         viewModel.getSimilarVacancies(getIdFromArgs())
 
         viewModel.state.observe(viewLifecycleOwner) {
-            when (it) {
-                is SimilarVacanciesState.Content -> renderContent(it.similarVacancies)
-                is SimilarVacanciesState.Loading -> showProgressBar()
-                is SimilarVacanciesState.NothingFound -> showPlaceHolder()
-                is SimilarVacanciesState.Error -> showError(it.errorCode)
-            }
+            render(it)
         }
 
         binding.returnArrow.setOnClickListener {
             findNavController().navigateUp()
         }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
+        _binding = null
+    }
+
+    private fun render(screenState: SimilarVacanciesState) {
+        when (screenState) {
+            is SimilarVacanciesState.Content -> renderContent(screenState.similarVacancies)
+            is SimilarVacanciesState.Loading -> renderLoading()
+            is SimilarVacanciesState.NothingFound -> renderNothingFound()
+            is SimilarVacanciesState.Error -> renderError(screenState.errorCode)
+        }
+    }
+
+    private fun renderContent(similarVacancies: List<VacancySimilarShortUiModel>) {
+        foundVacancies = similarVacancies
+        adapter?.updateAdapter(foundVacancies)
+        binding.apply {
+            progressBar.isVisible = false
+            nothingFoundPlaceholder.isVisible = false
+            placeholderMessage.isVisible = false
+        }
+    }
+
+    private fun renderLoading() {
+        binding.apply {
+            progressBar.isVisible = true
+            nothingFoundPlaceholder.isVisible = false
+            placeholderMessage.isVisible = false
+        }
+    }
+
+    private fun renderNothingFound() {
+        showPlaceHolder()
+    }
+
+    private fun renderError(errorCode: NetworkResultCode?) {
+        showPlaceHolder()
+        if (errorCode == null) {
+            showMessage(getString(R.string.something_went_wrong))
+        }
     }
 
     private fun setAdapter() {
@@ -87,27 +127,16 @@ class SimilarVacanciesFragment : Fragment() {
         binding.similarVacanciesList.adapter = adapter
     }
 
-    private fun showError(errorCode: NetworkResultCode?) {
-
+    private fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun showPlaceHolder() {
-
-    }
-
-    private fun showProgressBar() {
-
-    }
-
-    private fun renderContent(similarVacancies: List<VacancySimilarShortUiModel>) {
-        foundVacancies = similarVacancies
-        adapter?.updateAdapter(foundVacancies)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        adapter = null
-        _binding = null
+        binding.apply {
+            progressBar.isVisible = false
+            nothingFoundPlaceholder.isVisible = true
+            placeholderMessage.isVisible = true
+        }
     }
 
     private fun getIdFromArgs(): String {
