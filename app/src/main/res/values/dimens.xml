@@ -10,4 +10,5 @@
     <dimen name="margin_logo_txt_similar_vacancy">12dp</dimen>
     <dimen name="logo_corner_radius">12</dimen>
     <dimen name="logo_padding_with_image">0</dimen>
+    <dimen name="team_horizontal_margin">16dp</dimen>
 </resources>

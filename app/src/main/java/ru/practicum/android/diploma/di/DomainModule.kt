@@ -12,17 +12,16 @@ import ru.practicum.android.diploma.features.vacancydetails.domain.VacancyDetail
 
 val domainModule = module {
 
-    factory<SharingInteractor> {
+    single<SharingInteractor> {
         SharingInteractorImpl()
     }
 
-    factory<VacancyDetailsInteractor> {
+    single<VacancyDetailsInteractor> {
         VacancyDetailsInteractorImpl(vacancyRepository = get())
     }
 
-    factory<SimilarVacanciesInteractor> {
+    single<SimilarVacanciesInteractor> {
         SimilarVacanciesInteractorImpl(vacancyRepository = get())
-
     }
     
     single<FiltersInteractor> {
