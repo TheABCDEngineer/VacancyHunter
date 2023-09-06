@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -18,6 +20,7 @@ import ru.practicum.android.diploma.features.similarvacancies.data.models.Simila
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
 import ru.practicum.android.diploma.root.data.DataConverter
 import ru.practicum.android.diploma.root.data.FilterImplSharedPreference
+import ru.practicum.android.diploma.root.data.StorageKeys
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.root.data.network.HeadHunterApi
 import ru.practicum.android.diploma.root.data.network.HeaderInterceptor
@@ -54,6 +57,10 @@ val dataModule = module {
 
     single<Gson> {
         Gson()
+    }
+
+    single<SharedPreferences> {
+        androidContext().getSharedPreferences(StorageKeys.VACANCY_HUNTER_PREFERENCES, Context.MODE_PRIVATE)
     }
 
     single<VacancyDetailsMapper>  {
@@ -93,4 +100,5 @@ val dataModule = module {
     single<FiltersMapper> {
         FiltersMapper()
     }
+
 }
