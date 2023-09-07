@@ -13,7 +13,6 @@ data class VacancyDetailsDto(
     @SerializedName("employment") val employmentType: EmploymentType?,
     @SerializedName("schedule") val scheduleType: ScheduleType?,
     @SerializedName("description") val vacancyDesc: String?,
-    @SerializedName("branded_description") val vacancyBrandedDesc: String?,
     @SerializedName("key_skills") val keySkills: List<KeySkill>?,
     @SerializedName("contacts") val contacts: Contacts?,
     @SerializedName("alternate_url") val alternateUrl: String?,

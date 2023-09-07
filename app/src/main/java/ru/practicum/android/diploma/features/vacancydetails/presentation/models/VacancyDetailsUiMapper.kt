@@ -18,10 +18,7 @@ class VacancyDetailsUiMapper(private val context: Context) :
             employerArea = model.employerArea,
             experience = model.experienceReq,
             employmentTypes = formatEmploymentTypes(model.employmentType, model.scheduleType),
-            vacancyDescription = chooseDescription(
-                model.vacancyDescription,
-                model.vacancyBrandedDesc
-            ),
+            vacancyDescription = model.vacancyDescription,
             keySkills = formatKeySkills(model.keySkills),
             contactsName = model.contactsName,
             contactsEmail = model.contactsEmail,
@@ -34,10 +31,6 @@ class VacancyDetailsUiMapper(private val context: Context) :
         return keySkills
             .filter { it.isNotEmpty() }
             .joinToString("\n")
-    }
-
-    private fun chooseDescription(vacancyDescription: String, vacancyBrandedDesc: String): String {
-        return if (vacancyBrandedDesc.isNotEmpty()) vacancyBrandedDesc else vacancyDescription
     }
 
     private fun formatEmploymentTypes(employmentType: String, scheduleType: String): String {

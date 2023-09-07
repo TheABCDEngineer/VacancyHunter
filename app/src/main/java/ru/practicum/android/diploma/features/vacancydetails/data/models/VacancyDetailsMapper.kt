@@ -18,7 +18,6 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
             employmentType = dto.employmentType?.employmentTypeName ?: "",
             scheduleType = dto.scheduleType?.scheduleTypeName ?: "",
             vacancyDescription = dto.vacancyDesc ?: "",
-            vacancyBrandedDesc = dto.vacancyBrandedDesc ?: "",
             keySkills = getSkillsList(dto.keySkills),
             contactsName = dto.contacts?.contactsName ?: "",
             contactsEmail = dto.contacts?.contactsEmail ?: "",
