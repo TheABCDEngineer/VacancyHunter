@@ -13,4 +13,5 @@
     <dimen name="team_horizontal_margin">16dp</dimen>
     <dimen name="progress_bar_dimens">44dp</dimen>
     <dimen name="similar_horizontal_margin">16dp</dimen>
+    <dimen name="details_paragraph_top_margin">24dp</dimen>
 </resources>

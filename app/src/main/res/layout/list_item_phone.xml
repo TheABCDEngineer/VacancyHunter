@@ -7,47 +7,26 @@
 
     <TextView
         android:id="@+id/phoneTitle"
-        style="@style/font_medium_16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
+        style="@style/details_header_3"
         android:text="@string/phone"
-        android:textColor="?attr/colorOnPrimary"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/phone"
-        style="@style/font_regular_16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
+        style="@style/details_text_in_paragraph"
         android:textColor="@color/yp_blue"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/phoneTitle"
         tools:text="+7 (904) 329-27-71" />
 
     <TextView
         android:id="@+id/phoneComment"
-        style="@style/font_regular_16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
-        android:textColor="?attr/colorOnPrimary"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
+        style="@style/details_text_in_paragraph"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/phone"
         tools:text="Заполнить анкету по форме можно на нашем сайте" />
 
