@@ -155,6 +155,14 @@ class VacancyDetailsFragment : Fragment() {
     }
 
     private fun renderEmployerCard() {
+        val cardIsEmpty = vacancy.logoUrl.isEmpty() && vacancy.employerName.isEmpty() && vacancy.employerArea.isEmpty()
+        if (cardIsEmpty) {
+            binding.employerCard.isVisible = false
+            return
+        }
+
+        binding.employerCard.isVisible = true
+
         if (vacancy.logoUrl.isNotEmpty()) {
             Glide.with(binding.logoImage)
                 .load(vacancy.logoUrl)

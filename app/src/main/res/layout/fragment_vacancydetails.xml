@@ -26,9 +26,9 @@
             android:layout_marginStart="4dp"
             android:text="@string/vacancy"
             android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/returnArrow"
             app:layout_constraintStart_toEndOf="@id/returnArrow"
-            app:layout_constraintTop_toTopOf="@id/returnArrow" />
+            app:layout_constraintTop_toTopOf="@id/returnArrow"
+            app:layout_constraintBottom_toBottomOf="@id/returnArrow" />
 
         <ImageButton
             android:id="@+id/shareButton"
@@ -36,9 +36,9 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/share_icon"
             android:src="@drawable/ic_sharing"
-            app:layout_constraintBottom_toBottomOf="@id/returnArrow"
             app:layout_constraintEnd_toStartOf="@id/favButton"
-            app:layout_constraintTop_toTopOf="@id/returnArrow" />
+            app:layout_constraintTop_toTopOf="@id/returnArrow"
+            app:layout_constraintBottom_toBottomOf="@id/returnArrow" />
 
         <ImageButton
             android:id="@+id/favButton"
@@ -47,9 +47,9 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/favorites_icon"
             android:src="@drawable/ic_favorites_off"
-            app:layout_constraintBottom_toBottomOf="@id/returnArrow"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/returnArrow" />
+            app:layout_constraintTop_toTopOf="@id/returnArrow"
+            app:layout_constraintBottom_toBottomOf="@id/returnArrow" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/left_guideline"
@@ -72,8 +72,8 @@
             android:layout_marginTop="120dp"
             android:indeterminateTint="@color/yp_blue"
             android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -86,11 +86,12 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/returnArrow"
-            tools:text="Android-разработчик" />
+            tools:text="Android-разработчик"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/salary"
@@ -102,11 +103,12 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/vacancyName"
-            tools:text="от 100 000 ₽" />
+            tools:text="от 100 000 ₽"
+            tools:visibility="visible"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/employerCard"
@@ -115,9 +117,11 @@
             android:layout_marginTop="24dp"
             android:background="@drawable/vac_details_card_backgrnd"
             android:padding="16dp"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@id/salary">
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
+            app:layout_constraintTop_toBottomOf="@id/salary"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/logoImage"
@@ -138,11 +142,11 @@
                 android:textColor="@color/yp_black"
                 android:visibility="gone"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toTopOf="@id/city"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@id/logoImage"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/logoImage"
+                app:layout_constraintBottom_toTopOf="@id/city"
                 tools:text="Еда" />
 
             <TextView
@@ -155,11 +159,11 @@
                 android:textColor="@color/yp_black"
                 android:visibility="gone"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toBottomOf="@id/logoImage"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@id/logoImage"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/employerName"
+                app:layout_constraintBottom_toBottomOf="@id/logoImage"
                 tools:text="Москва" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -175,9 +179,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/employerCard" />
 
         <TextView
@@ -190,9 +194,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/experienceReq"
             tools:text="От 1 года до 3 лет" />
 
@@ -206,9 +210,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/experience"
             tools:text="Полная занятость, Удаленная работа" />
 
@@ -224,9 +228,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/employment" />
 
         <TextView
@@ -240,9 +244,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/descriptionTitle"
             tools:text=" • Разрабатывать новую функциональность приложения\n
         • Помогать с интеграцией нашего SDK в другие приложения\n
@@ -277,9 +281,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/keySkillsTitle"
             tools:text=" • Разрабатывать новую функциональность приложения\n
  • Помогать с интеграцией нашего SDK в другие приложения\n
@@ -297,9 +301,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/keySkills" />
 
         <TextView
@@ -314,9 +318,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/contactsTitle" />
 
         <TextView
@@ -329,9 +333,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/contactsPersonTitle"
             tools:text="Ирина" />
 
@@ -347,9 +351,9 @@
             android:textColor="?attr/colorOnPrimary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/contactsName" />
 
         <TextView
@@ -362,9 +366,9 @@
             android:textColor="@color/yp_blue"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/emailTitle"
             tools:text="i.lozgkina@yandex.ru" />
 
@@ -372,10 +376,10 @@
             android:id="@+id/phonesList"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/similarVacanciesButton"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/email"
+            app:layout_constraintBottom_toTopOf="@id/similarVacanciesButton"
             tools:itemCount="4"
             tools:listitem="@layout/list_item_phone" />
 
@@ -393,10 +397,10 @@
             android:visibility="gone"
             app:backgroundTint="@color/yp_blue"
             app:cornerRadius="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@id/phonesList" />
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
+            app:layout_constraintTop_toBottomOf="@id/phonesList"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
