@@ -155,7 +155,7 @@ class VacancyDetailsFragment : Fragment() {
     }
 
     private fun renderEmployerCard() {
-        val cardIsEmpty = vacancy.logoUrl.isEmpty() && vacancy.employerName.isEmpty() && vacancy.employerArea.isEmpty()
+        val cardIsEmpty = vacancy.logoUrl.isEmpty() && vacancy.employerName.isEmpty() && vacancy.employerAddress.isEmpty()
         if (cardIsEmpty) {
             binding.employerCard.isVisible = false
             return
@@ -175,8 +175,8 @@ class VacancyDetailsFragment : Fragment() {
             binding.employerName.text = vacancy.employerName
             binding.employerName.isVisible = true
         }
-        if (vacancy.employerArea.isNotEmpty()) {
-            binding.city.text = vacancy.employerArea
+        if (vacancy.employerAddress.isNotEmpty()) {
+            binding.city.text = vacancy.employerAddress
             binding.city.isVisible = true
         }
     }
@@ -259,7 +259,7 @@ class VacancyDetailsFragment : Fragment() {
             vacancy.vacancyName,
             vacancy.salary,
             vacancy.employerName,
-            vacancy.employerArea,
+            vacancy.employerAddress,
             vacancy.shareVacancyUrl
         )
         viewModel.generateShareText(strings)

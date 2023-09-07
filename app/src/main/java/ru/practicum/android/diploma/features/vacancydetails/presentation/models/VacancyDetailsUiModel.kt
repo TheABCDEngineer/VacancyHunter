@@ -8,7 +8,7 @@ data class VacancyDetailsUiModel(
     val salary: String,
     val logoUrl: String,
     val employerName: String,
-    val employerArea: String,
+    val employerAddress: String,
     val experience: String,
     val employmentTypes: String,
     val vacancyDescription: String,
