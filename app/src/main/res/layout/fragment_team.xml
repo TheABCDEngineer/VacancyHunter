@@ -33,9 +33,9 @@
             android:paddingVertical="20dp"
             android:text="@string/team"
             android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -48,51 +48,34 @@
             android:paddingVertical="8dp"
             android:text="@string/team_members"
             android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/screenTitle" />
 
         <TextView
             android:id="@+id/team_1"
-            style="@style/font_medium_16"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/team_member_view"
             android:layout_marginTop="24dp"
-            android:ellipsize="end"
             android:text="@string/team_1"
-            android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/teamMembers" />
 
         <TextView
             android:id="@+id/team_2"
-            style="@style/font_medium_16"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:ellipsize="end"
+            style="@style/team_member_view"
             android:text="@string/team_2"
-            android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/team_1" />
 
         <TextView
             android:id="@+id/team_3"
-            style="@style/font_medium_16"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:ellipsize="end"
+            style="@style/team_member_view"
             android:text="@string/team_3"
-            android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/team_2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
