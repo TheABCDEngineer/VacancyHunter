@@ -147,7 +147,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/logoImage"
                 app:layout_constraintBottom_toTopOf="@id/city"
-                tools:text="Еда" />
+                tools:text="Еда"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/city"
@@ -164,7 +165,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/employerName"
                 app:layout_constraintBottom_toBottomOf="@id/logoImage"
-                tools:text="Москва" />
+                tools:text="Москва"
+                tools:visibility="visible"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -182,7 +184,8 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintTop_toBottomOf="@id/employerCard" />
+            app:layout_constraintTop_toBottomOf="@id/employerCard"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/experience"
@@ -198,7 +201,8 @@
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/experienceReq"
-            tools:text="От 1 года до 3 лет" />
+            tools:text="От 1 года до 3 лет"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/employment"
@@ -214,7 +218,8 @@
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/experience"
-            tools:text="Полная занятость, Удаленная работа" />
+            tools:text="Полная занятость, Удаленная работа"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/descriptionTitle"
@@ -231,7 +236,8 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintTop_toBottomOf="@id/employment" />
+            app:layout_constraintTop_toBottomOf="@id/employment"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/vacancyDescription"
@@ -248,11 +254,13 @@
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/descriptionTitle"
-            tools:text=" • Разрабатывать новую функциональность приложения\n
+            tools:text="
+        • Разрабатывать новую функциональность приложения\n
         • Помогать с интеграцией нашего SDK в другие приложения\n
         • Проектировать большие новые модули\n
         • Писать UI- и unit-тесты\n
-        • Следить за работоспособностью сервиса и устранять технический долг" />
+        • Следить за работоспособностью сервиса и устранять технический долг"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/keySkillsTitle"
@@ -269,7 +277,8 @@
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@id/vacancyDescription" />
+            app:layout_constraintTop_toBottomOf="@id/vacancyDescription"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/keySkills"
@@ -287,7 +296,8 @@
             app:layout_constraintTop_toBottomOf="@id/keySkillsTitle"
             tools:text=" • Разрабатывать новую функциональность приложения\n
  • Помогать с интеграцией нашего SDK в другие приложения\n
- • Проектировать большие новые модули" />
+ • Проектировать большие новые модули"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/contactsTitle"
@@ -304,7 +314,8 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintTop_toBottomOf="@id/keySkills" />
+            app:layout_constraintTop_toBottomOf="@id/keySkills"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/contactsPersonTitle"
@@ -321,7 +332,8 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintTop_toBottomOf="@id/contactsTitle" />
+            app:layout_constraintTop_toBottomOf="@id/contactsTitle"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/contactsName"
@@ -337,7 +349,8 @@
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/contactsPersonTitle"
-            tools:text="Ирина" />
+            tools:text="Ирина"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/emailTitle"
@@ -354,7 +367,8 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintTop_toBottomOf="@id/contactsName" />
+            app:layout_constraintTop_toBottomOf="@id/contactsName"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/email"
@@ -381,7 +395,8 @@
             app:layout_constraintTop_toBottomOf="@id/email"
             app:layout_constraintBottom_toTopOf="@id/similarVacanciesButton"
             tools:itemCount="4"
-            tools:listitem="@layout/list_item_phone" />
+            tools:listitem="@layout/list_item_phone"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/similarVacanciesButton"
@@ -400,7 +415,8 @@
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintTop_toBottomOf="@id/phonesList"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
