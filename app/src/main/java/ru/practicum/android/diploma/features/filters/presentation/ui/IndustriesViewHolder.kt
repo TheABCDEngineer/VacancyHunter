@@ -11,5 +11,6 @@ class IndustriesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     fun bind(industry: Industry) {
         industryRB.setText(industry.name)
+        industryRB.isChecked = false
     }
 }
