@@ -1,7 +1,10 @@
 package ru.practicum.android.diploma.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -15,9 +18,9 @@ import ru.practicum.android.diploma.features.search.domain.repository.SearchVaca
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesMapper
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarityParamsMapper
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
-import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
 import ru.practicum.android.diploma.root.data.DataConverter
 import ru.practicum.android.diploma.root.data.FilterImplSharedPreference
+import ru.practicum.android.diploma.root.data.StorageKeys
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.root.data.network.HeadHunterApi
 import ru.practicum.android.diploma.root.data.network.HeaderInterceptor
@@ -49,11 +52,15 @@ val dataModule = module {
     }
 
     single<NetworkSearch> {
-        RetrofitNetworkClient(api = get(), context = get())
+        RetrofitNetworkClient(api = get(), context = androidContext())
     }
 
     single<Gson> {
         Gson()
+    }
+
+    single<SharedPreferences> {
+        androidContext().getSharedPreferences(StorageKeys.VACANCY_HUNTER_PREFERENCES, Context.MODE_PRIVATE)
     }
 
     single<VacancyDetailsMapper>  {
@@ -61,10 +68,6 @@ val dataModule = module {
     }
 
     singleOf(::SearchVacancyRepositoryImplNetwork).bind<SearchVacancyRepository>()
-
-    single<VacancyDetailsUiMapper> {
-        VacancyDetailsUiMapper()
-    }
 
     single<SimilarityParamsMapper> {
         SimilarityParamsMapper()
@@ -97,4 +100,5 @@ val dataModule = module {
     single<FiltersMapper> {
         FiltersMapper()
     }
+
 }

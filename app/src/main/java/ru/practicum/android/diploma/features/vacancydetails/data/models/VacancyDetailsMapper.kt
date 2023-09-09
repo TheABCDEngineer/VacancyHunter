@@ -1,5 +1,8 @@
 package ru.practicum.android.diploma.features.vacancydetails.data.models
 
+import ru.practicum.android.diploma.features.vacancydetails.domain.models.Address
+import ru.practicum.android.diploma.features.vacancydetails.domain.models.ContactPhone
+import ru.practicum.android.diploma.features.vacancydetails.domain.models.Metro
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 
@@ -10,19 +13,19 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
             vacancyId = dto.vacancyId,
             vacancyName = dto.vacancyName ?: "",
             salary = getSalary(dto.salary),
-            logoUrl = dto.employer?.logoUrls?.logoUrl90 ?: "",
+            logoUrl = dto.employer?.logoUrls?.logoOriginal ?: "",
             employerName = dto.employer?.employerName ?: "",
             employerArea = dto.vacancyArea?.area ?: "",
             experienceReq = dto.experience?.experience ?: "",
             employmentType = dto.employmentType?.employmentTypeName ?: "",
             scheduleType = dto.scheduleType?.scheduleTypeName ?: "",
             vacancyDescription = dto.vacancyDesc ?: "",
-            vacancyBrandedDesc = dto.vacancyBrandedDesc ?: "",
             keySkills = getSkillsList(dto.keySkills),
             contactsName = dto.contacts?.contactsName ?: "",
             contactsEmail = dto.contacts?.contactsEmail ?: "",
             contactsPhones = getPhones(dto.contacts?.phones),
-            responseUrl = dto.responseUrl ?: ""
+            shareVacancyUrl = dto.alternateUrl ?: "",
+            employerAddress = getAddress(dto.address)
         )
     }
 
@@ -32,9 +35,12 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
         } ?: emptyList()
     }
 
-    private fun getPhones(phones: List<VacancyDetailsDto.Phone>?): List<String> {
+    private fun getPhones(phones: List<VacancyDetailsDto.PhoneDto>?): List<ContactPhone> {
         return phones?.map {
-            it.phoneNumber
+            ContactPhone(
+                phoneNumber = it.phoneNumber ?: "",
+                phoneComment = it.comment ?: ""
+            )
         } ?: emptyList()
     }
 
@@ -46,6 +52,31 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
                 salaryLowerBoundary = salaryDto.from,
                 salaryUpperBoundary = salaryDto.to
             )
+        }
+    }
+
+    private fun getAddress(addressDto: VacancyDetailsDto.EmployerAddressDto?): Address? {
+        return when (addressDto) {
+            null -> null
+            else -> Address(
+                building = addressDto.building ?: "",
+                city = addressDto.city ?: "",
+                street = addressDto.street ?: "",
+                addressNote = addressDto.addressNote ?: "",
+                metroStations = getMetroList(addressDto.metroStations)
+            )
+        }
+    }
+
+    private fun getMetroList(listMetroDto: List<VacancyDetailsDto.MetroDto>?): List<Metro> {
+        return when (listMetroDto) {
+            null -> emptyList()
+            else -> listMetroDto.map {
+                Metro(
+                    lineName = it.lineName ?: "",
+                    stationName = it.stationName ?: ""
+                )
+            }
         }
     }
 

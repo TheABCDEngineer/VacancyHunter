@@ -11,7 +11,7 @@
     <string name="arrow_back">Arrow Back</string>
     <string name="vacancy">Вакансия</string>
     <string name="share_icon">Share Icon</string>
-    <string name="favorites_icon">Favorites Icon</string>
+    <string name="favorites_icon">Изображение сердца для кнопки "Добавить в избранное"</string>
     <string name="logo_image">Logo image</string>
     <string name="experience_required">Требуемый опыт</string>
     <string name="vacancy_description">Описание вакансии</string>
@@ -26,9 +26,9 @@
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="no_such_vacancies">Таких вакансий нет</string>
     <string name="found">Найдено</string>
-    <string name="no_app_found">No application for this action found on your device</string>
+    <string name="no_app_found">На устройстве не найдено подходящих для этого действия приложений</string>
     <string name="share_to">Поделиться вакансией через:</string>
-    <string name="empty_share_text">Can\'t share empty text</string>
+    <string name="empty_share_text">Пустое сообщение</string>
     <string name="work_place">Место работы</string>
     <string name="industry">Отрасль</string>
     <string name="do_not_show_without_salary">Не показывать без ЗП</string>
@@ -36,11 +36,16 @@
     <string name="expected_salary">Ожидаемая ЗП</string>
     <string name="filters_settings">Настройки фильтрации</string>
     <string name="no_internet_connection">Отсутствует подключение к интернету</string>
-    <string name="salary_from_to">От %d до %d %s</string>
-    <string name="salary_from">От %d %s</string>
-    <string name="salary_to">До %d %s</string>
+    <string name="salary_from_to">От %s до %s %s</string>
+    <string name="salary_from">От %s %s</string>
+    <string name="salary_to">До %s %s</string>
     <string name="industry_header">Выбор отрасли</string>
     <string name="enter_industry">Введите отрасль</string>
     <string name="choose">Выбрать</string>
-
+    <string name="placeholder_image">Стилизованный персонаж в виде телефона в шапке держит лупу</string>
+    <string name="empty_list">Список пуст</string>
+    <string name="team_members">Над приложением работали</string>
+    <string name="team_1">TheABCDEngineer</string>
+    <string name="team_2">InnaLapwa</string>
+    <string name="team_3">pogonat</string>
 </resources>

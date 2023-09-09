@@ -13,11 +13,11 @@ data class VacancyDetailsDto(
     @SerializedName("employment") val employmentType: EmploymentType?,
     @SerializedName("schedule") val scheduleType: ScheduleType?,
     @SerializedName("description") val vacancyDesc: String?,
-    @SerializedName("branded_description") val vacancyBrandedDesc: String?,
     @SerializedName("key_skills") val keySkills: List<KeySkill>?,
     @SerializedName("contacts") val contacts: Contacts?,
-    @SerializedName("response_url") val responseUrl: String?,
-    @SerializedName("professional_roles") val profRoles: List<ProfRole>?
+    @SerializedName("alternate_url") val alternateUrl: String?,
+    @SerializedName("professional_roles") val profRoles: List<ProfRole>?,
+    @SerializedName("address") val address: EmployerAddressDto
 
 ) {
 
@@ -28,7 +28,7 @@ data class VacancyDetailsDto(
     data class Contacts(
         @SerializedName("email") val contactsEmail: String?,
         @SerializedName("name") val contactsName: String?,
-        @SerializedName("phones") val phones: List<Phone>?
+        @SerializedName("phones") val phones: List<PhoneDto>?
     )
 
     data class SalaryDto(
@@ -43,7 +43,7 @@ data class VacancyDetailsDto(
 
     ) {
         data class LogoUrls(
-            @SerializedName("90") val logoUrl90: String
+            @SerializedName("original") val logoOriginal: String
         )
     }
 
@@ -55,8 +55,9 @@ data class VacancyDetailsDto(
         @SerializedName("name") val experience: String
     )
 
-    data class Phone(
-        @SerializedName("formatted") val phoneNumber: String
+    data class PhoneDto(
+        @SerializedName("formatted") val phoneNumber: String?,
+        @SerializedName("comment") val comment: String?
     )
 
     data class ScheduleType(
@@ -67,8 +68,20 @@ data class VacancyDetailsDto(
         @SerializedName("name") val area: String
     )
 
-    data class  ProfRole(
+    data class ProfRole(
         @SerializedName("id") val profRoleId: String
     )
 
+    data class EmployerAddressDto(
+        @SerializedName("building") val building: String?,
+        @SerializedName("city") val city: String?,
+        @SerializedName("street") val street: String?,
+        @SerializedName("description") val addressNote: String?,
+        @SerializedName("metro_stations") val metroStations: List<MetroDto>?
+    )
+
+    data class MetroDto(
+        @SerializedName("line_name") val lineName: String?,
+        @SerializedName("station_name") val stationName: String?
+    )
 }

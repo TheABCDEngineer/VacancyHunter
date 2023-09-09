@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -12,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSimilarVacanciesBinding
-import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
 import ru.practicum.android.diploma.features.similarvacancies.presentation.SimilarVacanciesViewModel
 import ru.practicum.android.diploma.features.similarvacancies.presentation.models.SimilarVacanciesState
+import ru.practicum.android.diploma.features.similarvacancies.presentation.models.VacancySimilarShortUiModel
 import ru.practicum.android.diploma.features.similarvacancies.ui.adapters.SimilarVacanciesAdapter
 import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
@@ -28,9 +30,9 @@ class SimilarVacanciesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var adapter: SimilarVacanciesAdapter? = null
-    private lateinit var onListItemClickDebounce: (VacancyShortSimilar) -> Unit
+    private lateinit var onListItemClickDebounce: (VacancySimilarShortUiModel) -> Unit
 
-    private lateinit var foundVacancies: List<VacancyShortSimilar>
+    private lateinit var foundVacancies: List<VacancySimilarShortUiModel>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,22 +51,60 @@ class SimilarVacanciesFragment : Fragment() {
         viewModel.getSimilarVacancies(getIdFromArgs())
 
         viewModel.state.observe(viewLifecycleOwner) {
-            when (it) {
-                is SimilarVacanciesState.Content -> renderContent(it.similarVacancies)
-                is SimilarVacanciesState.Loading -> showProgressBar()
-                is SimilarVacanciesState.NothingFound -> showPlaceHolder()
-                is SimilarVacanciesState.Error -> showError(it.errorCode)
-            }
+            render(it)
         }
 
         binding.returnArrow.setOnClickListener {
             findNavController().navigateUp()
         }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
+        _binding = null
+    }
+
+    private fun render(screenState: SimilarVacanciesState) {
+        when (screenState) {
+            is SimilarVacanciesState.Content -> renderContent(screenState.similarVacancies)
+            is SimilarVacanciesState.Loading -> renderLoading()
+            is SimilarVacanciesState.NothingFound -> renderNothingFound()
+            is SimilarVacanciesState.Error -> renderError(screenState.errorCode)
+        }
+    }
+
+    private fun renderContent(similarVacancies: List<VacancySimilarShortUiModel>) {
+        foundVacancies = similarVacancies
+        adapter?.updateAdapter(foundVacancies)
+        binding.apply {
+            progressBar.isVisible = false
+            nothingFoundPlaceholder.isVisible = false
+            placeholderMessage.isVisible = false
+        }
+    }
+
+    private fun renderLoading() {
+        binding.apply {
+            progressBar.isVisible = true
+            nothingFoundPlaceholder.isVisible = false
+            placeholderMessage.isVisible = false
+        }
+    }
+
+    private fun renderNothingFound() {
+        showPlaceHolder()
+    }
+
+    private fun renderError(errorCode: NetworkResultCode?) {
+        showPlaceHolder()
+        if (errorCode == null) {
+            showMessage(getString(R.string.something_went_wrong))
+        }
     }
 
     private fun setAdapter() {
-        onListItemClickDebounce = debounce<VacancyShortSimilar>(
+        onListItemClickDebounce = debounce<VacancySimilarShortUiModel>(
             CLICK_DEBOUNCE_DELAY_MILLIS,
             viewLifecycleOwner.lifecycleScope,
             true
@@ -78,7 +118,7 @@ class SimilarVacanciesFragment : Fragment() {
 
         adapter = SimilarVacanciesAdapter(
             object : SimilarVacanciesAdapter.ListItemClickListener {
-                override fun onListItemClick(vacancy: VacancyShortSimilar) {
+                override fun onListItemClick(vacancy: VacancySimilarShortUiModel) {
                     onListItemClickDebounce(vacancy)
                 }
             }
@@ -87,27 +127,16 @@ class SimilarVacanciesFragment : Fragment() {
         binding.similarVacanciesList.adapter = adapter
     }
 
-    private fun showError(errorCode: NetworkResultCode?) {
-
+    private fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun showPlaceHolder() {
-
-    }
-
-    private fun showProgressBar() {
-
-    }
-
-    private fun renderContent(similarVacancies: List<VacancyShortSimilar>) {
-        foundVacancies = similarVacancies
-        adapter?.updateAdapter(foundVacancies)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        adapter = null
-        _binding = null
+        binding.apply {
+            progressBar.isVisible = false
+            nothingFoundPlaceholder.isVisible = true
+            placeholderMessage.isVisible = true
+        }
     }
 
     private fun getIdFromArgs(): String {

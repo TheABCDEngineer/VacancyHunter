@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.features.search.data
 
+import android.util.Log
 import ru.practicum.android.diploma.features.filters.domain.models.Filter
 import ru.practicum.android.diploma.features.search.data.network.NetworkClient
 import ru.practicum.android.diploma.features.search.data.network.dto.ShortVacancyRequest
@@ -20,9 +21,7 @@ class SearchVacancyRepositoryImplNetwork(
         filterParams: Filter
     ): Outcome<ResponseModel> {
         val response = networkClient.executeRequest(
-            ShortVacancyRequest(
-                fetchRequestPath(value, filterParams)
-            )
+            fetchRequest(value, filterParams)
         )
 
         return when (response.resultCode) {
@@ -47,13 +46,22 @@ class SearchVacancyRepositoryImplNetwork(
         }
     }
 
-    private fun fetchRequestPath(value: String, filter: Filter): String {
-        var path = value//"text=$value"
-        if (filter.country != null) path += "&country=${filter.country.id}"
-        if (filter.region != null) path += "&area=${filter.region.id}"
-        if (filter.industry != null) path += "&industry=${filter.industry.id}"
-        if (filter.salary != null) path += "&salary=${filter.salary}"
-        if (filter.doNotShowWithoutSalary != null) path += "&only_with_salary=${filter.doNotShowWithoutSalary}"
-        return path
+    private fun fetchRequest(requestJob: String, filter: Filter): ShortVacancyRequest {
+        Log.i("test_1", filter.region?.id.toString())
+        return ShortVacancyRequest(
+            requestJob = requestJob,
+            countryId = filter.country?.id.toString(),
+            regionId = if (filter.region != null) filter.region.id.toString() else null,
+            industryId = filter.industry?.id,
+            salary = filter.salary,
+            isSalary = filter.doNotShowWithoutSalary
+        )
+//        var path = value//"text=$value"
+//        if (filter.country != null) path += "&country=${filter.country.id}"
+//        if (filter.region != null) path += "&area=${filter.region.id}"
+//        if (filter.industry != null) path += "&industry=${filter.industry.id}"
+//        if (filter.salary != null) path += "&salary=${filter.salary}"
+//        if (filter.doNotShowWithoutSalary != null) path += "&only_with_salary=${filter.doNotShowWithoutSalary}"
+//        return path
     }
 }

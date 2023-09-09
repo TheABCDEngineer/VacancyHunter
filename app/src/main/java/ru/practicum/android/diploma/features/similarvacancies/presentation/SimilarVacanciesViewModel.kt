@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.similarvacancies.domain.SimilarVacanciesInteractor
 import ru.practicum.android.diploma.features.similarvacancies.presentation.models.SimilarVacanciesState
+import ru.practicum.android.diploma.features.similarvacancies.presentation.models.VacancySimilarShortUiMapper
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 
 class SimilarVacanciesViewModel(
-    private val interactor: SimilarVacanciesInteractor
+    private val interactor: SimilarVacanciesInteractor,
+    private val uiMapper: VacancySimilarShortUiMapper
 ) : ViewModel() {
 
     private val _state = MutableLiveData<SimilarVacanciesState>()
@@ -30,7 +32,13 @@ class SimilarVacanciesViewModel(
 
                     it.data.isEmpty() -> _state.postValue(SimilarVacanciesState.NothingFound)
 
-                    else -> _state.postValue(SimilarVacanciesState.Content(it.data))
+                    else -> _state.postValue(
+                        SimilarVacanciesState.Content(
+                            it.data.map { domainModel ->
+                                uiMapper(domainModel)
+                            }
+                        )
+                    )
                 }
             }
         }
