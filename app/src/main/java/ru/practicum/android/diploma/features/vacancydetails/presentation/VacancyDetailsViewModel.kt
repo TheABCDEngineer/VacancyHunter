@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.features.favorites.domain.FavoritesInteractor
 import ru.practicum.android.diploma.features.vacancydetails.domain.SharingInteractor
 import ru.practicum.android.diploma.features.vacancydetails.domain.VacancyDetailsInteractor
+import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsEvent
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsState
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
@@ -15,7 +17,8 @@ import ru.practicum.android.diploma.root.domain.model.Outcome
 class VacancyDetailsViewModel(
     private val sharingInteractor: SharingInteractor,
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
-    private val vacancyDetailsUiMapper: VacancyDetailsUiMapper
+    private val vacancyDetailsUiMapper: VacancyDetailsUiMapper,
+    private val favoritesInteractor: FavoritesInteractor
 ) : ViewModel() {
 
     private val _screenState = MutableLiveData<VacancyDetailsState>()
@@ -24,6 +27,7 @@ class VacancyDetailsViewModel(
     private val _externalNavEvent = MutableLiveData<Event<VacancyDetailsEvent>>()
     val externalNavEvent: LiveData<Event<VacancyDetailsEvent>> get() = _externalNavEvent
 
+    private lateinit var domainModel: VacancyDetails
 
     fun getVacancyById(id: String) {
         if (id.isNotEmpty()) {
@@ -35,6 +39,7 @@ class VacancyDetailsViewModel(
                 when (result) {
                     is Outcome.Success -> {
                         result.data?.let {
+                            domainModel = it
                             _screenState.postValue(
                                 VacancyDetailsState.Content(
                                     vacancyDetailsUiMapper(it)
