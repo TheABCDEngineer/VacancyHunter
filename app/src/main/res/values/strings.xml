@@ -48,4 +48,5 @@
     <string name="team_1">TheABCDEngineer</string>
     <string name="team_2">InnaLapwa</string>
     <string name="team_3">pogonat</string>
+    <string name="server_error">Ошибка сервера</string>
 </resources>

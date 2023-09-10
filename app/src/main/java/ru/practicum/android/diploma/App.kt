@@ -19,9 +19,4 @@ class App: Application() {
             modules(listOf(uiModule, domainModule, dataModule))
         }
     }
-
-    companion object {
-        const val CLICK_DEBOUNCE_DELAY_MILLIS = 200L
-
-    }
 }
