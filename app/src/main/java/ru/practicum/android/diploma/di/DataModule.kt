@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -25,6 +26,7 @@ import ru.practicum.android.diploma.root.data.FilterImplSharedPreference
 import ru.practicum.android.diploma.root.data.StorageKeys
 import ru.practicum.android.diploma.root.data.VacancyDbConverter
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
+import ru.practicum.android.diploma.root.data.db.AppDatabase
 import ru.practicum.android.diploma.root.data.network.HeadHunterApi
 import ru.practicum.android.diploma.root.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.root.data.network.NetworkSearch
@@ -110,6 +112,12 @@ val dataModule = module {
 
     single<VacancyDbConverter> {
         VacancyDbConverter()
+    }
+
+    single<AppDatabase> {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
 }
