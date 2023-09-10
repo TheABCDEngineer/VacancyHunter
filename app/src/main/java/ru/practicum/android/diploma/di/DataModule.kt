@@ -10,6 +10,8 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.practicum.android.diploma.features.favorites.data.FavoritesRepositoryImpl
+import ru.practicum.android.diploma.features.favorites.domain.FavoritesRepository
 import ru.practicum.android.diploma.features.filters.data.models.FiltersMapper
 import ru.practicum.android.diploma.features.search.data.SearchVacancyRepositoryImplNetwork
 import ru.practicum.android.diploma.features.search.data.network.NetworkClient
@@ -21,6 +23,7 @@ import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyD
 import ru.practicum.android.diploma.root.data.DataConverter
 import ru.practicum.android.diploma.root.data.FilterImplSharedPreference
 import ru.practicum.android.diploma.root.data.StorageKeys
+import ru.practicum.android.diploma.root.data.VacancyDbConverter
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.root.data.network.HeadHunterApi
 import ru.practicum.android.diploma.root.data.network.HeaderInterceptor
@@ -99,6 +102,14 @@ val dataModule = module {
     
     single<FiltersMapper> {
         FiltersMapper()
+    }
+
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(appDatabase = get(), vacancyDbConverter = get())
+    }
+
+    single<VacancyDbConverter> {
+        VacancyDbConverter()
     }
 
 }

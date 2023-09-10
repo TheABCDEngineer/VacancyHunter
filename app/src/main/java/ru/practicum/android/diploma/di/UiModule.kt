@@ -19,7 +19,8 @@ val uiModule = module {
         VacancyDetailsViewModel(
             sharingInteractor = get(),
             vacancyDetailsInteractor = get(),
-            vacancyDetailsUiMapper = get()
+            vacancyDetailsUiMapper = get(),
+            favoritesInteractor = get()
         )
     }
     
