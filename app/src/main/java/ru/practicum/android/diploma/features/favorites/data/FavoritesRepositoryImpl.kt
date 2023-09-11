@@ -12,12 +12,12 @@ class FavoritesRepositoryImpl(
 ): FavoritesRepository {
     override suspend fun addToFavorites(vacancy: VacancyDetails): Boolean {
         val result = appDatabase.favVacancyDao().addVacancy(convertToVacancyEntity(vacancy))
-        return if (result == NUMBER_OF_LINES_WHEN_OPERATION_FAILED) false else true
+        return (result != CODE_WHEN_INSERT_FAILED)
     }
 
     override suspend fun deleteFromFavorites(vacancyId: String): Boolean {
         val result = appDatabase.favVacancyDao().deleteVacancy(vacancyId)
-        return if (result == NUMBER_OF_LINES_WHEN_OPERATION_FAILED) false else true
+        return (result != NUMBER_OF_LINES_WHEN_OPERATION_FAILED)
     }
 
     private fun convertToVacancyEntity(vacancy: VacancyDetails): FavVacancyEntity {
@@ -26,6 +26,7 @@ class FavoritesRepositoryImpl(
 
     companion object {
         private const val NUMBER_OF_LINES_WHEN_OPERATION_FAILED = 0
+        private const val CODE_WHEN_INSERT_FAILED = -1L
     }
 
 }
