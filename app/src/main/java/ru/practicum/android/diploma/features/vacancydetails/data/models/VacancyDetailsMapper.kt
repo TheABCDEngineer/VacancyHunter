@@ -25,7 +25,8 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
             contactsEmail = dto.contacts?.contactsEmail ?: "",
             contactsPhones = getPhones(dto.contacts?.phones),
             shareVacancyUrl = dto.alternateUrl ?: "",
-            employerAddress = getAddress(dto.address)
+            employerAddress = getAddress(dto.address),
+            isFavorite = false
         )
     }
 

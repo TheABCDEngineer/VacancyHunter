@@ -24,7 +24,8 @@ class VacancyDetailsUiMapper(private val context: Context) :
             contactsName = model.contactsName,
             contactsEmail = model.contactsEmail,
             contactsPhones = model.contactsPhones,
-            shareVacancyUrl = model.shareVacancyUrl
+            shareVacancyUrl = model.shareVacancyUrl,
+            isFavorite = model.isFavorite
         )
     }
 
