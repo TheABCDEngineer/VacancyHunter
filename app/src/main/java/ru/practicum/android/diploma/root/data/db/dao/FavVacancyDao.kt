@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.root.data.db.entity.FavVacancyEntity
 interface FavVacancyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addVacancy(vacancy: FavVacancyEntity): Int
+    suspend fun addVacancy(vacancy: FavVacancyEntity): Long
 
     @Query("DELETE FROM fav_vacancies_table WHERE id=:vacancyId")
     suspend fun deleteVacancy(vacancyId: String): Int
