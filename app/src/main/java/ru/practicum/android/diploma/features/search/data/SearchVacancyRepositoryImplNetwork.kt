@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.features.search.data
 
-import android.util.Log
 import ru.practicum.android.diploma.features.filters.domain.models.Filter
 import ru.practicum.android.diploma.features.search.data.network.NetworkClient
 import ru.practicum.android.diploma.features.search.data.network.dto.ShortVacancyRequest
@@ -18,17 +17,23 @@ class SearchVacancyRepositoryImplNetwork(
 
     override suspend fun loadVacancies(
         value: String,
-        filterParams: Filter
+        filterParams: Filter,
+        perPage: Int,
+        page: Int
     ): Outcome<ResponseModel> {
         val response = networkClient.executeRequest(
-            fetchRequest(value, filterParams)
+            fetchRequest(value, filterParams, perPage, page)
         )
 
         return when (response.resultCode) {
             NetworkResultCode.SUCCESS -> {
                 if (response.data != null) {
+                    val data = response.data as VacancyResponse
                     val vacancyResponse = ResponseModel(
-                        converter.map(listDto = (response.data!! as VacancyResponse).items)
+                        resultVacancyList = converter.map(listDto = data.items),
+                        foundCount = data.found,
+                        pagesCount = data.pages,
+                        page = data.page
                     )
                     Outcome.Success(data = vacancyResponse)
                 } else {
@@ -46,22 +51,16 @@ class SearchVacancyRepositoryImplNetwork(
         }
     }
 
-    private fun fetchRequest(requestJob: String, filter: Filter): ShortVacancyRequest {
-        Log.i("test_1", filter.region?.id.toString())
+    private fun fetchRequest(requestJob: String, filter: Filter, perPage: Int, page: Int): ShortVacancyRequest {
         return ShortVacancyRequest(
             requestJob = requestJob,
             countryId = filter.country?.id.toString(),
             regionId = if (filter.region != null) filter.region.id.toString() else null,
             industryId = filter.industry?.id,
             salary = filter.salary,
-            isSalary = filter.doNotShowWithoutSalary
+            isSalary = filter.doNotShowWithoutSalary,
+            perPage = perPage,
+            page = page
         )
-//        var path = value//"text=$value"
-//        if (filter.country != null) path += "&country=${filter.country.id}"
-//        if (filter.region != null) path += "&area=${filter.region.id}"
-//        if (filter.industry != null) path += "&industry=${filter.industry.id}"
-//        if (filter.salary != null) path += "&salary=${filter.salary}"
-//        if (filter.doNotShowWithoutSalary != null) path += "&only_with_salary=${filter.doNotShowWithoutSalary}"
-//        return path
     }
 }

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.features.search.presentation
+package ru.practicum.android.diploma.features.search.presentation.screenState
 
 enum class SearchScreenState (
     val isChip: Boolean,

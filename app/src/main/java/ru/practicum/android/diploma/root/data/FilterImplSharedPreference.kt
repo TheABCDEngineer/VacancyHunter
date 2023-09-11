@@ -12,14 +12,6 @@ class FilterImplSharedPreference(
     private val filtersMapper: FiltersMapper,
     private val networkClient: NetworkSearch
 ) : FilterRepository {
-    override fun saveFilter(model: Filter) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getFilter(): Filter {//MOCK!
-        return Filter(null,null, null,null,false)
-    }
-
     override suspend fun getIndustries(): Outcome<List<Industry>> {
         val response = networkClient.getIndustries()
         return when (response.resultCode) {

@@ -39,7 +39,9 @@ class NetworkClientImplRetrofit(
                     regionId = request.regionId,
                     industryId = request.industryId,
                     salary = request.salary,
-                    isSalary = request.isSalary.toString()
+                    isSalary = request.isSalary.toString(),
+                    perPage = request.perPage,
+                    page = request.page
                 )
             }
             else -> {}
