@@ -49,4 +49,7 @@
     <string name="team_2">InnaLapwa</string>
     <string name="team_3">pogonat</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="choice_work_place">Выбор места работы</string>
+    <string name="country">Страна</string>
+    <string name="region">Регион</string>
 </resources>
