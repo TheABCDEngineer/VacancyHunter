@@ -9,4 +9,8 @@ sealed class VacancyDetailsState {
         val vacancy: VacancyDetailsUiModel,
     ) : VacancyDetailsState()
 
+    data class ToggleFavorite(
+        val isFavorite: Boolean,
+    ) : VacancyDetailsState()
+
 }
