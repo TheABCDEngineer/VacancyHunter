@@ -14,13 +14,13 @@ import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.features.search.presentation.viewModel.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.practicum.android.diploma.App
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.features.search.presentation.SearchScreenState
-import ru.practicum.android.diploma.features.search.presentation.SearchingCleanerState
+import ru.practicum.android.diploma.features.search.presentation.screenState.FilterState
+import ru.practicum.android.diploma.features.search.presentation.screenState.SearchScreenState
+import ru.practicum.android.diploma.features.search.presentation.screenState.SearchingCleanerState
+import ru.practicum.android.diploma.features.search.presentation.ui.model.VacancyFactoryModel
 import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
-import ru.practicum.android.diploma.root.presentation.model.VacancyScreenModel
-import ru.practicum.android.diploma.root.presentation.ui.recyclerView.VacancyAdapter
+import ru.practicum.android.diploma.features.search.presentation.ui.recyclerView.VacancyAdapter
 import ru.practicum.android.diploma.util.debounce
 import ru.practicum.android.diploma.util.hideKeyboard
 
@@ -31,7 +31,7 @@ class SearchFragment : Fragment() {
     private val rvAdapter = VacancyAdapter(
         vacancyList = ArrayList(),
         onItemClickedAction = debounce(
-            App.CLICK_DEBOUNCE_DELAY_MILLIS,
+            300L,
             lifecycleScope,
             false
         ) { vacancyId: String ->
@@ -39,7 +39,8 @@ class SearchFragment : Fragment() {
                 R.id.action_searchFragment_to_vacancyDetailsFragment,
                 VacancyDetailsFragment.createArgs(vacancyId)
             )
-        }
+        },
+        onContinueLoading = { viewModel.getNextSearchingPage() }
     )
 
     override fun onCreateView(
@@ -59,6 +60,11 @@ class SearchFragment : Fragment() {
         }
         configureObservers()
         configureSearchingField()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onUiResume()
     }
 
     override fun onDestroy() {
@@ -84,8 +90,17 @@ class SearchFragment : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.onSearchingRequestChange(editField.text.toString())
                 hideKeyboard(this@SearchFragment)
+                editField.clearFocus()
             }
             false
+        }
+
+        editField?.setOnFocusChangeListener { _, inFocus ->
+            if (inFocus) {
+                if (editField.text.isNotEmpty()) updateSearchingCleanerState(SearchingCleanerState.ACTIVE)
+            } else {
+                updateSearchingCleanerState(SearchingCleanerState.INACTIVE)
+            }
         }
 
         searchingCleaner?.setOnClickListener {
@@ -104,8 +119,11 @@ class SearchFragment : Fragment() {
         viewModel.chipMessageObserve().observe(viewLifecycleOwner) { message ->
             updateChip(message)
         }
-        viewModel.vacancyFeedObserve().observe(viewLifecycleOwner) { vacancyList ->
-            updateFeed(vacancyList)
+        viewModel.vacancyFeedObserve().observe(viewLifecycleOwner) { vacancyFactoryModel ->
+            updateFeed(vacancyFactoryModel)
+        }
+        viewModel.filterStateObserve().observe(viewLifecycleOwner) { state ->
+            updateFilterState(state)
         }
     }
 
@@ -121,11 +139,20 @@ class SearchFragment : Fragment() {
         binding?.feedPlaceholder?.isVisible = state.isPlaceholder
     }
 
-    private fun updateFeed(vacancyList: ArrayList<VacancyScreenModel>) {
-        rvAdapter.updateItems(vacancyList)
+    private fun updateFeed(model: VacancyFactoryModel) {
+        if (model.isNewSearching) {
+            rvAdapter.updateItems(model.items, model.isContinueLoading)
+            return
+        }
+        rvAdapter.addItems(model.items, model.isContinueLoading)
     }
 
     private fun updateChip(text: String) {
         binding?.chip?.text = text
+    }
+
+    private fun updateFilterState(state: FilterState) {
+        binding?.filterChip?.text  = state.filterRequirementsCount.toString()
+        binding?.filterChip?.isVisible = state is FilterState.Active
     }
 }

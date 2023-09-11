@@ -8,25 +8,21 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.App
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.features.filters.domain.models.Filter
-import ru.practicum.android.diploma.features.search.domain.model.ResponseModel
-import ru.practicum.android.diploma.features.search.domain.repository.SearchVacancyRepository
-import ru.practicum.android.diploma.features.search.presentation.SearchScreenState
-import ru.practicum.android.diploma.features.search.presentation.SearchingCleanerState
+import ru.practicum.android.diploma.features.search.domain.interactor.VacancyFactoryInteractor
+import ru.practicum.android.diploma.features.search.presentation.screenState.FilterState
+import ru.practicum.android.diploma.features.search.presentation.screenState.SearchScreenState
+import ru.practicum.android.diploma.features.search.presentation.screenState.SearchingCleanerState
+import ru.practicum.android.diploma.features.search.presentation.ui.model.VacancyFactoryModel
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.root.domain.model.Outcome
-import ru.practicum.android.diploma.root.domain.repository.FilterRepository
-import ru.practicum.android.diploma.root.presentation.model.VacancyScreenModel
-import ru.practicum.android.diploma.util.isInternetConnected
 
 class SearchViewModel(
-    private val vacancyRepository: SearchVacancyRepository,
-    private val filterRepository: FilterRepository,
+    private val vacancyFactory: VacancyFactoryInteractor,
     private val context: Context
 ) : ViewModel() {
     private var previousSearchingRequest = ""
+    private var previousFilterHash = vacancyFactory.getFilterHash()
     private var searchJob: Job? = null
 
     private val searchingCleanerState = MutableLiveData<SearchingCleanerState>()
@@ -35,24 +31,54 @@ class SearchViewModel(
     private val searchScreenState = MutableLiveData<SearchScreenState>()
     fun searchScreenStateObserve(): LiveData<SearchScreenState> = searchScreenState
 
-    private val vacancyFeed = MutableLiveData<ArrayList<VacancyScreenModel>>()
-    fun vacancyFeedObserve(): LiveData<ArrayList<VacancyScreenModel>> = vacancyFeed
+    private val vacancyFeed = MutableLiveData<VacancyFactoryModel>()
+    fun vacancyFeedObserve(): LiveData<VacancyFactoryModel> = vacancyFeed
 
     private val chipMessage = MutableLiveData<String>()
     fun chipMessageObserve(): LiveData<String> = chipMessage
 
-    fun onSearchingRequestChange(text: String) {
+    private val filterState = MutableLiveData<FilterState>()
+    fun filterStateObserve(): LiveData<FilterState> = filterState
+
+    fun onUiResume() {
+        val currentFilterHash = vacancyFactory.getFilterHash()
+        if (currentFilterHash == previousFilterHash) return
+        previousFilterHash = currentFilterHash
+
+        val count = vacancyFactory.getFilterRequirementsCount()
+        val state =
+            if (count > 0) FilterState.Active(count) else FilterState.Inactive()
+        filterState.postValue(state)
+
+        if (previousSearchingRequest.isNotEmpty()) runSearching(delay = 0L) {
+            searchScreenState.postValue(SearchScreenState.SEARCHING)
+            vacancyFactory.getFirstVacancyPage(previousSearchingRequest)
+        }
+    }
+
+    fun onSearchingRequestChange(text: String?) {
         val cleanerState =
-            if (text.isEmpty()) SearchingCleanerState.INACTIVE else SearchingCleanerState.ACTIVE
+            if (text.isNullOrEmpty()) SearchingCleanerState.INACTIVE else SearchingCleanerState.ACTIVE
         searchingCleanerState.postValue(cleanerState)
 
-        if (!isConnected()) return
+        if (text == previousSearchingRequest) return
+        previousSearchingRequest = text ?: ""
 
-        if (text == previousSearchingRequest || text.isEmpty()) return
-        previousSearchingRequest = text
+        if (text.isNullOrEmpty()) {
+            searchJob?.cancel()
+            return
+        }
 
-        val filter = filterRepository.getFilter()
-        runSearching(App.CLICK_DEBOUNCE_DELAY_MILLIS, text, filter)
+        runSearching(delay = CLICK_DEBOUNCE_DELAY_MILLIS) {
+            searchScreenState.postValue(SearchScreenState.SEARCHING)
+            vacancyFactory.getFirstVacancyPage(text)
+        }
+    }
+
+    fun getNextSearchingPage() {
+        runSearching(delay = 0L) {
+            vacancyFactory.getNextVacancyPage()
+        }
     }
 
     fun onSearchingFieldClean() {
@@ -60,51 +86,68 @@ class SearchViewModel(
         searchingCleanerState.postValue(SearchingCleanerState.INACTIVE)
     }
 
-    private fun runSearching(delay: Long, parameter: String, filter: Filter) {
+    private fun runSearching(delay: Long, action: suspend() -> Outcome<VacancyFactoryModel>) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(delay)
-            searchScreenState.postValue(SearchScreenState.SEARCHING)
             handleSearchingResponse(
-                vacancyRepository.loadVacancies(parameter, filter)
+                action.invoke()
             )
             searchJob = null
         }
     }
 
-    private fun handleSearchingResponse(response: Outcome<ResponseModel>) {
-        val vacancyList = ArrayList<VacancyScreenModel>()
+    private fun handleSearchingResponse(response: Outcome<VacancyFactoryModel>) {
+        when (response.status) {
+            NetworkResultCode.SUCCESS -> {
+                if (response.data == null) {
+                    provideScreenState(NetworkResultCode.SERVER_ERROR)
+                    return
+                }
+                val data = response.data!!
+                provideScreenState(NetworkResultCode.SUCCESS, data)
+                if (data.items.isEmpty() && data.isNewSearching) return
+                vacancyFeed.postValue(data)
+            }
+
+            else -> provideScreenState(response.status)
+        }
+    }
+
+    private fun provideScreenState(networkResultCode: NetworkResultCode, model: VacancyFactoryModel? = null) {
         var screenState = SearchScreenState.RESPONSE_RESULTS
         var chipMessage = ""
 
-        if (response is Outcome.Success && response.data != null) {
-            vacancyList.addAll(response.data.resultVacancyList)
-        }
-
-        when (response.status!!) {
+        when (networkResultCode) {
             NetworkResultCode.SUCCESS -> {
-                if (vacancyList.isNotEmpty()) {
-                    vacancyFeed.postValue(vacancyList)
-                    chipMessage =
-                        context.getString(R.string.found) + " " + modifyToStringVacancyQuantity(
-                            vacancyList.size
-                        )
-                }
-                if (vacancyList.isEmpty()) {
+                if (model ==  null) return
+                chipMessage =
+                    context.getString(R.string.found) + " " + modifyToStringVacancyQuantity(
+                        vacancyFactory.getVacancyCount()
+                    )
+                screenState = SearchScreenState.RESPONSE_RESULTS
+
+                if (model.items.isEmpty() && model.isNewSearching) {
                     screenState = SearchScreenState.EMPTY_RESULT
                     chipMessage = context.getString(R.string.no_such_vacancies)
                 }
             }
-
-            else -> {
+            NetworkResultCode.SERVER_ERROR -> {
+                screenState = SearchScreenState.SOMETHING_WENT_WRONG
+                chipMessage = context.getString(R.string.server_error)
+            }
+            NetworkResultCode.CONNECTION_ERROR -> {
+                screenState = SearchScreenState.SOMETHING_WENT_WRONG
+                chipMessage = context.getString(R.string.no_internet_connection)
+            }
+            NetworkResultCode.UNKNOWN_ERROR -> {
                 screenState = SearchScreenState.SOMETHING_WENT_WRONG
                 chipMessage = context.getString(R.string.something_went_wrong)
             }
         }
 
-        searchScreenState.postValue(screenState)
+        this.searchScreenState.postValue(screenState)
         this.chipMessage.postValue(chipMessage)
-
     }
 
     private fun modifyToStringVacancyQuantity(quantity: Int): String {
@@ -116,10 +159,7 @@ class SearchViewModel(
         return "$quantity $ending"
     }
 
-    private fun isConnected(): Boolean {
-        if (isInternetConnected(context)) return true
-        searchScreenState.postValue(SearchScreenState.SOMETHING_WENT_WRONG)
-        chipMessage.postValue(context.getString(R.string.no_internet_connection))
-        return false
+    companion object {
+        const val CLICK_DEBOUNCE_DELAY_MILLIS = 2000L
     }
 }

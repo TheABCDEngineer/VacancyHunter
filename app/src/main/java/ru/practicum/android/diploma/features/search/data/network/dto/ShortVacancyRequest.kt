@@ -6,5 +6,7 @@ data class ShortVacancyRequest(
     val regionId: String?,
     val industryId: String?,
     val salary: String?,
-    val isSalary: Boolean
+    val isSalary: Boolean,
+    val perPage: Int,
+    val page: Int
 )
