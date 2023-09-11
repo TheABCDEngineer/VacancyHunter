@@ -6,12 +6,12 @@ import ru.practicum.android.diploma.features.search.domain.repository.SearchVaca
 import ru.practicum.android.diploma.features.search.presentation.ui.model.VacancyFactoryModel
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.root.domain.model.Outcome
-import ru.practicum.android.diploma.root.domain.repository.FilterRepository
+import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 import kotlin.reflect.full.memberProperties
 
 class VacancyFactory(
     private val vacancyRepository: SearchVacancyRepository,
-    private val filterRepository: FilterRepository
+    private val storage: FilterStorage
 ) : VacancyFactoryInteractor {
     private var searchingVacancyTitle = ""
     private var pagesCounter = 0
@@ -26,7 +26,7 @@ class VacancyFactory(
         pagesCounter = 0
         pagesCount = 0
         vacancyCount = 0
-        filter = filterRepository.getFilter() ?: emptyFilter
+        filter = storage.getFilter() ?: emptyFilter
 
         return loadVacancies(isNewSearching = true)
     }
@@ -40,7 +40,7 @@ class VacancyFactory(
 
     override fun getFilterRequirementsCount(): Int {
         var count = 0
-        val _filter = filterRepository.getFilter() ?: return 0
+        val _filter = storage.getFilter() ?: return 0
         for (property in Filter::class.memberProperties) {
             if (property.get(_filter) != null || property.get(_filter) == true) {
                 count += 1
@@ -50,7 +50,7 @@ class VacancyFactory(
     }
 
     override fun getFilterHash(): Int? {
-        val _filter = filterRepository.getFilter() ?: return null
+        val _filter = storage.getFilter() ?: return null
         return _filter.hashCode()
     }
 
