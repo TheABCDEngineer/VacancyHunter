@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.features.filters.data.models
 
+import ru.practicum.android.diploma.features.filters.data.dto.CountryDto
 import ru.practicum.android.diploma.features.filters.data.dto.IndustryDto
 import ru.practicum.android.diploma.features.filters.data.dto.SubindustryDto
+import ru.practicum.android.diploma.features.filters.domain.models.Country
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 
 class FiltersMapper {
@@ -19,4 +21,9 @@ class FiltersMapper {
         }
         return industries.sortedWith(compareBy({it.name}))
     }
+
+    fun convertCountryDto(countryDto: CountryDto) = Country(
+        countryDto.id,
+        countryDto.name
+    )
 }

@@ -19,7 +19,7 @@ import ru.practicum.android.diploma.features.similarvacancies.data.models.Simila
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarityParamsMapper
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
 import ru.practicum.android.diploma.root.data.DataConverter
-import ru.practicum.android.diploma.root.data.FilterImplSharedPreference
+import ru.practicum.android.diploma.root.data.FilterRepositoryImpl
 import ru.practicum.android.diploma.root.data.FilterStorageImplSharedPref
 import ru.practicum.android.diploma.root.data.StorageKeys
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
@@ -93,7 +93,7 @@ val dataModule = module {
             gson = get())
     }
 
-    singleOf(::FilterImplSharedPreference).bind<FilterRepository>()
+    singleOf(::FilterRepositoryImpl).bind<FilterRepository>()
 
     singleOf(::DataConverter).bind()
 

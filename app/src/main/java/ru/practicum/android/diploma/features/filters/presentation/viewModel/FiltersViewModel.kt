@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.features.filters.presentation.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,6 +45,26 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
                 }
                 else -> {
                     _industriesScreenState.postValue(IndustryScreenState.Error)
+                }
+            }
+        }
+    }
+
+    fun getCountries() {
+        viewModelScope.launch {
+            val result = filtersInteractor.getCountries()
+            when (result) {
+                is Outcome.Success -> {
+                    result.data?.let {
+                        Log.d("test", "success ${it.size}")
+                        //industriesFullList = it
+
+                        //_industriesScreenState.postValue(IndustryScreenState.Content(it))
+                    }
+                }
+                else -> {
+                    Log.d("test", "error")
+                    //_industriesScreenState.postValue(IndustryScreenState.Error)
                 }
             }
         }
