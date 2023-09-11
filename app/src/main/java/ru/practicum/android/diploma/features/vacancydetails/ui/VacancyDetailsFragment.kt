@@ -83,6 +83,7 @@ class VacancyDetailsFragment : Fragment() {
             is VacancyDetailsState.Content -> renderContent(screenState.vacancy)
             is VacancyDetailsState.Loading -> renderLoading()
             is VacancyDetailsState.Error -> renderError()
+            is VacancyDetailsState.ToggleFavorite -> renderFavorite(screenState.isFavorite)
         }
     }
 
@@ -99,9 +100,17 @@ class VacancyDetailsFragment : Fragment() {
         renderDescription()
         renderKeySkills()
         renderContacts()
+        renderFavorite(foundVacancy.isFavorite)
 
         binding.similarVacanciesButton.isVisible = isInternetConnected(requireContext())
 
+    }
+
+    private fun renderFavorite(isFavorite: Boolean) {
+        when (isFavorite) {
+            true -> binding.favButton.setImageResource(R.drawable.ic_favorites_on)
+            false -> binding.favButton.setImageResource(R.drawable.ic_favorites_off)
+        }
     }
 
     private fun renderContacts() {
