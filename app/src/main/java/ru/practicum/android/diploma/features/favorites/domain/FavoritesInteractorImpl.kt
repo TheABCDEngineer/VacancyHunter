@@ -12,9 +12,12 @@ class FavoritesInteractorImpl(
 
     override suspend fun toggleFavorites(vacancy: VacancyDetails): Boolean {
         return if (vacancy.isFavorite) {
-            deleteFromFavorites(vacancy.vacancyId)
+            val deleteFromFavoriteResult = deleteFromFavorites(vacancy.vacancyId)
+            val isFavoriteNewStatus = !deleteFromFavoriteResult
+            isFavoriteNewStatus
         } else {
-            addToFavorites(vacancy)
+            val isFavoriteNewStatus = addToFavorites(vacancy)
+            isFavoriteNewStatus
         }
     }
 

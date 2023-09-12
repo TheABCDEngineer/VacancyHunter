@@ -74,8 +74,8 @@ class VacancyDetailsViewModel(
 
     fun toggleFavorites() {
         viewModelScope.launch {
-            val isSuccessful = favoritesInteractor.toggleFavorites(domainModel)
-            _screenState.postValue(VacancyDetailsState.ToggleFavorite(isSuccessful))
+            val isFavorite = favoritesInteractor.toggleFavorites(domainModel)
+            _screenState.postValue(VacancyDetailsState.ToggleFavorite(isFavorite))
         }
     }
 
