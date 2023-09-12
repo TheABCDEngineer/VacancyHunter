@@ -244,7 +244,7 @@ class VacancyDetailsFragment : Fragment() {
             generateShareText()
         }
 
-        binding.favButton.setOnClickListener { }
+        binding.favButton.setOnClickListener { viewModel.toggleFavorites() }
 
         binding.similarVacanciesButton.setOnClickListener {
             if (isInternetConnected(requireContext())) {

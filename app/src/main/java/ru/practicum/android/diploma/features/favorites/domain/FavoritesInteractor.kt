@@ -4,7 +4,9 @@ import ru.practicum.android.diploma.features.vacancydetails.domain.models.Vacanc
 
 interface FavoritesInteractor {
 
-    suspend fun addToFavourites(vacancy: VacancyDetails): Boolean
+    suspend fun toggleFavorites(vacancy: VacancyDetails): Boolean
+
+    suspend fun addToFavorites(vacancy: VacancyDetails): Boolean
 
     suspend fun deleteFromFavorites(vacancyId: String): Boolean
 }
