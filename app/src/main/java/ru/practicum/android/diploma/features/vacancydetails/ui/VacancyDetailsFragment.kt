@@ -176,7 +176,7 @@ class VacancyDetailsFragment : Fragment() {
             Glide.with(binding.logoImage)
                 .load(vacancy.logoUrl)
                 .centerInside()
-                .transform(RoundedCorners(dpToPx(R.dimen.logo_corner_radius)))
+                .transform(RoundedCorners(dpToPx(LOGO_CORNER_RADIUS)))
                 .placeholder(R.drawable.placeholder)
                 .into(binding.logoImage)
         }
@@ -316,6 +316,7 @@ class VacancyDetailsFragment : Fragment() {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
+        private const val LOGO_CORNER_RADIUS = 12
         private const val ARGS_VACANCY_ID = "ARGS_VACANCY_ID"
         fun createArgs(id: String): Bundle = bundleOf(ARGS_VACANCY_ID to id)
     }
