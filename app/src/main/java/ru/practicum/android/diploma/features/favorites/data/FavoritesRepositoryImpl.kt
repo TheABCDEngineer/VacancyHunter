@@ -20,6 +20,10 @@ class FavoritesRepositoryImpl(
         return (result != NUMBER_OF_LINES_WHEN_OPERATION_FAILED)
     }
 
+    override suspend fun checkIfIsFavorite(vacancyId: String): Boolean {
+        return appDatabase.favVacancyDao().checkIfIsFavorite(vacancyId)
+    }
+
     private fun convertToVacancyEntity(vacancy: VacancyDetails): FavVacancyEntity {
         return vacancyDbConverter.mapToVacancyEntity(vacancy)
     }
