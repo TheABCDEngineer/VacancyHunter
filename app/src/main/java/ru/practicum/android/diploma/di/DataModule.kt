@@ -37,6 +37,12 @@ import ru.practicum.android.diploma.root.domain.repository.FilterRepository
 
 val dataModule = module {
 
+    single<AppDatabase> {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
     single<HeaderInterceptor> {
         HeaderInterceptor()
     }
@@ -114,10 +120,6 @@ val dataModule = module {
         VacancyDbConverter()
     }
 
-    single<AppDatabase> {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
-            .fallbackToDestructiveMigration()
-            .build()
-    }
+
 
 }
