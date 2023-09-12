@@ -9,12 +9,10 @@ class FavoritesInteractorImpl(
 ) : FavoritesInteractor {
 
     override suspend fun toggleFavorites(vacancy: VacancyDetails): Boolean {
-        return withContext(Dispatchers.IO) {
-            if (vacancy.isFavorite) {
-                deleteFromFavorites(vacancy.vacancyId)
-            } else {
-                addToFavorites(vacancy)
-            }
+        return if (vacancy.isFavorite) {
+            deleteFromFavorites(vacancy.vacancyId)
+        } else {
+            addToFavorites(vacancy)
         }
     }
 
