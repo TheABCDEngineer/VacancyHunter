@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.features.favorites.domain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
+import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class FavoritesInteractorImpl(
     private val favoritesRepository: FavoritesRepository
@@ -25,6 +26,12 @@ class FavoritesInteractorImpl(
     override suspend fun deleteFromFavorites(vacancyId: String): Boolean {
         return withContext(Dispatchers.IO) {
             favoritesRepository.deleteFromFavorites(vacancyId)
+        }
+    }
+
+    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyDetails>> {
+        return withContext(Dispatchers.IO) {
+            favoritesRepository.getFavoriteVacancies()
         }
     }
 

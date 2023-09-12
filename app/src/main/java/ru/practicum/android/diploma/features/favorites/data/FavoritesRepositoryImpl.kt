@@ -5,6 +5,7 @@ import ru.practicum.android.diploma.features.vacancydetails.domain.models.Vacanc
 import ru.practicum.android.diploma.root.data.VacancyDbConverter
 import ru.practicum.android.diploma.root.data.db.AppDatabase
 import ru.practicum.android.diploma.root.data.db.entity.FavVacancyEntity
+import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class FavoritesRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -27,6 +28,14 @@ class FavoritesRepositoryImpl(
     override suspend fun getVacancyById(vacancyId: String): VacancyDetails {
         val favVacancyEntity = appDatabase.favVacancyDao().getVacancyById(vacancyId)
         return vacancyDbConverter.mapToVacancyDetails(favVacancyEntity)
+    }
+
+    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyDetails>> {
+        val foundFavoriteVacancies = appDatabase.favVacancyDao().getFavoriteVacancies()
+        val listOfVacancies = foundFavoriteVacancies.map {
+            vacancyDbConverter.mapToVacancyDetails(it)
+        }
+        return Outcome.Success(data = listOfVacancies)
     }
 
     private fun convertToVacancyEntity(vacancy: VacancyDetails): FavVacancyEntity {

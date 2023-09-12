@@ -21,4 +21,7 @@ interface FavVacancyDao {
     @Query("SELECT * FROM fav_vacancies_table WHERE id = :vacancyId")
     suspend fun getVacancyById(vacancyId: String): FavVacancyEntity
 
+    @Query("SELECT * FROM fav_vacancies_table ORDER BY created_at DESC")
+    suspend fun getFavoriteVacancies(): List<FavVacancyEntity>
+
 }
