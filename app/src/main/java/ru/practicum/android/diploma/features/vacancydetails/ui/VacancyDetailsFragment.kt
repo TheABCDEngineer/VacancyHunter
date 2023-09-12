@@ -83,7 +83,10 @@ class VacancyDetailsFragment : Fragment() {
             is VacancyDetailsState.Content -> renderContent(screenState.vacancy)
             is VacancyDetailsState.Loading -> renderLoading()
             is VacancyDetailsState.Error -> renderError()
-            is VacancyDetailsState.ToggleFavorite -> renderFavorite(screenState.isFavorite)
+            is VacancyDetailsState.ToggleFavorite -> {
+                vacancy = vacancy.copy(isFavorite = screenState.isFavorite)
+                renderFavorite(screenState.isFavorite)
+            }
         }
     }
 
