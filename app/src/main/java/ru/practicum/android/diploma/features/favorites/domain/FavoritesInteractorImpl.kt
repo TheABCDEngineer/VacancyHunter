@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.features.favorites.domain
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 import ru.practicum.android.diploma.root.domain.model.Outcome
 
@@ -29,7 +30,7 @@ class FavoritesInteractorImpl(
         }
     }
 
-    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyDetails>> {
+    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyShortSimilar>> {
         return withContext(Dispatchers.IO) {
             favoritesRepository.getFavoriteVacancies()
         }
