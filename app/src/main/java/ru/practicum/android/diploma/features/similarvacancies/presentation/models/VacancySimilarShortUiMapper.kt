@@ -23,9 +23,7 @@ class VacancySimilarShortUiMapper(private val context: Context) : (VacancyShortS
     }
 
     private fun formatSalary(salaryObj: Salary?): String {
-        return salaryObj?.let {
-            SalaryFormat.formatSalaryString(salaryObj, context)
-        } ?: ""
+        return SalaryFormat.formatSalaryString(salaryObj, context)
     }
 
 }

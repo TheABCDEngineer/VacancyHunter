@@ -42,7 +42,6 @@ class VacancyDetailsUiMapper(private val context: Context) :
     }
 
     private fun formatSalaryString(salaryObj: Salary?): String {
-        if (salaryObj == null) return ""
         return SalaryFormat.formatSalaryString(salaryObj, context)
     }
 
