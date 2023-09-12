@@ -19,7 +19,7 @@ val domainModule = module {
     }
 
     single<VacancyDetailsInteractor> {
-        VacancyDetailsInteractorImpl(vacancyRepository = get())
+        VacancyDetailsInteractorImpl(vacancyRepository = get(), favoritesRepository = get())
     }
 
     single<SimilarVacanciesInteractor> {
