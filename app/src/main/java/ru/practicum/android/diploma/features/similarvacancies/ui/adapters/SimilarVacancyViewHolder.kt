@@ -23,7 +23,7 @@ class SimilarVacancyViewHolder(
         Glide.with(binding.logoImage)
             .load(vacancy.logoUrl)
             .centerInside()
-            .transform(RoundedCorners(dpToPx(R.dimen.logo_corner_radius)))
+            .transform(RoundedCorners(dpToPx()))
             .placeholder(R.drawable.padded_logo_placeholder)
             .into(binding.logoImage)
 
@@ -32,8 +32,12 @@ class SimilarVacancyViewHolder(
         }
     }
 
-    private fun dpToPx(dp: Int): Int {
+    private fun dpToPx(): Int {
         val density = this.itemView.context.resources.displayMetrics.density
-        return (dp * density).toInt()
+        return (LOGO_CORNER_RADIUS_DP * density).toInt()
+    }
+
+    companion object {
+        private const val LOGO_CORNER_RADIUS_DP = 12
     }
 }
