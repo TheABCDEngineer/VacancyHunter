@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.features.vacancydetails.presentation.models.
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsState
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
 import ru.practicum.android.diploma.root.domain.model.Outcome
+import ru.practicum.android.diploma.util.debounce
 
 class VacancyDetailsViewModel(
     private val sharingInteractor: SharingInteractor,
@@ -27,30 +28,31 @@ class VacancyDetailsViewModel(
     private val _externalNavEvent = MutableLiveData<Event<VacancyDetailsEvent>>()
     val externalNavEvent: LiveData<Event<VacancyDetailsEvent>> get() = _externalNavEvent
 
+    private val toggleFavoriteDebounce =
+        debounce(FAV_DEBOUNCE_DELAY_MILLIS, viewModelScope, false) {
+            executeToggleFavorite()
+        }
+
     private lateinit var domainModel: VacancyDetails
 
     fun getVacancyById(id: String) {
-        if (id.isNotEmpty()) {
-            viewModelScope.launch {
+        if (id.isEmpty()) return
 
-                _screenState.postValue(VacancyDetailsState.Loading)
+        viewModelScope.launch {
 
-                val result = vacancyDetailsInteractor.getVacancyById(id)
-                when (result) {
-                    is Outcome.Success -> {
-                        result.data?.let {
-                            domainModel = it
-                            _screenState.postValue(
-                                VacancyDetailsState.Content(
-                                    vacancyDetailsUiMapper(it)
-                                )
-                            )
-                        }
+            _screenState.postValue(VacancyDetailsState.Loading)
+
+            val result = vacancyDetailsInteractor.getVacancyById(id)
+            when (result) {
+                is Outcome.Success -> {
+                    result.data?.let {
+                        domainModel = it
+                        _screenState.postValue(VacancyDetailsState.Content(vacancyDetailsUiMapper(it)))
                     }
+                }
 
-                    else -> {
-                        _screenState.postValue(VacancyDetailsState.Error)
-                    }
+                else -> {
+                    _screenState.postValue(VacancyDetailsState.Error)
                 }
             }
         }
@@ -73,6 +75,10 @@ class VacancyDetailsViewModel(
     }
 
     fun toggleFavorites() {
+        toggleFavoriteDebounce()
+    }
+
+    private fun executeToggleFavorite() {
         viewModelScope.launch {
             val isFavorite = favoritesInteractor.toggleFavorites(domainModel)
             domainModel = domainModel.copy(isFavorite = isFavorite)
@@ -80,4 +86,7 @@ class VacancyDetailsViewModel(
         }
     }
 
+    companion object {
+        private const val FAV_DEBOUNCE_DELAY_MILLIS = 300L
+    }
 }
