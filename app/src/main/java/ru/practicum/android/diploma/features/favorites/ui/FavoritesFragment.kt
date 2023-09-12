@@ -87,10 +87,12 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun renderNothingFound() {
+        adapter?.updateAdapter(emptyList())
         showPlaceHolder()
     }
 
     private fun renderError(errorCode: NetworkResultCode?) {
+        adapter?.updateAdapter(emptyList())
         showPlaceHolder()
         if (errorCode == null) {
             showMessage(getString(R.string.something_went_wrong))
