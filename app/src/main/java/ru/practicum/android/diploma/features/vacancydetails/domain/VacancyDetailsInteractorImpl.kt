@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.features.vacancydetails.domain
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.features.favorites.domain.FavoritesRepository
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 import ru.practicum.android.diploma.root.domain.VacancyRepository
@@ -18,7 +20,9 @@ class VacancyDetailsInteractorImpl(
             is Outcome.Error -> return outcome
             is Outcome.Success -> {
                 val vacancyDetails = outcome.data ?: return outcome
-                val isFavorite = favoritesRepository.checkIfIsFavorite(id)
+                val isFavorite = withContext(Dispatchers.IO) {
+                    favoritesRepository.checkIfIsFavorite(id)
+                }
                 return if (isFavorite) {
                     val vacancyMarkedFavorite = vacancyDetails.copy(isFavorite = true)
                     Outcome.Success(vacancyMarkedFavorite)
