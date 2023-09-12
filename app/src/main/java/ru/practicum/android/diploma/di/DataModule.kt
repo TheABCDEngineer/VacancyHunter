@@ -117,9 +117,7 @@ val dataModule = module {
     }
 
     single<VacancyDbConverter> {
-        VacancyDbConverter()
+        VacancyDbConverter(gson = get())
     }
-
-
 
 }
