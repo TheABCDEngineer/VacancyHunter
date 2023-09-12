@@ -10,4 +10,6 @@ interface FavoritesRepository {
 
     suspend fun checkIfIsFavorite(vacancyId: String): Boolean
 
+    suspend fun getVacancyById(vacancyId: String): VacancyDetails
+
 }

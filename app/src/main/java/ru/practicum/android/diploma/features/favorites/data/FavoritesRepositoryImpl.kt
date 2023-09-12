@@ -24,6 +24,11 @@ class FavoritesRepositoryImpl(
         return appDatabase.favVacancyDao().checkIfIsFavorite(vacancyId)
     }
 
+    override suspend fun getVacancyById(vacancyId: String): VacancyDetails {
+        val favVacancyEntity = appDatabase.favVacancyDao().getVacancyById(vacancyId)
+        return vacancyDbConverter.mapToVacancyDetails(favVacancyEntity)
+    }
+
     private fun convertToVacancyEntity(vacancy: VacancyDetails): FavVacancyEntity {
         return vacancyDbConverter.mapToVacancyEntity(vacancy)
     }
