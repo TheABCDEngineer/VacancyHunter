@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.root.data
 
 import com.google.gson.Gson
+import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Address
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.ContactPhone
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
@@ -9,7 +10,7 @@ import ru.practicum.android.diploma.root.data.db.entity.FavVacancyEntity
 
 class VacancyDbConverter(private val gson: Gson) {
 
-    fun mapToVacancyEntity(vacancy: VacancyDetails): FavVacancyEntity {
+    fun mapVacancyDetailsToVacancyEntity(vacancy: VacancyDetails): FavVacancyEntity {
         return FavVacancyEntity(
             vacancyId = vacancy.vacancyId,
             vacancyName = vacancy.vacancyName,
@@ -31,7 +32,7 @@ class VacancyDbConverter(private val gson: Gson) {
         )
     }
 
-    fun mapToVacancyDetails(vacancy: FavVacancyEntity): VacancyDetails {
+    fun mapVacancyEntityToVacancyDetails(vacancy: FavVacancyEntity): VacancyDetails {
         return VacancyDetails(
             vacancyId = vacancy.vacancyId,
             vacancyName = vacancy.vacancyName,
@@ -50,6 +51,17 @@ class VacancyDbConverter(private val gson: Gson) {
             shareVacancyUrl = vacancy.shareVacancyUrl,
             employerAddress = convertFromJsonToAddress(vacancy.employerAddress),
             isFavorite = true
+        )
+    }
+
+    fun mapVacancyEntityToVacancyShort(vacancy: FavVacancyEntity): VacancyShortSimilar {
+        return VacancyShortSimilar(
+            vacancyId = vacancy.vacancyId,
+            vacancyName = vacancy.vacancyName,
+            salary = convertFromJsonToSalary(vacancy.salary),
+            logoUrl = vacancy.logoUrl,
+            employerName = vacancy.employerName,
+            employerArea = vacancy.employerArea
         )
     }
 
