@@ -36,9 +36,11 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/share_icon"
             android:src="@drawable/ic_sharing"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/favButton"
             app:layout_constraintTop_toTopOf="@id/returnArrow"
-            app:layout_constraintBottom_toBottomOf="@id/returnArrow" />
+            app:layout_constraintBottom_toBottomOf="@id/returnArrow"
+            tools:visibility="visible"/>
 
         <ImageButton
             android:id="@+id/favButton"
@@ -47,9 +49,11 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/favorites_icon"
             android:src="@drawable/ic_favorites_off"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/returnArrow"
-            app:layout_constraintBottom_toBottomOf="@id/returnArrow" />
+            app:layout_constraintBottom_toBottomOf="@id/returnArrow"
+            tools:visibility="visible"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/left_guideline"

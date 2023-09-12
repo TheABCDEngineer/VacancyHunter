@@ -101,9 +101,15 @@ class VacancyDetailsFragment : Fragment() {
         renderKeySkills()
         renderContacts()
         renderFavorite(foundVacancy.isFavorite)
+        renderTopBarButtons()
 
         binding.similarVacanciesButton.isVisible = isInternetConnected(requireContext())
 
+    }
+
+    private fun renderTopBarButtons() {
+        binding.favButton.isVisible = true
+        binding.shareButton.isVisible = true
     }
 
     private fun renderFavorite(isFavorite: Boolean) {
@@ -176,7 +182,7 @@ class VacancyDetailsFragment : Fragment() {
             Glide.with(binding.logoImage)
                 .load(vacancy.logoUrl)
                 .centerInside()
-                .transform(RoundedCorners(dpToPx(LOGO_CORNER_RADIUS)))
+                .transform(RoundedCorners(dpToPx()))
                 .placeholder(R.drawable.placeholder)
                 .into(binding.logoImage)
         }
@@ -305,9 +311,9 @@ class VacancyDetailsFragment : Fragment() {
         ).show()
     }
 
-    private fun dpToPx(dp: Int): Int {
+    private fun dpToPx(): Int {
         val density = resources.displayMetrics.density
-        return (dp * density).toInt()
+        return (LOGO_CORNER_RADIUS_DP * density).toInt()
     }
 
     private fun getIdFromArgs(): String {
@@ -316,7 +322,7 @@ class VacancyDetailsFragment : Fragment() {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
-        private const val LOGO_CORNER_RADIUS = 12
+        private const val LOGO_CORNER_RADIUS_DP = 12
         private const val ARGS_VACANCY_ID = "ARGS_VACANCY_ID"
         fun createArgs(id: String): Bundle = bundleOf(ARGS_VACANCY_ID to id)
     }
