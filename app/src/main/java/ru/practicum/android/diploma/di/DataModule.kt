@@ -23,6 +23,7 @@ import ru.practicum.android.diploma.features.similarvacancies.data.models.Simila
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
 import ru.practicum.android.diploma.root.data.DataConverter
 import ru.practicum.android.diploma.root.data.FilterImplSharedPreference
+import ru.practicum.android.diploma.root.data.FilterStorageImplSharedPref
 import ru.practicum.android.diploma.root.data.StorageKeys
 import ru.practicum.android.diploma.root.data.VacancyDbConverter
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
@@ -34,6 +35,7 @@ import ru.practicum.android.diploma.root.data.network.ResponseProcessor
 import ru.practicum.android.diploma.root.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 import ru.practicum.android.diploma.root.domain.repository.FilterRepository
+import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 
 val dataModule = module {
 
@@ -112,6 +114,8 @@ val dataModule = module {
         FiltersMapper()
     }
 
+    singleOf(::FilterStorageImplSharedPref).bind<FilterStorage>()
+
     single<FavoritesRepository> {
         FavoritesRepositoryImpl(appDatabase = get(), vacancyDbConverter = get())
     }
@@ -119,5 +123,4 @@ val dataModule = module {
     single<VacancyDbConverter> {
         VacancyDbConverter(gson = get())
     }
-
 }

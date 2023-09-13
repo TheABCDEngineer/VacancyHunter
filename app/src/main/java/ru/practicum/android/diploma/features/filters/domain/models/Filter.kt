@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.features.filters.domain.models
 
 data class Filter(
-    val industry: Industry?,
-    val country: Country?,
+    var industry: Industry?,
+    var country: Country?,
     val region: Region?,
-    val salary: String?,
-    val doNotShowWithoutSalary: Boolean
+    var salary: String?,
+    var doNotShowWithoutSalary: Boolean
 )

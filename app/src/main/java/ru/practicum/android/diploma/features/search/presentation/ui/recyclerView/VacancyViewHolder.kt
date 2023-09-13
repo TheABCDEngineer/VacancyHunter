@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.root.presentation.ui.recyclerView
+package ru.practicum.android.diploma.features.search.presentation.ui.recyclerView
 
 import android.view.View
 import android.widget.ImageView

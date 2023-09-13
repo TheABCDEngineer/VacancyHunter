@@ -32,7 +32,7 @@ class FiltersFragment : Fragment() {
     private lateinit var industrySearchTextWatcher: TextWatcher
     private val industriesAdapter = IndustriesAdapter()
 
-    private var industry: Industry? = null // временно для теста
+    private val filter = Filter(null, null, null, null, false)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +48,7 @@ class FiltersFragment : Fragment() {
 
         setMainScreenListeners()
         setIndustryScreenListeners()
+        setWorkPlaceScreenListeners()
         customizeRecyclerView()
 
         viewModel.industriesScreenState.observe(viewLifecycleOwner) {
@@ -56,11 +57,12 @@ class FiltersFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        _binding = null
         super.onDestroy()
 
-        binding.expectedSalary.removeTextChangedListener(salaryTextWatcher)
-        binding.filterIndustrySearchField.removeTextChangedListener(industrySearchTextWatcher)
+        salaryTextWatcher.let { binding.expectedSalary.removeTextChangedListener(it) }
+        industrySearchTextWatcher.let { binding.filterIndustrySearchField.removeTextChangedListener(it) }
+
+        _binding = null
     }
 
     private fun setMainScreenListeners() {
@@ -69,6 +71,8 @@ class FiltersFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filter.salary = s.toString()
+                setClearIconVisibility(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -91,13 +95,30 @@ class FiltersFragment : Fragment() {
             filterMainIndustryClickListener()
         }
 
+        binding.filterMainWorkPlaceEmpty.setOnClickListener {
+            filterMainWorkPlaceClickListener()
+        }
+
+        binding.filterMainWorkPlaceFilled.setOnClickListener {
+            filterMainWorkPlaceClickListener()
+        }
+
         binding.filterMainBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
         binding.filterIndustryClear.setOnClickListener {
-            industry = null
+            filter.industry = null
             render(FilterScreenState.MainScreen)
+        }
+
+        binding.filterSalaryClear.setOnClickListener {
+            filter.salary = null
+            binding.expectedSalary.text?.clear()
+        }
+
+        binding.filterMainDoNotShowWithoutSalary.setOnCheckedChangeListener { _, isChecked ->
+            filter.doNotShowWithoutSalary = isChecked
         }
     }
 
@@ -122,13 +143,19 @@ class FiltersFragment : Fragment() {
         }
 
         binding.filterIndustriesChooseButton.setOnClickListener {
-            industry = industriesAdapter.getCheckedIndustry()
+            filter.industry = industriesAdapter.getCheckedIndustry()
+            render(FilterScreenState.MainScreen)
+        }
+    }
+
+    private fun setWorkPlaceScreenListeners() {
+        binding.filterWorkPlaceBack.setOnClickListener {
             render(FilterScreenState.MainScreen)
         }
     }
 
     private fun customizeRecyclerView() {
-        industriesAdapter.onItemClick = { _industry ->
+        industriesAdapter.onItemClick = { _ ->
             binding.filterIndustriesChooseButton.visibility = View.VISIBLE
         }
 
@@ -140,7 +167,11 @@ class FiltersFragment : Fragment() {
         binding.filterIndustriesChooseButton.visibility = View.GONE
         industriesAdapter.reload()
         viewModel.getIndustries()
-        render(FilterScreenState.IndustryScreen(industry))
+        render(FilterScreenState.IndustryScreen(filter.industry))
+    }
+
+    private fun filterMainWorkPlaceClickListener() {
+        render(FilterScreenState.WorkPlaceScreen(null, null))
     }
 
     private fun setEditTextColors(textInputLayout: TextInputLayout, text: CharSequence?) {
@@ -175,10 +206,11 @@ class FiltersFragment : Fragment() {
     private fun showMain() {
         binding.filterMainLayout.visibility = View.VISIBLE
         binding.filterIndustryLayout.visibility = View.GONE
-        if (industry != null) {
+        binding.filterWorkPlaceLayout.visibility = View.GONE
+        if (filter.industry != null) {
             binding.filterMainIndustryEmpty.visibility = View.GONE
             binding.filterMainIndustryFilled.visibility = View.VISIBLE
-            binding.filterMainIndustry.text = industry?.name
+            binding.filterMainIndustry.text = filter.industry?.name
         } else {
             binding.filterMainIndustryEmpty.visibility = View.VISIBLE
             binding.filterMainIndustryFilled.visibility = View.GONE
@@ -187,6 +219,7 @@ class FiltersFragment : Fragment() {
 
     private fun showIndustry(industry: Industry?) {
         binding.filterMainLayout.visibility = View.GONE
+        binding.filterWorkPlaceLayout.visibility = View.GONE
         binding.filterIndustryLayout.visibility = View.VISIBLE
         binding.filterIndustrySearchField.text.clear()
 
@@ -212,7 +245,14 @@ class FiltersFragment : Fragment() {
 
 
     private fun showWorkPlace() {
+        binding.filterWorkPlaceLayout.visibility = View.VISIBLE
+        binding.filterMainLayout.visibility = View.GONE
+        binding.filterIndustryLayout.visibility = View.GONE
+    }
 
+    private fun setClearIconVisibility(text: CharSequence?) {
+        binding.filterSalaryClear.visibility =
+            if (text.toString().isNotEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun showMessage(message: String) {
