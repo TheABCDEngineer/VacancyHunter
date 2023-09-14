@@ -206,7 +206,7 @@ class FiltersFragment : Fragment() {
         countriesAdapter.countries.clear()
         countriesAdapter.notifyDataSetChanged()
         viewModel.getCountries()
-        render(FilterScreenState.Country(null))
+        render(FilterScreenState.CountryScreen(null))
     }
 
     private fun setEditTextColors(textInputLayout: TextInputLayout, text: CharSequence?) {
@@ -227,7 +227,7 @@ class FiltersFragment : Fragment() {
             is FilterScreenState.MainScreen -> showMain()
             is FilterScreenState.IndustryScreen -> showIndustry(state.industry)
             is FilterScreenState.WorkPlaceScreen -> showWorkPlace()
-            is FilterScreenState.Country -> showCountry(state.country)
+            is FilterScreenState.CountryScreen -> showCountry(state.country)
         }
     }
 

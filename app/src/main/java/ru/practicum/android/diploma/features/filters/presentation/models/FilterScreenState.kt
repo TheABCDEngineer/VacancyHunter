@@ -7,5 +7,5 @@ sealed interface FilterScreenState {
     object MainScreen : FilterScreenState
     data class IndustryScreen(val industry:Industry?) : FilterScreenState
     data class WorkPlaceScreen(val country: Area?, val region: Area?) : FilterScreenState
-    data class Country(val country: Area?): FilterScreenState
+    data class CountryScreen(val country: Area?): FilterScreenState
 }
