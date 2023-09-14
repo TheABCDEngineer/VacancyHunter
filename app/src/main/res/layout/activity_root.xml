@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
     tools:context=".root.presentation.ui.RootActivity">
 
     <androidx.fragment.app.FragmentContainerView
@@ -26,10 +27,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:backgroundTint="@color/design_default_color_background"
+        android:background="@drawable/bottom_menu_line"
         app:itemIconTint="@color/tab_bar_items_colors_selector"
         app:itemTextColor="@color/tab_bar_items_colors_selector"
-        app:itemRippleColor="@color/design_default_color_background"
         app:guidelineUseRtl="false"
         app:itemIconSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
