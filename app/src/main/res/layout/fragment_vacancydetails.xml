@@ -140,12 +140,12 @@
                 app:layout_constraintStart_toEndOf="@id/logoImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/logoImage"
-                app:layout_constraintBottom_toTopOf="@id/city"
+                app:layout_constraintBottom_toTopOf="@id/address"
                 tools:text="Еда"
                 tools:visibility="visible"/>
 
             <TextView
-                android:id="@+id/city"
+                android:id="@+id/address"
                 style="@style/details_text_in_paragraph"
                 android:layout_marginTop="0dp"
                 android:layout_marginStart="@dimen/vac_detail_card_text_margin"
