@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.filters.domain.FiltersInteractor
 import ru.practicum.android.diploma.features.filters.domain.models.Area
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
+import ru.practicum.android.diploma.features.filters.presentation.models.CountryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
 import ru.practicum.android.diploma.root.domain.model.Outcome
 import java.util.Locale
@@ -18,6 +19,9 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
     private val _industriesScreenState = MutableLiveData<IndustryScreenState>()
     val industriesScreenState: LiveData<IndustryScreenState> get() = _industriesScreenState
+
+    private val _countriesScreenState = MutableLiveData<CountryScreenState>()
+    val countriesScreenState: LiveData<CountryScreenState> get() = _countriesScreenState
 
     private var country: Area? = null
     private var region: Area? = null
@@ -56,15 +60,16 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
     fun getCountries() {
         viewModelScope.launch {
+            _countriesScreenState.postValue(CountryScreenState.Loading)
             val result = filtersInteractor.getCountries()
             when (result) {
                 is Outcome.Success -> {
                     result.data?.let {
-                        Log.d("test", "success countries ${it.size}")
+                        _countriesScreenState.postValue(CountryScreenState.Content(it))
                     }
                 }
                 else -> {
-                    Log.d("test", "error countries")
+                    _countriesScreenState.postValue(CountryScreenState.Error)
                 }
             }
         }

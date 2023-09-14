@@ -16,8 +16,11 @@ import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
+import ru.practicum.android.diploma.features.filters.domain.models.Area
+import ru.practicum.android.diploma.features.filters.domain.models.Country
 import ru.practicum.android.diploma.features.filters.domain.models.Filter
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
+import ru.practicum.android.diploma.features.filters.presentation.models.CountryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.FilterScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.viewModel.FiltersViewModel
@@ -30,7 +33,9 @@ class FiltersFragment : Fragment() {
 
     private lateinit var salaryTextWatcher: TextWatcher
     private lateinit var industrySearchTextWatcher: TextWatcher
+
     private val industriesAdapter = IndustriesAdapter()
+    private val countriesAdapter = CountriesAdapter()
 
     private val filter = Filter(null, null, null, null, false)
 
@@ -53,6 +58,10 @@ class FiltersFragment : Fragment() {
 
         viewModel.industriesScreenState.observe(viewLifecycleOwner) {
             renderIndustry(it)
+        }
+
+        viewModel.countriesScreenState.observe(viewLifecycleOwner) {
+            renderCountry(it)
         }
     }
 
@@ -152,6 +161,19 @@ class FiltersFragment : Fragment() {
         binding.filterWorkPlaceBack.setOnClickListener {
             render(FilterScreenState.MainScreen)
         }
+
+        binding.filterCountryBack.setOnClickListener {
+            render(FilterScreenState.WorkPlaceScreen(null, null))
+        }
+
+        binding.filterWorkPlaceCountryEmpty.setOnClickListener {
+            filterWorkPlaceCountryClickListener()
+        }
+
+        binding.filterWorkPlaceCountryFilled.setOnClickListener {
+            filterWorkPlaceCountryClickListener()
+        }
+
     }
 
     private fun customizeRecyclerView() {
@@ -161,6 +183,14 @@ class FiltersFragment : Fragment() {
 
         binding.filterIndustriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.filterIndustriesRecyclerView.adapter = industriesAdapter
+
+
+        countriesAdapter.onItemClick = { _ ->
+            // render
+        }
+
+        binding.filterCountriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.filterCountriesRecyclerView.adapter = countriesAdapter
     }
 
     private fun filterMainIndustryClickListener() {
@@ -172,6 +202,13 @@ class FiltersFragment : Fragment() {
 
     private fun filterMainWorkPlaceClickListener() {
         render(FilterScreenState.WorkPlaceScreen(null, null))
+    }
+
+    private fun filterWorkPlaceCountryClickListener() {
+        countriesAdapter.countries.clear()
+        countriesAdapter.notifyDataSetChanged()
+        viewModel.getCountries()
+        render(FilterScreenState.Country(null))
     }
 
     private fun setEditTextColors(textInputLayout: TextInputLayout, text: CharSequence?) {
@@ -192,6 +229,7 @@ class FiltersFragment : Fragment() {
             is FilterScreenState.MainScreen -> showMain()
             is FilterScreenState.IndustryScreen -> showIndustry(state.industry)
             is FilterScreenState.WorkPlaceScreen -> showWorkPlace()
+            is FilterScreenState.Country -> showCountry(state.country)
         }
     }
 
@@ -200,6 +238,14 @@ class FiltersFragment : Fragment() {
             is IndustryScreenState.Content -> showIndustryContent(state.industries)
             is IndustryScreenState.Error -> showIndustryError()
             is IndustryScreenState.Loading -> showIndustryLoading()
+        }
+    }
+
+    private fun renderCountry(state: CountryScreenState) {
+        when (state) {
+            is CountryScreenState.Content -> showCountryContent(state.countries)
+            is CountryScreenState.Error -> showCountryError()
+            is CountryScreenState.Loading -> showCountryLoading()
         }
     }
 
@@ -248,6 +294,28 @@ class FiltersFragment : Fragment() {
         binding.filterWorkPlaceLayout.visibility = View.VISIBLE
         binding.filterMainLayout.visibility = View.GONE
         binding.filterIndustryLayout.visibility = View.GONE
+        binding.filterCountryLayout.visibility = View.GONE
+    }
+
+    private fun showCountry(country: Area?) {
+        binding.filterCountryLayout.visibility = View.VISIBLE
+        binding.filterWorkPlaceLayout.visibility = View.GONE
+    }
+
+    private fun showCountryContent(countries: List<Area>) {
+        binding.filterCountriesProgressBar.visibility = View.GONE
+        countriesAdapter.countries = countries.toMutableList()
+        countriesAdapter.notifyDataSetChanged()
+    }
+
+    private fun showCountryError() {
+        binding.filterCountriesProgressBar.visibility = View.GONE
+        showMessage(getString(R.string.something_went_wrong))
+        render(FilterScreenState.WorkPlaceScreen(null, null))
+    }
+
+    private fun showCountryLoading() {
+        binding.filterCountriesProgressBar.visibility = View.VISIBLE
     }
 
     private fun setClearIconVisibility(text: CharSequence?) {
