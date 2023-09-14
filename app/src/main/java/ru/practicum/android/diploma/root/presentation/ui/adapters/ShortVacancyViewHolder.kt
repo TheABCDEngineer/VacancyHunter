@@ -4,11 +4,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.ListItemVacancySimilarBinding
+import ru.practicum.android.diploma.databinding.ListItemVacancyBinding
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 
 class ShortVacancyViewHolder(
-    private val binding: ListItemVacancySimilarBinding,
+    private val binding: ListItemVacancyBinding,
     private val clickListener: VacanciesAdapter.ListItemClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
 

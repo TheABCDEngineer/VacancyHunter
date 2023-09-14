@@ -67,6 +67,6 @@
         app:layout_constraintTop_toBottomOf="@id/screenTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:itemCount="10"
-        tools:listitem="@layout/list_item_vacancy_similar" />
+        tools:listitem="@layout/list_item_vacancy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

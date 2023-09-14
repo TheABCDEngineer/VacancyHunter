@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.root.presentation.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.practicum.android.diploma.databinding.ListItemVacancySimilarBinding
+import ru.practicum.android.diploma.databinding.ListItemVacancyBinding
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 
 class VacanciesAdapter(
@@ -17,7 +17,7 @@ class VacanciesAdapter(
         val view = LayoutInflater.from(parent.context)
 
         return ShortVacancyViewHolder(
-            ListItemVacancySimilarBinding.inflate(view, parent, false),
+            ListItemVacancyBinding.inflate(view, parent, false),
             clickListener
         )
     }
