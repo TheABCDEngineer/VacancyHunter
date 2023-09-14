@@ -6,25 +6,16 @@
     android:layout_height="wrap_content"
     android:layout_marginVertical="8dp">
 
-    <FrameLayout
-        android:id="@+id/logoImageFrame"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/placeholder">
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="@dimen/vac_detail_image_dimens"
+        android:layout_height="@dimen/vac_detail_image_dimens"
         android:contentDescription="@string/logo_image"
         android:src="@drawable/padded_logo_placeholder"
-        android:background="@drawable/logo_border_figma" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/logo_border_frame" />
-    </FrameLayout>
+        android:background="@drawable/logo_border_figma"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/placeholder" />
 
     <TextView
         android:id="@+id/cardTitle"
@@ -37,7 +28,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/logoImageFrame"
+        app:layout_constraintStart_toEndOf="@id/logoImage"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Фулстек-разработчик, Москва" />
 
@@ -52,7 +43,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/logoImageFrame"
+        app:layout_constraintStart_toEndOf="@id/logoImage"
         app:layout_constraintTop_toBottomOf="@id/cardTitle"
         tools:text="Карты" />
 
@@ -67,7 +58,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/logoImageFrame"
+        app:layout_constraintStart_toEndOf="@id/logoImage"
         app:layout_constraintTop_toBottomOf="@id/employerName"
         tools:text="от 40 000 до 80 000 ₽" />
 
