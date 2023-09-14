@@ -20,7 +20,7 @@ class RetrofitNetworkClient(
 
     override suspend fun getVacancyById(dto: VacancyDetailsRequest): Response<VacancyDetailsDto> {
 
-        if (isConnected() == false) {
+        if (!isConnected()) {
             return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)
         }
 
@@ -35,7 +35,7 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun getSimilarVacanciesById(dto: SimilarVacanciesRequest): Response<SimilarVacanciesResponse> {
-        if (isConnected() == false) {
+        if (!isConnected()) {
             return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)
         }
         return withContext(Dispatchers.IO) {
@@ -51,7 +51,7 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun getSimilarVacanciesByProfRoles(dto: SimilarVacanciesRequest): Response<SimilarVacanciesResponse> {
-        if (isConnected() == false) {
+        if (!isConnected()) {
             return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)
         }
         return withContext(Dispatchers.IO) {
@@ -60,7 +60,7 @@ class RetrofitNetworkClient(
                     dto.params.vacancyId,
                     dto.params.profRoles!![0]
                 )
-                Response(resultCode = NetworkResultCode.SUCCESS, response )
+                Response(resultCode = NetworkResultCode.SUCCESS, response)
 
             } catch (e: Throwable) {
                 Response(resultCode = NetworkResultCode.SERVER_ERROR, data = null)
@@ -69,7 +69,7 @@ class RetrofitNetworkClient(
     }
     
     override suspend fun getIndustries(): Response<List<IndustryDto>> {
-        if (isConnected() == false) {
+        if (!isConnected()) {
             return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)
         }
 
