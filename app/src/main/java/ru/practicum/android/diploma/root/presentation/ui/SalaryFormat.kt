@@ -8,7 +8,7 @@ import java.util.Locale
 
 object SalaryFormat {
     fun formatSalaryString(salaryObj: Salary?, context: Context): String {
-        if (salaryObj == null) return ""
+        if (salaryObj == null) return context.getString(R.string.no_salary)
         val from = salaryObj.salaryLowerBoundary
         val to = salaryObj.salaryUpperBoundary
         val currencySymbol = getCurrencySymbol(salaryObj.salaryCurrency)

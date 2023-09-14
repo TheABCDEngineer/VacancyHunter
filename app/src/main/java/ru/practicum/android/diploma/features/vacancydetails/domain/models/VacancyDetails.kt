@@ -16,7 +16,8 @@ data class VacancyDetails(
     val contactsEmail: String,
     val contactsPhones: List<ContactPhone>,
     val shareVacancyUrl: String,
-    val employerAddress: Address?
+    val employerAddress: Address?,
+    val isFavorite: Boolean
 )
 
 

@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.features.similarvacancies.data.models.Simila
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesRequest
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarityParamsMapper
 import ru.practicum.android.diploma.features.similarvacancies.domain.models.SimilarityParams
-import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
+import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsMapper
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsRequest
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
@@ -29,7 +29,7 @@ class VacancyRepositoryImpl(
 
     override suspend fun getSimilarVacanciesById(
         searchParams: SimilarityParams
-    ): Outcome<List<VacancyShortSimilar>> {
+    ): Outcome<List<VacancyShortDomainModel>> {
         val response =
             networkClient.getSimilarVacanciesById(dto = SimilarVacanciesRequest(searchParams))
         return responseProcessor.processResponse(response, similarVacanciesMapper)
@@ -37,7 +37,7 @@ class VacancyRepositoryImpl(
 
     override suspend fun getSimilarVacanciesByProfRoles(
         params: SimilarityParams
-    ): Outcome<List<VacancyShortSimilar>> {
+    ): Outcome<List<VacancyShortDomainModel>> {
         val response =
             networkClient.getSimilarVacanciesByProfRoles(dto = SimilarVacanciesRequest(params))
         return responseProcessor.processResponse(response, similarVacanciesMapper)

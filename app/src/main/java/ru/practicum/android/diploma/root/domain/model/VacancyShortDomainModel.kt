@@ -1,9 +1,9 @@
-package ru.practicum.android.diploma.features.similarvacancies.domain.models
+package ru.practicum.android.diploma.root.domain.model
 
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
 
 
-data class VacancyShortSimilar(
+data class VacancyShortDomainModel(
     val vacancyId: String,
     val vacancyName: String,
     val salary: Salary?,

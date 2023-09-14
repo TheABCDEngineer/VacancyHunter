@@ -1,32 +1,31 @@
-package ru.practicum.android.diploma.features.similarvacancies.ui
+package ru.practicum.android.diploma.features.favorites.ui
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentSimilarVacanciesBinding
-import ru.practicum.android.diploma.features.similarvacancies.presentation.SimilarVacanciesViewModel
-import ru.practicum.android.diploma.features.similarvacancies.presentation.models.SimilarVacanciesState
+import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
+import ru.practicum.android.diploma.features.favorites.presentation.FavoritesViewModel
+import ru.practicum.android.diploma.features.favorites.presentation.models.FavoritesScreenState
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 import ru.practicum.android.diploma.root.presentation.ui.adapters.VacanciesAdapter
 import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.util.debounce
 
-class SimilarVacanciesFragment : Fragment() {
+class FavoritesFragment : Fragment() {
 
-    private val viewModel by viewModel<SimilarVacanciesViewModel>()
+    private val viewModel by viewModel<FavoritesViewModel>()
 
-    private var _binding: FragmentSimilarVacanciesBinding? = null
+    private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
 
     private var adapter: VacanciesAdapter? = null
@@ -39,7 +38,7 @@ class SimilarVacanciesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSimilarVacanciesBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoritesBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -48,34 +47,29 @@ class SimilarVacanciesFragment : Fragment() {
 
         setAdapter()
 
-        viewModel.getSimilarVacancies(getIdFromArgs())
-
+        viewModel.getFavorites()
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
-
-        binding.returnArrow.setOnClickListener {
-            findNavController().navigateUp()
-        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        adapter = null
+    override fun onDestroy() {
         _binding = null
+        adapter = null
+        super.onDestroy()
     }
 
-    private fun render(screenState: SimilarVacanciesState) {
-        when (screenState) {
-            is SimilarVacanciesState.Content -> renderContent(screenState.similarVacancies)
-            is SimilarVacanciesState.Loading -> renderLoading()
-            is SimilarVacanciesState.NothingFound -> renderNothingFound()
-            is SimilarVacanciesState.Error -> renderError(screenState.errorCode)
+    private fun render(screenState: FavoritesScreenState) {
+        when(screenState) {
+            is FavoritesScreenState.Content -> renderContent(screenState.favoriteVacancies)
+            is FavoritesScreenState.Loading -> renderLoading()
+            is FavoritesScreenState.NothingFound -> renderNothingFound()
+            is FavoritesScreenState.Error -> renderError(screenState.errorCode)
         }
     }
 
-    private fun renderContent(similarVacancies: List<VacancyShortUiModel>) {
-        foundVacancies = similarVacancies
+    private fun renderContent(favoriteVacancies: List<VacancyShortUiModel>) {
+        foundVacancies = favoriteVacancies
         adapter?.updateAdapter(foundVacancies)
         binding.apply {
             progressBar.isVisible = false
@@ -93,10 +87,12 @@ class SimilarVacanciesFragment : Fragment() {
     }
 
     private fun renderNothingFound() {
+        adapter?.updateAdapter(emptyList())
         showPlaceHolder()
     }
 
     private fun renderError(errorCode: NetworkResultCode?) {
+        adapter?.updateAdapter(emptyList())
         showPlaceHolder()
         if (errorCode == null) {
             showMessage(getString(R.string.something_went_wrong))
@@ -111,7 +107,7 @@ class SimilarVacanciesFragment : Fragment() {
         ) { vacancy ->
             findNavController()
                 .navigate(
-                    R.id.action_similarVacanciesFragment_to_vacancyDetailsFragment,
+                    R.id.action_favoritesFragment_to_vacancyDetailsFragment,
                     VacancyDetailsFragment.createArgs(vacancy.vacancyId)
                 )
         }
@@ -123,8 +119,8 @@ class SimilarVacanciesFragment : Fragment() {
                 }
             }
         )
-        binding.similarVacanciesList.layoutManager = LinearLayoutManager(requireContext())
-        binding.similarVacanciesList.adapter = adapter
+        binding.favoriteVacanciesList.layoutManager = LinearLayoutManager(requireContext())
+        binding.favoriteVacanciesList.adapter = adapter
     }
 
     private fun showMessage(message: String) {
@@ -139,15 +135,7 @@ class SimilarVacanciesFragment : Fragment() {
         }
     }
 
-    private fun getIdFromArgs(): String {
-        return requireArguments().getString(ARGS_VACANCY_ID) ?: ""
-    }
-
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
-        private const val ARGS_VACANCY_ID = "ARGS_VACANCY_ID"
-        fun createArgs(id: String): Bundle =
-            bundleOf(ARGS_VACANCY_ID to id)
     }
-
 }

@@ -24,7 +24,8 @@ class VacancyDetailsUiMapper(private val context: Context) :
             contactsName = model.contactsName,
             contactsEmail = model.contactsEmail,
             contactsPhones = model.contactsPhones,
-            shareVacancyUrl = model.shareVacancyUrl
+            shareVacancyUrl = model.shareVacancyUrl,
+            isFavorite = model.isFavorite
         )
     }
 
@@ -41,7 +42,6 @@ class VacancyDetailsUiMapper(private val context: Context) :
     }
 
     private fun formatSalaryString(salaryObj: Salary?): String {
-        if (salaryObj == null) return ""
         return SalaryFormat.formatSalaryString(salaryObj, context)
     }
 

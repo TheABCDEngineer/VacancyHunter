@@ -3,6 +3,8 @@ package ru.practicum.android.diploma.di
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import ru.practicum.android.diploma.features.favorites.domain.FavoritesInteractor
+import ru.practicum.android.diploma.features.favorites.domain.FavoritesInteractorImpl
 import ru.practicum.android.diploma.features.similarvacancies.domain.SimilarVacanciesInteractor
 import ru.practicum.android.diploma.features.similarvacancies.domain.SimilarVacanciesInteractorImpl
 import ru.practicum.android.diploma.features.filters.domain.FiltersInteractor
@@ -21,7 +23,7 @@ val domainModule = module {
     }
 
     single<VacancyDetailsInteractor> {
-        VacancyDetailsInteractorImpl(vacancyRepository = get())
+        VacancyDetailsInteractorImpl(vacancyRepository = get(), favoritesRepository = get())
     }
 
     single<SimilarVacanciesInteractor> {
@@ -33,4 +35,9 @@ val domainModule = module {
     }
 
     factoryOf(::VacancyFactory).bind<VacancyFactoryInteractor>()
+
+    single<FavoritesInteractor> {
+        FavoritesInteractorImpl(favoritesRepository = get())
+    }
+
 }
