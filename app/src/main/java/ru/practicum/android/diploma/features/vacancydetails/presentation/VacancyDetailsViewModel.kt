@@ -58,8 +58,11 @@ class VacancyDetailsViewModel(
         }
     }
 
-    fun composeEmail(address: String, vacancyName: String) {
-        val email = sharingInteractor.createEmailObject(address, vacancyName)
+    fun composeEmail() {
+        val email = sharingInteractor.createEmailObject(
+            domainModel.contactsEmail,
+            domainModel.vacancyName
+        )
         email?.let {
             _externalNavEvent.postValue(
                 Event(VacancyDetailsEvent.ComposeEmail(email))
@@ -67,7 +70,13 @@ class VacancyDetailsViewModel(
         }
     }
 
-    fun generateShareText(strings: List<String>) {
+    fun generateShareText(salary: String, address: String) {
+        val strings = listOf(
+            domainModel.vacancyName,
+            salary,
+            domainModel.employerName,
+            address,
+            domainModel.shareVacancyUrl)
         val message = sharingInteractor.generateShareText(strings)
         _externalNavEvent.postValue(
             Event(VacancyDetailsEvent.ShareVacancy(message))
