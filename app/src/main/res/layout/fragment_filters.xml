@@ -509,4 +509,55 @@
         </FrameLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/filter_country_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/filter_country_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="?attr/colorOnPrimary" />
+
+            <TextView
+                style="@style/font_medium_22"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/choice_country"
+                android:textColor="?attr/colorOnPrimary" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/filter_countries_progressBar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="56dp"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateTint="@color/yp_blue"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/filter_countries_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:height="0dp"
+            tools:listitem="@layout/filter_country_list_view" />
+
+    </LinearLayout>
+
 </LinearLayout>
