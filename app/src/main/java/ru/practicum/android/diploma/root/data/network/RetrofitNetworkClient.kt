@@ -57,8 +57,8 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 val response = api.getSimilarVacanciesByProfRoles(
-                    dto.params.vacancyId,
-                    dto.params.profRoles!![0]
+                    vacancyId =  dto.params.vacancyId,
+                    role = dto.params.profRoles?.firstOrNull() ?: ""
                 )
                 Response(resultCode = NetworkResultCode.SUCCESS, response)
 
