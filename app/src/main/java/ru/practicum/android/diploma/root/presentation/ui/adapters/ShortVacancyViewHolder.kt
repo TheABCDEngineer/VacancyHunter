@@ -23,21 +23,14 @@ class ShortVacancyViewHolder(
         Glide.with(binding.logoImage)
             .load(vacancy.logoUrl)
             .centerInside()
-            .transform(RoundedCorners(dpToPx()))
+            .transform(RoundedCorners(
+                binding.logoImage.resources.getDimensionPixelSize(R.dimen.logo_corner_radius)
+            ))
             .placeholder(R.drawable.padded_logo_placeholder)
             .into(binding.logoImage)
 
         itemView.setOnClickListener {
             clickListener.onListItemClick(vacancy = vacancy)
         }
-    }
-
-    private fun dpToPx(): Int {
-        val density = this.itemView.context.resources.displayMetrics.density
-        return (LOGO_CORNER_RADIUS_DP * density).toInt()
-    }
-
-    companion object {
-        private const val LOGO_CORNER_RADIUS_DP = 12
     }
 }

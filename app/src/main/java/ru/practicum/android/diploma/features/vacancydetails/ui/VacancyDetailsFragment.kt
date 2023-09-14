@@ -123,7 +123,11 @@ class VacancyDetailsFragment : Fragment() {
     }
 
     private fun renderContacts() {
-        if (vacancy.contactsPhones.isNotEmpty() || vacancy.contactsName.isNotEmpty() || vacancy.contactsEmail.isNotEmpty()) {
+        if (
+            vacancy.contactsPhones.isNotEmpty() ||
+            vacancy.contactsName.isNotEmpty() ||
+            vacancy.contactsEmail.isNotEmpty()
+            ) {
             binding.contactsTitle.isVisible = true
         }
         if (vacancy.contactsName.isNotEmpty()) {
@@ -173,7 +177,10 @@ class VacancyDetailsFragment : Fragment() {
     }
 
     private fun renderEmployerCard() {
-        val cardIsEmpty = vacancy.logoUrl.isEmpty() && vacancy.employerName.isEmpty() && vacancy.employerAddress.isEmpty()
+        val cardIsEmpty: Boolean =
+            vacancy.logoUrl.isEmpty() &&
+            vacancy.employerName.isEmpty() &&
+            vacancy.employerAddress.isEmpty()
         if (cardIsEmpty) {
             binding.employerCard.isVisible = false
             return
@@ -185,7 +192,9 @@ class VacancyDetailsFragment : Fragment() {
             Glide.with(binding.logoImage)
                 .load(vacancy.logoUrl)
                 .centerInside()
-                .transform(RoundedCorners(dpToPx()))
+                .transform(RoundedCorners(
+                    resources.getDimensionPixelSize(R.dimen.logo_corner_radius)
+                ))
                 .placeholder(R.drawable.placeholder)
                 .into(binding.logoImage)
         }
@@ -314,18 +323,12 @@ class VacancyDetailsFragment : Fragment() {
         ).show()
     }
 
-    private fun dpToPx(): Int {
-        val density = resources.displayMetrics.density
-        return (LOGO_CORNER_RADIUS_DP * density).toInt()
-    }
-
     private fun getIdFromArgs(): String {
         return requireArguments().getString(ARGS_VACANCY_ID) ?: ""
     }
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
-        private const val LOGO_CORNER_RADIUS_DP = 12
         private const val ARGS_VACANCY_ID = "ARGS_VACANCY_ID"
         fun createArgs(id: String): Bundle = bundleOf(ARGS_VACANCY_ID to id)
     }

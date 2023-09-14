@@ -8,6 +8,7 @@
     <dimen name="vac_detail_horizontal_margin">16dp</dimen>
     <dimen name="vac_detail_card_text_margin">8dp</dimen>
     <dimen name="margin_logo_txt_similar_vacancy">12dp</dimen>
+    <dimen name="logo_corner_radius">12dp</dimen>
     <dimen name="logo_padding_with_image">0</dimen>
     <dimen name="team_horizontal_margin">16dp</dimen>
     <dimen name="progress_bar_dimens">44dp</dimen>
