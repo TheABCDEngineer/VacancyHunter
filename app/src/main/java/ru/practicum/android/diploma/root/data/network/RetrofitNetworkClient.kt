@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.features.filters.data.dto.AreaDto
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesRequest
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesResponse
 import ru.practicum.android.diploma.features.filters.data.dto.IndustryDto
@@ -76,6 +77,21 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 val response = api.getIndustries()
+                Response(resultCode = NetworkResultCode.SUCCESS, response)
+            } catch (e: Throwable) {
+                Response(resultCode = NetworkResultCode.SERVER_ERROR, data = null)
+            }
+        }
+    }
+
+    override suspend fun getAreas(): Response<List<AreaDto>> {
+        if (isConnected() == false) {
+            return Response(resultCode = NetworkResultCode.CONNECTION_ERROR, data = null)
+        }
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = api.getAreas()
                 Response(resultCode = NetworkResultCode.SUCCESS, response)
             } catch (e: Throwable) {
                 Response(resultCode = NetworkResultCode.SERVER_ERROR, data = null)
