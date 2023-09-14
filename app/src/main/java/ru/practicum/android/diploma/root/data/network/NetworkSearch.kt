@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.root.data.network
 
+import ru.practicum.android.diploma.features.filters.data.dto.AreaDto
 import ru.practicum.android.diploma.features.filters.data.dto.CountryDto
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesRequest
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesResponse
@@ -20,4 +21,5 @@ interface NetworkSearch {
 
     suspend fun getCountries(): Response<List<CountryDto>>
 
+    suspend fun getAreas(): Response<List<AreaDto>>
 }

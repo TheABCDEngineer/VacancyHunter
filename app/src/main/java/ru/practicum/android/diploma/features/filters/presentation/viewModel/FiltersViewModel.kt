@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.filters.domain.FiltersInteractor
+import ru.practicum.android.diploma.features.filters.domain.models.Area
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
 import ru.practicum.android.diploma.root.domain.model.Outcome
@@ -17,6 +18,9 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
     private val _industriesScreenState = MutableLiveData<IndustryScreenState>()
     val industriesScreenState: LiveData<IndustryScreenState> get() = _industriesScreenState
+
+    private var country: Area? = null
+    private var region: Area? = null
 
     fun filterIndustries(text: String): List<Industry> {
         if (text.isEmpty())
@@ -56,15 +60,27 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
             when (result) {
                 is Outcome.Success -> {
                     result.data?.let {
-                        Log.d("test", "success ${it.size}")
-                        //industriesFullList = it
-
-                        //_industriesScreenState.postValue(IndustryScreenState.Content(it))
+                        Log.d("test", "success countries ${it.size}")
                     }
                 }
                 else -> {
-                    Log.d("test", "error")
-                    //_industriesScreenState.postValue(IndustryScreenState.Error)
+                    Log.d("test", "error countries")
+                }
+            }
+        }
+    }
+
+    fun getRegions() {
+        viewModelScope.launch {
+            val result = filtersInteractor.getRegions(country?.parentId)
+            when (result) {
+                is Outcome.Success -> {
+                    result.data?.let {
+                        Log.d("test", "success regions ${it.size}")
+                    }
+                }
+                else -> {
+                    Log.d("test", "error regions")
                 }
             }
         }
