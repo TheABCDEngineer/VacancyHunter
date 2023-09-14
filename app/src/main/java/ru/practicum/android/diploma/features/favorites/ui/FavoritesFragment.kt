@@ -15,8 +15,8 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
 import ru.practicum.android.diploma.features.favorites.presentation.FavoritesViewModel
 import ru.practicum.android.diploma.features.favorites.presentation.models.FavoritesScreenState
-import ru.practicum.android.diploma.features.similarvacancies.presentation.models.VacancySimilarShortUiModel
-import ru.practicum.android.diploma.features.similarvacancies.ui.adapters.SimilarVacanciesAdapter
+import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
+import ru.practicum.android.diploma.root.presentation.ui.adapters.VacanciesAdapter
 import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.util.debounce
@@ -28,10 +28,10 @@ class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
 
-    private var adapter: SimilarVacanciesAdapter? = null
-    private lateinit var onListItemClickDebounce: (VacancySimilarShortUiModel) -> Unit
+    private var adapter: VacanciesAdapter? = null
+    private lateinit var onListItemClickDebounce: (VacancyShortUiModel) -> Unit
 
-    private lateinit var foundVacancies: List<VacancySimilarShortUiModel>
+    private lateinit var foundVacancies: List<VacancyShortUiModel>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +68,7 @@ class FavoritesFragment : Fragment() {
         }
     }
 
-    private fun renderContent(favoriteVacancies: List<VacancySimilarShortUiModel>) {
+    private fun renderContent(favoriteVacancies: List<VacancyShortUiModel>) {
         foundVacancies = favoriteVacancies
         adapter?.updateAdapter(foundVacancies)
         binding.apply {
@@ -100,7 +100,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        onListItemClickDebounce = debounce<VacancySimilarShortUiModel>(
+        onListItemClickDebounce = debounce<VacancyShortUiModel>(
             CLICK_DEBOUNCE_DELAY_MILLIS,
             viewLifecycleOwner.lifecycleScope,
             true
@@ -112,9 +112,9 @@ class FavoritesFragment : Fragment() {
                 )
         }
 
-        adapter = SimilarVacanciesAdapter(
-            object : SimilarVacanciesAdapter.ListItemClickListener {
-                override fun onListItemClick(vacancy: VacancySimilarShortUiModel) {
+        adapter = VacanciesAdapter(
+            object : VacanciesAdapter.ListItemClickListener {
+                override fun onListItemClick(vacancy: VacancyShortUiModel) {
                     onListItemClickDebounce(vacancy)
                 }
             }

@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.root.data
 
 import com.google.gson.Gson
-import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
+import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Address
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.ContactPhone
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
@@ -54,8 +54,8 @@ class VacancyDbConverter(private val gson: Gson) {
         )
     }
 
-    fun mapVacancyEntityToVacancyShort(vacancy: FavVacancyEntity): VacancyShortSimilar {
-        return VacancyShortSimilar(
+    fun mapVacancyEntityToVacancyShort(vacancy: FavVacancyEntity): VacancyShortDomainModel {
+        return VacancyShortDomainModel(
             vacancyId = vacancy.vacancyId,
             vacancyName = vacancy.vacancyName,
             salary = convertFromJsonToSalary(vacancy.salary),

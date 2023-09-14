@@ -7,12 +7,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.favorites.domain.FavoritesInteractor
 import ru.practicum.android.diploma.features.favorites.presentation.models.FavoritesScreenState
-import ru.practicum.android.diploma.features.similarvacancies.presentation.models.VacancySimilarShortUiMapper
+import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiMapper
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 
 class FavoritesViewModel(
     private val interactor: FavoritesInteractor,
-    private val uiMapper: VacancySimilarShortUiMapper
+    private val uiMapper: VacancyShortUiMapper
 ) : ViewModel() {
 
     private val _state = MutableLiveData<FavoritesScreenState>()

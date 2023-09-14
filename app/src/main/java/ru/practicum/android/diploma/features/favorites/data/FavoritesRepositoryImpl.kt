@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.features.favorites.data
 
 import ru.practicum.android.diploma.features.favorites.domain.FavoritesRepository
-import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
+import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 import ru.practicum.android.diploma.root.data.VacancyDbConverter
 import ru.practicum.android.diploma.root.data.db.AppDatabase
@@ -31,7 +31,7 @@ class FavoritesRepositoryImpl(
         return vacancyDbConverter.mapVacancyEntityToVacancyDetails(favVacancyEntity)
     }
 
-    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyShortSimilar>> {
+    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyShortDomainModel>> {
         val foundFavoriteVacancies = appDatabase.favVacancyDao().getFavoriteVacancies()
         val listOfVacancies = foundFavoriteVacancies.map {
             vacancyDbConverter.mapVacancyEntityToVacancyShort(it)
