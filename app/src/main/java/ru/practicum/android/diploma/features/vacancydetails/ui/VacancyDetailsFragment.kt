@@ -115,8 +115,14 @@ class VacancyDetailsFragment : Fragment() {
 
     private fun renderFavorite(isFavorite: Boolean) {
         when (isFavorite) {
-            true -> binding.favButton.setImageResource(R.drawable.ic_favorites_on)
-            false -> binding.favButton.setImageResource(R.drawable.ic_favorites_off)
+            true -> {
+                binding.favButton.setImageResource(R.drawable.ic_favorites_on)
+                binding.favButton.setColorFilter(requireContext().getColor(R.color.yp_red))
+            }
+            false -> {
+                binding.favButton.setImageResource(R.drawable.ic_favorites_off)
+                binding.favButton.clearColorFilter()
+            }
         }
     }
 
