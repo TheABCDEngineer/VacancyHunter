@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.features.filters.presentation.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.features.filters.domain.models.Area
-import ru.practicum.android.diploma.features.filters.domain.models.Country
 import ru.practicum.android.diploma.features.filters.domain.models.Filter
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.CountryScreenState
