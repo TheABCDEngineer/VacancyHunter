@@ -43,7 +43,7 @@ class FilterRepositoryImpl(
                         filtersMapper.convertAreaTreeDto(response.data!!)
                     else
                         filtersMapper.convertAreaTreeByParentIdDto(response.data!!, parentId)
-                    Outcome.Success(data = areas)
+                    Outcome.Success(data = areas.sortedBy { it.name })
                 } else {
                     Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
                 }

@@ -5,42 +5,41 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.features.filters.domain.models.Industry
+import ru.practicum.android.diploma.features.filters.domain.models.Area
 
-class IndustriesAdapter: RecyclerView.Adapter<IndustriesViewHolder>() {
-    var industries = mutableListOf<Industry>()
-    var onItemClick: ((Industry) -> Unit)? = null
+class RegionsAdapter: RecyclerView.Adapter<RegionsViewHolder>() {
+    var regions = mutableListOf<Area>()
+    var onItemClick: ((Area) -> Unit)? = null
     private var lastCheckedRadioButton: RadioButton? = null
-    private var checkedIndustry: Industry? = null
+    private var checkedRegion: Area? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegionsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.filter_radio_button_list_view, parent, false)
-        return IndustriesViewHolder(view)
+        return RegionsViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return industries.size
+        return regions.size
     }
 
-    override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
-        holder.bind(industries[position])
+    override fun onBindViewHolder(holder: RegionsViewHolder, position: Int) {
+        holder.bind(regions[position])
 
         val radioButton = holder.itemView.findViewById<RadioButton>(R.id.filter_radioButton)
         radioButton.setOnClickListener {
-            onItemClick?.invoke(industries[position])
+            onItemClick?.invoke(regions[position])
             lastCheckedRadioButton?.isChecked = false
-            checkedIndustry = industries[position]
+            checkedRegion = regions[position]
             lastCheckedRadioButton = radioButton
         }
     }
 
-    fun getCheckedIndustry(): Industry? = checkedIndustry
+    fun getCheckedArea(): Area? = checkedRegion
 
     fun reload() {
-        industries.clear()
+        regions.clear()
         lastCheckedRadioButton = null
-        checkedIndustry = null
+        checkedRegion = null
         notifyDataSetChanged()
     }
-
 }
