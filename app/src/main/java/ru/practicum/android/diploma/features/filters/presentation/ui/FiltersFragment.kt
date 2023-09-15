@@ -21,6 +21,7 @@ import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.CountryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.FilterScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
+import ru.practicum.android.diploma.features.filters.presentation.models.RegionScreenState
 import ru.practicum.android.diploma.features.filters.presentation.viewModel.FiltersViewModel
 
 class FiltersFragment : Fragment() {
@@ -31,9 +32,11 @@ class FiltersFragment : Fragment() {
 
     private lateinit var salaryTextWatcher: TextWatcher
     private lateinit var industrySearchTextWatcher: TextWatcher
+    private lateinit var regionSearchTextWatcher: TextWatcher
 
     private val industriesAdapter = IndustriesAdapter()
     private val countriesAdapter = CountriesAdapter()
+    private val regionsAdapter = RegionsAdapter()
 
     private val filter = Filter(null, null, null, null, false)
 
@@ -52,6 +55,8 @@ class FiltersFragment : Fragment() {
         setMainScreenListeners()
         setIndustryScreenListeners()
         setWorkPlaceScreenListeners()
+        setCountryScreenListeners()
+        setRegionScreenListeners()
         customizeRecyclerView()
 
         viewModel.industriesScreenState.observe(viewLifecycleOwner) {
@@ -61,6 +66,10 @@ class FiltersFragment : Fragment() {
         viewModel.countriesScreenState.observe(viewLifecycleOwner) {
             renderCountry(it)
         }
+
+        viewModel.regionsScreenState.observe(viewLifecycleOwner) {
+            renderRegion(it)
+        }
     }
 
     override fun onDestroy() {
@@ -68,6 +77,7 @@ class FiltersFragment : Fragment() {
 
         salaryTextWatcher.let { binding.expectedSalary.removeTextChangedListener(it) }
         industrySearchTextWatcher.let { binding.filterIndustrySearchField.removeTextChangedListener(it) }
+        regionSearchTextWatcher.let { binding.filterRegionSearchField.removeTextChangedListener(it) }
 
         _binding = null
     }
@@ -159,7 +169,9 @@ class FiltersFragment : Fragment() {
         binding.filterWorkPlaceBack.setOnClickListener {
             render(FilterScreenState.MainScreen)
         }
+    }
 
+    private fun setCountryScreenListeners() {
         binding.filterCountryBack.setOnClickListener {
             render(FilterScreenState.WorkPlaceScreen(null, null))
         }
@@ -171,7 +183,40 @@ class FiltersFragment : Fragment() {
         binding.filterWorkPlaceCountryFilled.setOnClickListener {
             filterWorkPlaceCountryClickListener()
         }
+    }
 
+    private fun setRegionScreenListeners() {
+        regionSearchTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                regionsAdapter.regions.clear()
+                regionsAdapter.regions.addAll(viewModel.filterRegions(s.toString()))
+                regionsAdapter.notifyDataSetChanged()
+            }
+        }
+        binding.filterRegionSearchField.addTextChangedListener(regionSearchTextWatcher)
+
+        binding.filterRegionBack.setOnClickListener {
+            render(FilterScreenState.WorkPlaceScreen(null, null))
+        }
+
+        binding.filterRegionsChooseButton.setOnClickListener {
+            viewModel.setRegion(regionsAdapter.getCheckedArea())
+            render(FilterScreenState.WorkPlaceScreen(null, null))
+        }
+
+        binding.filterWorkPlaceRegionEmpty.setOnClickListener {
+            filterWorkPlaceRegionClickListener()
+        }
+
+        binding.filterWorkPlaceRegionFilled.setOnClickListener {
+            filterWorkPlaceRegionClickListener()
+        }
     }
 
     private fun customizeRecyclerView() {
@@ -189,6 +234,14 @@ class FiltersFragment : Fragment() {
 
         binding.filterCountriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.filterCountriesRecyclerView.adapter = countriesAdapter
+
+
+        regionsAdapter.onItemClick = { _ ->
+            binding.filterRegionsChooseButton.visibility = View.VISIBLE
+        }
+
+        binding.filterRegionsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.filterRegionsRecyclerView.adapter = regionsAdapter
     }
 
     private fun filterMainIndustryClickListener() {
@@ -207,6 +260,13 @@ class FiltersFragment : Fragment() {
         countriesAdapter.notifyDataSetChanged()
         viewModel.getCountries()
         render(FilterScreenState.CountryScreen(null))
+    }
+
+    private fun filterWorkPlaceRegionClickListener() {
+        binding.filterRegionsChooseButton.visibility = View.GONE
+        regionsAdapter.reload()
+        viewModel.getRegions()
+        render(FilterScreenState.RegionScreen(viewModel.getRegion()))
     }
 
     private fun setEditTextColors(textInputLayout: TextInputLayout, text: CharSequence?) {
@@ -228,6 +288,7 @@ class FiltersFragment : Fragment() {
             is FilterScreenState.IndustryScreen -> showIndustry(state.industry)
             is FilterScreenState.WorkPlaceScreen -> showWorkPlace()
             is FilterScreenState.CountryScreen -> showCountry(state.country)
+            is FilterScreenState.RegionScreen -> showRegion(state.region)
         }
     }
 
@@ -244,6 +305,14 @@ class FiltersFragment : Fragment() {
             is CountryScreenState.Content -> showCountryContent(state.countries)
             is CountryScreenState.Error -> showCountryError()
             is CountryScreenState.Loading -> showCountryLoading()
+        }
+    }
+
+    private fun renderRegion(state: RegionScreenState) {
+        when (state) {
+            is RegionScreenState.Content -> showRegionContent(state.regions)
+            is RegionScreenState.Error -> showRegionError()
+            is RegionScreenState.Loading -> showRegionLoading()
         }
     }
 
@@ -286,17 +355,17 @@ class FiltersFragment : Fragment() {
         binding.filterIndustriesProgressBar.visibility = View.VISIBLE
     }
 
-
-
     private fun showWorkPlace() {
         binding.filterWorkPlaceLayout.visibility = View.VISIBLE
         binding.filterMainLayout.visibility = View.GONE
         binding.filterIndustryLayout.visibility = View.GONE
         binding.filterCountryLayout.visibility = View.GONE
+        binding.filterRegionLayout.visibility = View.GONE
     }
 
     private fun showCountry(country: Area?) {
         binding.filterCountryLayout.visibility = View.VISIBLE
+        binding.filterRegionLayout.visibility = View.GONE
         binding.filterWorkPlaceLayout.visibility = View.GONE
     }
 
@@ -314,6 +383,28 @@ class FiltersFragment : Fragment() {
 
     private fun showCountryLoading() {
         binding.filterCountriesProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun showRegion(region: Area?) {
+        binding.filterRegionLayout.visibility = View.VISIBLE
+        binding.filterCountryLayout.visibility = View.GONE
+        binding.filterWorkPlaceLayout.visibility = View.GONE
+    }
+
+    private fun showRegionContent(regions: List<Area>) {
+        binding.filterRegionProgressBar.visibility = View.GONE
+        regionsAdapter.regions = regions.toMutableList()
+        regionsAdapter.notifyDataSetChanged()
+    }
+
+    private fun showRegionError() {
+        binding.filterRegionProgressBar.visibility = View.GONE
+        showMessage(getString(R.string.something_went_wrong))
+        render(FilterScreenState.WorkPlaceScreen(null, null))
+    }
+
+    private fun showRegionLoading() {
+        binding.filterRegionProgressBar.visibility = View.VISIBLE
     }
 
     private fun setClearIconVisibility(text: CharSequence?) {

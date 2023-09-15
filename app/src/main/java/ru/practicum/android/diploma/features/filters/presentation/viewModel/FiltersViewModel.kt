@@ -11,17 +11,22 @@ import ru.practicum.android.diploma.features.filters.domain.models.Area
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.CountryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
+import ru.practicum.android.diploma.features.filters.presentation.models.RegionScreenState
 import ru.practicum.android.diploma.root.domain.model.Outcome
 import java.util.Locale
 
 class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewModel() {
     lateinit var industriesFullList: List<Industry>
+    lateinit var regionsFullList: List<Area>
 
     private val _industriesScreenState = MutableLiveData<IndustryScreenState>()
     val industriesScreenState: LiveData<IndustryScreenState> get() = _industriesScreenState
 
     private val _countriesScreenState = MutableLiveData<CountryScreenState>()
     val countriesScreenState: LiveData<CountryScreenState> get() = _countriesScreenState
+
+    private val _regionsScreenState = MutableLiveData<RegionScreenState>()
+    val regionsScreenState: LiveData<RegionScreenState> get() = _regionsScreenState
 
     private var country: Area? = null
     private var region: Area? = null
@@ -32,6 +37,19 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
         val temp = mutableListOf<Industry>()
         for (item in industriesFullList) {
+            if (item.name.lowercase(Locale.ROOT).contains(text.lowercase(Locale.ROOT)))
+                temp.add(item)
+        }
+
+        return temp.toList()
+    }
+
+    fun filterRegions(text: String): List<Area> {
+        if (text.isEmpty())
+            return regionsFullList
+
+        val temp = mutableListOf<Area>()
+        for (item in regionsFullList) {
             if (item.name.lowercase(Locale.ROOT).contains(text.lowercase(Locale.ROOT)))
                 temp.add(item)
         }
@@ -77,19 +95,26 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
     fun getRegions() {
         viewModelScope.launch {
+            _regionsScreenState.postValue(RegionScreenState.Loading)
             val result = filtersInteractor.getRegions(country?.parentId)
             when (result) {
                 is Outcome.Success -> {
                     result.data?.let {
-                        Log.d("test", "success regions ${it.size}")
+                        regionsFullList = it
+                        _regionsScreenState.postValue(RegionScreenState.Content(it))
                     }
                 }
                 else -> {
-                    Log.d("test", "error regions")
+                    _regionsScreenState.postValue(RegionScreenState.Error)
                 }
             }
         }
     }
 
+    fun setRegion(chosenRegion: Area?) {
+        region = chosenRegion
+    }
+
+    fun getRegion() = region
 
 }
