@@ -587,7 +587,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Выбор региона"
+                android:text="@string/choice_region"
                 android:textColor="?attr/colorOnPrimary" />
         </LinearLayout>
 
@@ -607,7 +607,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded_rectangle"
                 android:backgroundTint="?attr/colorSecondary"
-                android:hint="Введите регион"
+                android:hint="@string/enter_region"
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:lines="1"
