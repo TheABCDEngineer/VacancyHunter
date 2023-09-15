@@ -36,8 +36,7 @@ class SearchFragment : Fragment() {
             false
         ) { vacancyId: String ->
             findNavController().navigate(
-                R.id.action_searchFragment_to_vacancyDetailsFragment,
-                VacancyDetailsFragment.createArgs(vacancyId)
+                SearchFragmentDirections.actionSearchFragmentToVacancyDetailsFragment(vacancyId)
             )
         },
         onContinueLoading = { viewModel.getNextSearchingPage() }

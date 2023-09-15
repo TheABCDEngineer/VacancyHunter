@@ -17,7 +17,6 @@ import ru.practicum.android.diploma.features.favorites.presentation.FavoritesVie
 import ru.practicum.android.diploma.features.favorites.presentation.models.FavoritesScreenState
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 import ru.practicum.android.diploma.root.presentation.ui.adapters.VacanciesAdapter
-import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.util.debounce
 
@@ -107,8 +106,9 @@ class FavoritesFragment : Fragment() {
         ) { vacancy ->
             findNavController()
                 .navigate(
-                    R.id.action_favoritesFragment_to_vacancyDetailsFragment,
-                    VacancyDetailsFragment.createArgs(vacancy.vacancyId)
+                    FavoritesFragmentDirections.actionFavoritesFragmentToVacancyDetailsFragment(
+                        vacancy.vacancyId
+                    )
                 )
         }
 

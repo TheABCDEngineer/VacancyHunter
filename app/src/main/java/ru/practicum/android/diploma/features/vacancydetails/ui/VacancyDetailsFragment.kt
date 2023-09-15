@@ -8,11 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -20,7 +20,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancydetailsBinding
-import ru.practicum.android.diploma.features.similarvacancies.ui.SimilarVacanciesFragment
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Email
 import ru.practicum.android.diploma.features.vacancydetails.presentation.VacancyDetailsViewModel
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsEvent
@@ -31,6 +30,9 @@ import ru.practicum.android.diploma.util.debounce
 import ru.practicum.android.diploma.util.isInternetConnected
 
 class VacancyDetailsFragment : Fragment() {
+
+    private val arguments:VacancyDetailsFragmentArgs by navArgs()
+
     private val viewModel by viewModel<VacancyDetailsViewModel>()
     private val externalNavigator: ExternalNavigator by inject()
 
@@ -52,7 +54,7 @@ class VacancyDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getVacancyById(getIdFromArgs())
+        viewModel.getVacancyById(arguments.vacancyId)
 
         viewModel.screenState.observe(viewLifecycleOwner) {
             render(it)
@@ -271,8 +273,9 @@ class VacancyDetailsFragment : Fragment() {
         binding.similarVacanciesButton.setOnClickListener {
             if (isInternetConnected(requireContext())) {
                 findNavController().navigate(
-                    R.id.action_vacancyDetailsFragment_to_similarVacanciesFragment,
-                    SimilarVacanciesFragment.createArgs(getIdFromArgs())
+                    VacancyDetailsFragmentDirections.actionVacancyDetailsFragmentToSimilarVacanciesFragment(
+                        arguments.vacancyId
+                    )
                 )
             } else {
                 binding.similarVacanciesButton.isVisible = false
@@ -320,13 +323,7 @@ class VacancyDetailsFragment : Fragment() {
         ).show()
     }
 
-    private fun getIdFromArgs(): String {
-        return requireArguments().getString(ARGS_VACANCY_ID) ?: ""
-    }
-
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
-        private const val ARGS_VACANCY_ID = "ARGS_VACANCY_ID"
-        fun createArgs(id: String): Bundle = bundleOf(ARGS_VACANCY_ID to id)
     }
 }
