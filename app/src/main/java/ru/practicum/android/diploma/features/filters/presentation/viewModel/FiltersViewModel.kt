@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.features.filters.presentation.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +29,9 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
     private var country: Area? = null
     private var region: Area? = null
+
+    private var filterCountry: Area? = null
+    private var filterRegion: Area? = null
 
     fun filterIndustries(text: String): List<Industry> {
         if (text.isEmpty())
@@ -96,7 +98,7 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
     fun getRegions() {
         viewModelScope.launch {
             _regionsScreenState.postValue(RegionScreenState.Loading)
-            val result = filtersInteractor.getRegions(country?.parentId)
+            val result = filtersInteractor.getRegions(country?.id)
             when (result) {
                 is Outcome.Success -> {
                     result.data?.let {
@@ -116,5 +118,35 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
     }
 
     fun getRegion() = region
+
+    fun setCountry(chosenCountry: Area?) {
+        country = chosenCountry
+    }
+
+    fun getCountry() = country
+
+    fun setFilterCountry() {
+        filterCountry = country
+    }
+
+    fun setFilterRegion() {
+        filterRegion = region
+    }
+
+    fun getWorkPlace(): String {
+        return if (filterCountry == null && filterRegion == null)
+            ""
+        else if (filterRegion == null)
+            "${filterCountry?.name}"
+        else
+            "${filterCountry?.name}, ${filterRegion?.name}"
+    }
+
+    fun clearWorkPlace() {
+        setCountry(null)
+        setRegion(null)
+        setFilterCountry()
+        setFilterRegion()
+    }
 
 }

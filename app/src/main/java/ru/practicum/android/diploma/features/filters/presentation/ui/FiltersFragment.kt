@@ -120,6 +120,12 @@ class FiltersFragment : Fragment() {
             filterMainWorkPlaceClickListener()
         }
 
+        binding.filterWorkPlaceClear.setOnClickListener {
+            viewModel.clearWorkPlace()
+            binding.filterMainWorkPlaceEmpty.visibility = View.VISIBLE
+            binding.filterMainWorkPlaceFilled.visibility = View.GONE
+        }
+
         binding.filterMainBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -167,6 +173,22 @@ class FiltersFragment : Fragment() {
 
     private fun setWorkPlaceScreenListeners() {
         binding.filterWorkPlaceBack.setOnClickListener {
+            render(FilterScreenState.MainScreen)
+        }
+
+        binding.filterWorkPlaceRegionClear.setOnClickListener {
+            viewModel.setRegion(null)
+            render(FilterScreenState.WorkPlaceScreen(null, null))
+        }
+
+        binding.filterWorkPlaceCountryClear.setOnClickListener {
+            viewModel.setCountry(null)
+            render(FilterScreenState.WorkPlaceScreen(null, null))
+        }
+
+        binding.filterWorkPlaceChooseButton.setOnClickListener {
+            viewModel.setFilterCountry()
+            viewModel.setFilterRegion()
             render(FilterScreenState.MainScreen)
         }
     }
@@ -220,28 +242,28 @@ class FiltersFragment : Fragment() {
     }
 
     private fun customizeRecyclerView() {
-        industriesAdapter.onItemClick = { _ ->
-            binding.filterIndustriesChooseButton.visibility = View.VISIBLE
-        }
-
         binding.filterIndustriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.filterIndustriesRecyclerView.adapter = industriesAdapter
-
-
-        countriesAdapter.onItemClick = { _ ->
-            // render
-        }
 
         binding.filterCountriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.filterCountriesRecyclerView.adapter = countriesAdapter
 
+        binding.filterRegionsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.filterRegionsRecyclerView.adapter = regionsAdapter
+
+
+        industriesAdapter.onItemClick = { _ ->
+            binding.filterIndustriesChooseButton.visibility = View.VISIBLE
+        }
+
+        countriesAdapter.onItemClick = { country ->
+            viewModel.setCountry(country)
+            render(FilterScreenState.WorkPlaceScreen(null, null))
+        }
 
         regionsAdapter.onItemClick = { _ ->
             binding.filterRegionsChooseButton.visibility = View.VISIBLE
         }
-
-        binding.filterRegionsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.filterRegionsRecyclerView.adapter = regionsAdapter
     }
 
     private fun filterMainIndustryClickListener() {
@@ -259,7 +281,7 @@ class FiltersFragment : Fragment() {
         countriesAdapter.countries.clear()
         countriesAdapter.notifyDataSetChanged()
         viewModel.getCountries()
-        render(FilterScreenState.CountryScreen(null))
+        render(FilterScreenState.CountryScreen(viewModel.getCountry()))
     }
 
     private fun filterWorkPlaceRegionClickListener() {
@@ -328,6 +350,16 @@ class FiltersFragment : Fragment() {
             binding.filterMainIndustryEmpty.visibility = View.VISIBLE
             binding.filterMainIndustryFilled.visibility = View.GONE
         }
+
+        val workPlaceText = viewModel.getWorkPlace()
+        if (workPlaceText.isEmpty()) {
+            binding.filterMainWorkPlaceEmpty.visibility = View.VISIBLE
+            binding.filterMainWorkPlaceFilled.visibility = View.GONE
+        } else {
+            binding.filterMainWorkPlaceFilled.visibility = View.VISIBLE
+            binding.filterMainWorkPlaceEmpty.visibility = View.GONE
+            binding.filterMainWorkPlace.text = workPlaceText
+        }
     }
 
     private fun showIndustry(industry: Industry?) {
@@ -361,6 +393,24 @@ class FiltersFragment : Fragment() {
         binding.filterIndustryLayout.visibility = View.GONE
         binding.filterCountryLayout.visibility = View.GONE
         binding.filterRegionLayout.visibility = View.GONE
+
+        if (viewModel.getCountry() != null) {
+            binding.filterWorkPlaceCountryEmpty.visibility = View.GONE
+            binding.filterWorkPlaceCountryFilled.visibility = View.VISIBLE
+            binding.filterWorkPlaceCountry.text = viewModel.getCountry()?.name
+        } else {
+            binding.filterWorkPlaceCountryEmpty.visibility = View.VISIBLE
+            binding.filterWorkPlaceCountryFilled.visibility = View.GONE
+        }
+
+        if (viewModel.getRegion() != null) {
+            binding.filterWorkPlaceRegionEmpty.visibility = View.GONE
+            binding.filterWorkPlaceRegionFilled.visibility = View.VISIBLE
+            binding.filterWorkPlaceRegion.text = viewModel.getRegion()?.name
+        } else {
+            binding.filterWorkPlaceRegionEmpty.visibility = View.VISIBLE
+            binding.filterWorkPlaceRegionFilled.visibility = View.GONE
+        }
     }
 
     private fun showCountry(country: Area?) {
@@ -389,6 +439,7 @@ class FiltersFragment : Fragment() {
         binding.filterRegionLayout.visibility = View.VISIBLE
         binding.filterCountryLayout.visibility = View.GONE
         binding.filterWorkPlaceLayout.visibility = View.GONE
+        binding.filterRegionSearchField.text.clear()
     }
 
     private fun showRegionContent(regions: List<Area>) {
