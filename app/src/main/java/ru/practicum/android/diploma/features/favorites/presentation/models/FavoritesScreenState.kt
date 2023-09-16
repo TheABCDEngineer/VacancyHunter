@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.features.favorites.presentation.models
 
 import androidx.paging.PagingData
-import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 
@@ -20,7 +19,7 @@ sealed class FavoritesScreenState {
     ) : FavoritesScreenState()
 
     data class ContentPaged(
-        val favoriteVacancies: Flow<PagingData<VacancyShortUiModel>>,
+        val favoriteVacancies: PagingData<VacancyShortUiModel>,
     ) : FavoritesScreenState()
 
 }

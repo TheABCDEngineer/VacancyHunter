@@ -66,11 +66,14 @@ class FavoritesViewModel(
                             uiMapper(domainModel)
                         }
                     }
-                    _state.postValue(
-                        FavoritesScreenState.ContentPaged(
-                            flowGagedUiVacancies
+                    flowGagedUiVacancies.collect{it ->
+                        _state.postValue(
+                            FavoritesScreenState.ContentPaged(
+                                it
+                            )
                         )
-                    )
+                    }
+
                 }
             }
         }
