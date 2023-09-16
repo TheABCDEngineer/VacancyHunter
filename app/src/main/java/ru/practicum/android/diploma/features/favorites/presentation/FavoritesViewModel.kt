@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import androidx.paging.map
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.favorites.domain.FavoritesInteractor
 import ru.practicum.android.diploma.features.favorites.presentation.models.FavoritesScreenState
@@ -39,6 +42,36 @@ class FavoritesViewModel(
                         }
                     )
                 )
+            }
+        }
+    }
+
+    fun getPagedFavorites() {
+        viewModelScope.launch {
+            _state.postValue(FavoritesScreenState.Loading)
+
+            val foundFavorites = interactor.getPagedFavorites()
+            when {
+                (foundFavorites.data == null) && (foundFavorites.status == NetworkResultCode.CONNECTION_ERROR) -> {
+                    _state.postValue(FavoritesScreenState.Error(NetworkResultCode.CONNECTION_ERROR))
+                }
+
+                (foundFavorites.data == null) -> _state.postValue(FavoritesScreenState.Error(null))
+
+//                foundFavorites.data.isEmpty() -> _state.postValue(FavoritesScreenState.NothingFound)
+                else -> {
+                    val flowPagedVacancies = foundFavorites.data.cachedIn(viewModelScope)
+                    val flowGagedUiVacancies = flowPagedVacancies.map { pagingData ->
+                        pagingData.map {domainModel ->
+                            uiMapper(domainModel)
+                        }
+                    }
+                    _state.postValue(
+                        FavoritesScreenState.ContentPaged(
+                            flowGagedUiVacancies
+                        )
+                    )
+                }
             }
         }
     }
