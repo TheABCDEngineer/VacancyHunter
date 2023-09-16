@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="font_size_32">32sp</dimen>
+    <dimen name="font_size_22">22sp</dimen>
+    <dimen name="font_size_16">16sp</dimen>
+    <dimen name="font_size_12">12sp</dimen>
+    <dimen name="vac_detail_image_dimens">48dp</dimen>
+    <dimen name="vac_detail_horizontal_margin">16dp</dimen>
+    <dimen name="vac_detail_card_text_margin">8dp</dimen>
+    <dimen name="margin_logo_txt_similar_vacancy">12dp</dimen>
+    <dimen name="logo_corner_radius">12</dimen>
+    <dimen name="logo_padding_with_image">0</dimen>
+    <dimen name="team_horizontal_margin">16dp</dimen>
+    <dimen name="progress_bar_dimens">44dp</dimen>
+    <dimen name="similar_horizontal_margin">16dp</dimen>
+    <dimen name="details_paragraph_top_margin">24dp</dimen>
+</resources>

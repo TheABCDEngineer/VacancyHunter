@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_navigation_graph"
+    app:startDestination="@id/searchFragment">
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="ru.practicum.android.diploma.features.search.presentation.ui.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_vacancyDetailsFragment"
+            app:destination="@id/vacancyDetailsFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_filtersFragment"
+            app:destination="@id/filtersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="ru.practicum.android.diploma.features.favorites.presentation.ui.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="ru.practicum.android.diploma.features.team.presentation.ui.TeamFragment"
+        android:label="fragment_team"
+        tools:layout="@layout/fragment_team" />   
+    <fragment
+        android:id="@+id/vacancyDetailsFragment"
+        android:name="ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment"
+        android:label="VacancyDetailsFragment"
+        tools:layout="@layout/fragment_vacancydetails">
+        <action
+            android:id="@+id/action_vacancyDetailsFragment_to_similarVacanciesFragment"
+            app:destination="@id/similarVacanciesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filtersFragment"
+        android:name="ru.practicum.android.diploma.features.filters.presentation.ui.FiltersFragment"
+        android:label="fragment_filters"
+        tools:layout="@layout/fragment_filters" />
+    <fragment
+        android:id="@+id/similarVacanciesFragment"
+        android:name="ru.practicum.android.diploma.features.similarvacancies.ui.SimilarVacanciesFragment"
+        android:label="SimilarVacanciesFragment"
+        tools:layout="@layout/fragment_similar_vacancies" >
+        <action
+            android:id="@+id/action_similarVacanciesFragment_to_vacancyDetailsFragment"
+            app:destination="@id/vacancyDetailsFragment" />
+    </fragment>
+</navigation>
