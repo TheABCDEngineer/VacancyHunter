@@ -6,29 +6,29 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import ru.practicum.android.diploma.databinding.ListItemVacancyBinding
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
+import ru.practicum.android.diploma.root.presentation.ui.adapters.ShortVacancyViewHolder
+import ru.practicum.android.diploma.root.presentation.ui.adapters.VacancyClickListener
 
 class PagedFavoritesAdapter(
-    private val clickListener: ListItemClickListener,
+    private val clickListener: VacancyClickListener,
     diffCallback: DiffUtil.ItemCallback<VacancyShortUiModel>
-) : PagingDataAdapter<VacancyShortUiModel, FavoriteViewHolder>(diffCallback) {
+) : PagingDataAdapter<VacancyShortUiModel, ShortVacancyViewHolder>(diffCallback) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): FavoriteViewHolder {
+    ): ShortVacancyViewHolder {
         val view = LayoutInflater.from(parent.context)
-        return FavoriteViewHolder(
+        return ShortVacancyViewHolder(
             ListItemVacancyBinding.inflate(view, parent, false),
             clickListener
         )
     }
 
-    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ShortVacancyViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
-    }
-
-    interface ListItemClickListener {
-        fun onListItemClick(vacancy: VacancyShortUiModel)
+        item?.let{
+            holder.bind(item)
+        }
     }
 }
 

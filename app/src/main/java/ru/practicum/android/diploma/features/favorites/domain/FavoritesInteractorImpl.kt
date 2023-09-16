@@ -35,12 +35,6 @@ class FavoritesInteractorImpl(
         }
     }
 
-    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyShortDomainModel>> {
-        return withContext(Dispatchers.IO) {
-            favoritesRepository.getFavoriteVacancies()
-        }
-    }
-
     override suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>> {
         return withContext(Dispatchers.IO) {
             favoritesRepository.getPagedFavorites()

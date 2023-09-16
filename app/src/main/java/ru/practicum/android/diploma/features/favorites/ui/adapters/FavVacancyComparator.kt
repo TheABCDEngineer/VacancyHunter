@@ -5,7 +5,6 @@ import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 
 object FavVacancyComparator : DiffUtil.ItemCallback<VacancyShortUiModel>() {
     override fun areItemsTheSame(oldItem: VacancyShortUiModel, newItem: VacancyShortUiModel): Boolean {
-        // Id is unique.
         return oldItem.vacancyId == newItem.vacancyId
     }
 

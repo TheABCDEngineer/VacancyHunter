@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.favorites.domain.FavoritesInteractor
 import ru.practicum.android.diploma.features.favorites.presentation.models.FavoritesScreenState
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiMapper
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
+import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class FavoritesViewModel(
     private val interactor: FavoritesInteractor,
@@ -21,59 +21,35 @@ class FavoritesViewModel(
     private val _state = MutableLiveData<FavoritesScreenState>()
     val state: LiveData<FavoritesScreenState> get() = _state
 
-    fun getFavorites() {
-        viewModelScope.launch {
-            _state.postValue(FavoritesScreenState.Loading)
-
-            val foundFavorites = interactor.getFavoriteVacancies()
-            when {
-                (foundFavorites.data == null) && (foundFavorites.status == NetworkResultCode.CONNECTION_ERROR) -> {
-                    _state.postValue(FavoritesScreenState.Error(NetworkResultCode.CONNECTION_ERROR))
-                }
-
-                (foundFavorites.data == null) -> _state.postValue(FavoritesScreenState.Error(null))
-
-                foundFavorites.data.isEmpty() -> _state.postValue(FavoritesScreenState.NothingFound)
-
-                else -> _state.postValue(
-                    FavoritesScreenState.Content(
-                        foundFavorites.data.map { domainModel ->
-                            uiMapper(domainModel)
-                        }
-                    )
-                )
-            }
-        }
-    }
-
     fun getPagedFavorites() {
         viewModelScope.launch {
             _state.postValue(FavoritesScreenState.Loading)
 
             val foundFavorites = interactor.getPagedFavorites()
-            when {
-                (foundFavorites.data == null) && (foundFavorites.status == NetworkResultCode.CONNECTION_ERROR) -> {
-                    _state.postValue(FavoritesScreenState.Error(NetworkResultCode.CONNECTION_ERROR))
+
+            when(foundFavorites) {
+                is Outcome.Error -> {
+                    if ((foundFavorites.data == null) &&
+                        (foundFavorites.status == NetworkResultCode.CONNECTION_ERROR)) {
+                            _state.postValue(FavoritesScreenState.Error(NetworkResultCode.CONNECTION_ERROR))
+                    } else if ((foundFavorites.data == null)) {
+                            _state.postValue(FavoritesScreenState.Error(null))
+                    }
                 }
 
-                (foundFavorites.data == null) -> _state.postValue(FavoritesScreenState.Error(null))
-
-//                foundFavorites.data.isEmpty() -> _state.postValue(FavoritesScreenState.NothingFound)
-                else -> {
-                    val flowPagedVacancies = foundFavorites.data.cachedIn(viewModelScope)
-                    val flowGagedUiVacancies = flowPagedVacancies.map { pagingData ->
-                        pagingData.map {domainModel ->
-                            uiMapper(domainModel)
+                is Outcome.Success -> {
+                    val data = foundFavorites.data
+                    if (data == null) {
+                        _state.postValue(FavoritesScreenState.Error(null))
+                    } else {
+                        val pagedData = data.cachedIn(viewModelScope)
+                        pagedData.collect { pagingData ->
+                            val pagedVacancies = pagingData.map {domainModel ->
+                                uiMapper(domainModel)
+                            }
+                            _state.postValue(FavoritesScreenState.ContentPaged(pagedVacancies))
                         }
                     }
-                    flowGagedUiVacancies.collect{it ->
-                        _state.postValue(
-                            FavoritesScreenState.ContentPaged(
-                                it
-                            )
-                        )
-                    }
-
                 }
             }
         }

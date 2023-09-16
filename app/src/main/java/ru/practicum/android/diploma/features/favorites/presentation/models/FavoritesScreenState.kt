@@ -14,10 +14,6 @@ sealed class FavoritesScreenState {
         val errorCode: NetworkResultCode?
     ) : FavoritesScreenState()
 
-    data class Content(
-        val favoriteVacancies: List<VacancyShortUiModel>,
-    ) : FavoritesScreenState()
-
     data class ContentPaged(
         val favoriteVacancies: PagingData<VacancyShortUiModel>,
     ) : FavoritesScreenState()

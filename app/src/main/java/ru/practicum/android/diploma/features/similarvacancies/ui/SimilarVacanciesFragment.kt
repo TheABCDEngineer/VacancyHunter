@@ -19,11 +19,12 @@ import ru.practicum.android.diploma.features.similarvacancies.presentation.model
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 import ru.practicum.android.diploma.root.presentation.ui.adapters.VacanciesAdapter
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
+import ru.practicum.android.diploma.root.presentation.ui.adapters.VacancyClickListener
 import ru.practicum.android.diploma.util.debounce
 
 class SimilarVacanciesFragment : Fragment() {
 
-    val args:SimilarVacanciesFragmentArgs by navArgs()
+    private val args:SimilarVacanciesFragmentArgs by navArgs()
 
     private val viewModel by viewModel<SimilarVacanciesViewModel>()
 
@@ -119,7 +120,7 @@ class SimilarVacanciesFragment : Fragment() {
         }
 
         adapter = VacanciesAdapter(
-            object : VacanciesAdapter.ListItemClickListener {
+            object : VacancyClickListener {
                 override fun onListItemClick(vacancy: VacancyShortUiModel) {
                     onListItemClickDebounce(vacancy)
                 }

@@ -16,8 +16,6 @@ interface FavoritesRepository {
 
     suspend fun getVacancyById(vacancyId: String): VacancyDetails
 
-    suspend fun getFavoriteVacancies(): Outcome<List<VacancyShortDomainModel>>
-
     suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>>
 
 }

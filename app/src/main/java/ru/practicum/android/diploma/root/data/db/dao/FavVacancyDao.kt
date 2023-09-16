@@ -23,9 +23,6 @@ interface FavVacancyDao {
     fun getVacancyById(vacancyId: String): FavVacancyEntity
 
     @Query("SELECT * FROM fav_vacancies_table ORDER BY created_at DESC")
-    fun getFavoriteVacancies(): List<FavVacancyEntity>
-
-    @Query("SELECT * FROM fav_vacancies_table ORDER BY created_at DESC")
     fun getPagedFavorites(): PagingSource<Int, FavVacancyEntity>
 
 }

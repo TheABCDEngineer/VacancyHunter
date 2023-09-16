@@ -37,14 +37,6 @@ class FavoritesRepositoryImpl(
         return vacancyDbConverter.mapVacancyEntityToVacancyDetails(favVacancyEntity)
     }
 
-    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyShortDomainModel>> {
-        val foundFavoriteVacancies = appDatabase.favVacancyDao().getFavoriteVacancies()
-        val listOfVacancies = foundFavoriteVacancies.map {
-            vacancyDbConverter.mapVacancyEntityToVacancyShort(it)
-        }
-        return Outcome.Success(data = listOfVacancies)
-    }
-
     override suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>> {
         val flowPagedEntities = Pager(
             PagingConfig(pageSize = 20, enablePlaceholders = false)

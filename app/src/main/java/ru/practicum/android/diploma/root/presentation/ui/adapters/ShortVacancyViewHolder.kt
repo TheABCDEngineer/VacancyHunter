@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 
 class ShortVacancyViewHolder(
     private val binding: ListItemVacancyBinding,
-    private val clickListener: VacanciesAdapter.ListItemClickListener
+    private val clickListener: VacancyClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(vacancy: VacancyShortUiModel) {

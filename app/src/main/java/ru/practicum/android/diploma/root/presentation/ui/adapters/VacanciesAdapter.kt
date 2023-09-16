@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.databinding.ListItemVacancyBinding
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 
 class VacanciesAdapter(
-    private val clickListener: ListItemClickListener
+    private val clickListener: VacancyClickListener
 ) : RecyclerView.Adapter<ShortVacancyViewHolder>() {
 
     private val vacancies = ArrayList<VacancyShortUiModel>()
@@ -35,10 +35,5 @@ class VacanciesAdapter(
         vacancies.addAll(newVacancyList)
         notifyDataSetChanged()
     }
-
-    interface ListItemClickListener {
-        fun onListItemClick(vacancy: VacancyShortUiModel)
-    }
-
 }
 

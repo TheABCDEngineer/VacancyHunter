@@ -14,7 +14,5 @@ interface FavoritesInteractor {
 
     suspend fun deleteFromFavorites(vacancyId: String): Boolean
 
-    suspend fun getFavoriteVacancies(): Outcome<List<VacancyShortDomainModel>>
-
     suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>>
 }
