@@ -47,7 +47,7 @@ class FavoritesRepositoryImpl(
 
     override suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>> {
         val flowPagedEntities = Pager(
-            PagingConfig(pageSize = 20)
+            PagingConfig(pageSize = 20, enablePlaceholders = false)
         ){
             appDatabase.favVacancyDao().getPagedFavorites()
         }.flow
