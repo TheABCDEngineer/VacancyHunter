@@ -41,14 +41,14 @@ class SearchViewModel(
     fun filterStateObserve(): LiveData<FilterState> = filterState
 
     fun onUiResume() {
-        val currentFilterHash = vacancyFactory.getFilterHash()
-        if (currentFilterHash == previousFilterHash) return
-        previousFilterHash = currentFilterHash
-
         val count = vacancyFactory.getFilterRequirementsCount()
         val state =
             if (count > 0) FilterState.Active(count) else FilterState.Inactive()
         filterState.postValue(state)
+
+        val currentFilterHash = vacancyFactory.getFilterHash()
+        if (currentFilterHash == previousFilterHash) return
+        previousFilterHash = currentFilterHash
 
         if (previousSearchingRequest.isNotEmpty()) runSearching(delay = 0L) {
             searchScreenState.postValue(SearchScreenState.SEARCHING)
