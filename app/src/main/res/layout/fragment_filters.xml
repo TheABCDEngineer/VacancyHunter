@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/filter_main_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -240,6 +240,47 @@
                 android:buttonTint="@color/yp_blue"
                 android:checked="false" />
         </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/filter_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/filter_apply_button"
+                style="@style/font_medium_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:elevation="0dp"
+                android:paddingVertical="20dp"
+                android:text="@string/apply"
+                android:textAllCaps="false"
+                android:textColor="@color/yp_white"
+                app:backgroundTint="@color/yp_blue"
+                app:cornerRadius="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/filter_reset_button"
+                style="@style/font_medium_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:stateListAnimator="@null"
+                android:elevation="0dp"
+                android:paddingVertical="20dp"
+                android:text="@string/reset"
+                android:textAllCaps="false"
+                android:textColor="?attr/colorAccent"
+                app:backgroundTint="?attr/colorPrimary"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout

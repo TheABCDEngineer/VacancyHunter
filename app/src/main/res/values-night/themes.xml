@@ -9,6 +9,7 @@
         <item name="colorSecondary">@color/yp_gray</item>
         <item name="colorSecondaryVariant">@color/yp_white</item>
         <item name="colorOnSecondary">@color/yp_black</item>
+        <item name="colorAccent">@color/yp_white</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

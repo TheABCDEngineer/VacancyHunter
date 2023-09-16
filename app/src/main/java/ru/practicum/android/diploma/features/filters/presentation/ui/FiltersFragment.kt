@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.features.filters.presentation.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.features.filters.domain.models.Area
-import ru.practicum.android.diploma.features.filters.domain.models.Filter
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.CountryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.FilterScreenState
@@ -38,8 +36,6 @@ class FiltersFragment : Fragment() {
     private val industriesAdapter = IndustriesAdapter()
     private val countriesAdapter = CountriesAdapter()
     private val regionsAdapter = RegionsAdapter()
-
-    private val filter = Filter(null, null, null, null, false)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,8 +85,9 @@ class FiltersFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filter.salary = s.toString()
+                viewModel.setFilterSalary(s.toString())
                 setClearIconVisibility(s)
+                setFilterButtonsVisibility()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -123,6 +120,7 @@ class FiltersFragment : Fragment() {
 
         binding.filterWorkPlaceClear.setOnClickListener {
             viewModel.clearWorkPlace()
+            setFilterButtonsVisibility()
             binding.filterMainWorkPlaceEmpty.visibility = View.VISIBLE
             binding.filterMainWorkPlaceFilled.visibility = View.GONE
         }
@@ -132,17 +130,29 @@ class FiltersFragment : Fragment() {
         }
 
         binding.filterIndustryClear.setOnClickListener {
-            filter.industry = null
+            viewModel.setFilterIndustry(null)
+            setFilterButtonsVisibility()
             render(FilterScreenState.MainScreen)
         }
 
         binding.filterSalaryClear.setOnClickListener {
-            filter.salary = null
+            viewModel.setFilterSalary(null)
+            setFilterButtonsVisibility()
             binding.expectedSalary.text?.clear()
         }
 
         binding.filterMainDoNotShowWithoutSalary.setOnCheckedChangeListener { _, isChecked ->
-            filter.doNotShowWithoutSalary = isChecked
+            viewModel.setFilterDoNotShowWithoutSalary(isChecked)
+            setFilterButtonsVisibility()
+        }
+
+        binding.filterApplyButton.setOnClickListener {
+            val filter = viewModel.getFilter()
+        }
+
+        binding.filterResetButton.setOnClickListener {
+            viewModel.clearFilter()
+            render(FilterScreenState.MainScreen)
         }
     }
 
@@ -167,7 +177,7 @@ class FiltersFragment : Fragment() {
         }
 
         binding.filterIndustriesChooseButton.setOnClickListener {
-            filter.industry = industriesAdapter.getCheckedIndustry()
+            viewModel.setFilterIndustry(industriesAdapter.getCheckedIndustry())
             render(FilterScreenState.MainScreen)
         }
     }
@@ -271,7 +281,7 @@ class FiltersFragment : Fragment() {
         binding.filterIndustriesChooseButton.visibility = View.GONE
         industriesAdapter.reload()
         viewModel.getIndustries()
-        render(FilterScreenState.IndustryScreen(filter.industry))
+        render(FilterScreenState.IndustryScreen(viewModel.getIndustry()))
     }
 
     private fun filterMainWorkPlaceClickListener() {
@@ -343,10 +353,10 @@ class FiltersFragment : Fragment() {
         binding.filterMainLayout.visibility = View.VISIBLE
         binding.filterIndustryLayout.visibility = View.GONE
         binding.filterWorkPlaceLayout.visibility = View.GONE
-        if (filter.industry != null) {
+        if (viewModel.getIndustry() != null) {
             binding.filterMainIndustryEmpty.visibility = View.GONE
             binding.filterMainIndustryFilled.visibility = View.VISIBLE
-            binding.filterMainIndustry.text = filter.industry?.name
+            binding.filterMainIndustry.text = viewModel.getIndustry()?.name
         } else {
             binding.filterMainIndustryEmpty.visibility = View.VISIBLE
             binding.filterMainIndustryFilled.visibility = View.GONE
@@ -361,6 +371,11 @@ class FiltersFragment : Fragment() {
             binding.filterMainWorkPlaceEmpty.visibility = View.GONE
             binding.filterMainWorkPlace.text = workPlaceText
         }
+
+        binding.expectedSalary.setText(viewModel.getSalary())
+        binding.filterMainDoNotShowWithoutSalary.isChecked = viewModel.getDoNotShowWithoutSalary()
+
+        setFilterButtonsVisibility()
     }
 
     private fun showIndustry(industry: Industry?) {
@@ -368,8 +383,6 @@ class FiltersFragment : Fragment() {
         binding.filterWorkPlaceLayout.visibility = View.GONE
         binding.filterIndustryLayout.visibility = View.VISIBLE
         binding.filterIndustrySearchField.text.clear()
-
-        // TODO industry
     }
 
     private fun showIndustryContent(industries: List<Industry>) {
@@ -412,6 +425,8 @@ class FiltersFragment : Fragment() {
             binding.filterWorkPlaceRegionEmpty.visibility = View.VISIBLE
             binding.filterWorkPlaceRegionFilled.visibility = View.GONE
         }
+
+        setWorkPlaceChooseButtonVisibility()
     }
 
     private fun showCountry(country: Area?) {
@@ -470,5 +485,19 @@ class FiltersFragment : Fragment() {
             message,
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun setFilterButtonsVisibility() {
+        if (viewModel.isFilterButtonsAvailable())
+            binding.filterButtons.visibility = View.VISIBLE
+        else
+            binding.filterButtons.visibility = View.GONE
+    }
+
+    private fun setWorkPlaceChooseButtonVisibility() {
+        if (viewModel.isWorkPlaceChooseButtonAvailable())
+            binding.filterWorkPlaceChooseButton.visibility = View.VISIBLE
+        else
+            binding.filterWorkPlaceChooseButton.visibility = View.GONE
     }
 }

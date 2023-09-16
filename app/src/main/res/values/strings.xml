@@ -55,4 +55,6 @@
     <string name="choice_country">Выбор страны</string>
     <string name="choice_region">Выбор региона</string>
     <string name="enter_region">Введите регион</string>
+    <string name="apply">Применить</string>
+    <string name="reset">Сбросить</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.features.filters.domain.FiltersInteractor
 import ru.practicum.android.diploma.features.filters.domain.models.Area
+import ru.practicum.android.diploma.features.filters.domain.models.Filter
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.CountryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
@@ -32,6 +33,9 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
     private var filterCountry: Area? = null
     private var filterRegion: Area? = null
+    private var filterIndustry: Industry? = null
+    private var filterSalary: String? = null
+    private var filterDoNotShowWithoutSalary: Boolean = false
 
     fun filterIndustries(text: String): List<Industry> {
         if (text.isEmpty())
@@ -137,6 +141,17 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
         filterRegion = region
     }
 
+    fun setFilterIndustry(industry: Industry?) {
+        filterIndustry = industry
+    }
+    fun setFilterSalary(salary: String?) {
+        filterSalary = salary
+    }
+
+    fun setFilterDoNotShowWithoutSalary(value: Boolean) {
+        filterDoNotShowWithoutSalary = value
+    }
+
     fun getWorkPlace(): String {
         return if (filterCountry == null && filterRegion == null)
             ""
@@ -146,6 +161,12 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
             "${filterCountry?.name}, ${filterRegion?.name}"
     }
 
+    fun getIndustry() = filterIndustry
+
+    fun getSalary() = filterSalary
+
+    fun getDoNotShowWithoutSalary() = filterDoNotShowWithoutSalary
+
     fun clearWorkPlace() {
         setCountry(null)
         setRegion(null)
@@ -153,4 +174,29 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
         setFilterRegion()
     }
 
+    fun getFilter() = Filter(
+        filterIndustry,
+        filterCountry,
+        filterRegion,
+        filterSalary,
+        filterDoNotShowWithoutSalary
+    )
+
+    fun clearFilter() {
+        filterCountry = null
+        filterRegion = null
+        filterIndustry = null
+        filterSalary = ""
+        filterDoNotShowWithoutSalary = false
+    }
+
+    fun isFilterButtonsAvailable() = (
+            filterCountry != null
+                    || filterRegion != null
+                    || filterIndustry != null
+                    || !filterSalary.isNullOrEmpty()
+                    || filterDoNotShowWithoutSalary
+            )
+
+    fun isWorkPlaceChooseButtonAvailable() = (country != null || region != null)
 }
