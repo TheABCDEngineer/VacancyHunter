@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -36,6 +37,8 @@ class FiltersFragment : Fragment() {
     private val industriesAdapter = IndustriesAdapter()
     private val countriesAdapter = CountriesAdapter()
     private val regionsAdapter = RegionsAdapter()
+
+    private var currentScreen: FilterScreenState = FilterScreenState.MainScreen
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -126,7 +129,7 @@ class FiltersFragment : Fragment() {
         }
 
         binding.filterMainBack.setOnClickListener {
-            findNavController().navigateUp()
+            navigateOut()
         }
 
         binding.filterIndustryClear.setOnClickListener {
@@ -154,6 +157,15 @@ class FiltersFragment : Fragment() {
             viewModel.clearFilter()
             render(FilterScreenState.MainScreen)
         }
+
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navigateOut()
+                }
+            }
+            )
     }
 
     private fun setIndustryScreenListeners() {
@@ -173,7 +185,7 @@ class FiltersFragment : Fragment() {
         binding.filterIndustrySearchField.addTextChangedListener(industrySearchTextWatcher)
 
         binding.filterIndustryBack.setOnClickListener {
-            render(FilterScreenState.MainScreen)
+            navigateOut()
         }
 
         binding.filterIndustriesChooseButton.setOnClickListener {
@@ -184,7 +196,8 @@ class FiltersFragment : Fragment() {
 
     private fun setWorkPlaceScreenListeners() {
         binding.filterWorkPlaceBack.setOnClickListener {
-            render(FilterScreenState.MainScreen)
+            viewModel.setCountry(null)
+            navigateOut()
         }
 
         binding.filterWorkPlaceRegionClear.setOnClickListener {
@@ -206,7 +219,7 @@ class FiltersFragment : Fragment() {
 
     private fun setCountryScreenListeners() {
         binding.filterCountryBack.setOnClickListener {
-            render(FilterScreenState.WorkPlaceScreen(null, null))
+            navigateOut()
         }
 
         binding.filterWorkPlaceCountryEmpty.setOnClickListener {
@@ -235,7 +248,7 @@ class FiltersFragment : Fragment() {
         binding.filterRegionSearchField.addTextChangedListener(regionSearchTextWatcher)
 
         binding.filterRegionBack.setOnClickListener {
-            render(FilterScreenState.WorkPlaceScreen(null, null))
+            navigateOut()
         }
 
         binding.filterRegionsChooseButton.setOnClickListener {
@@ -316,6 +329,7 @@ class FiltersFragment : Fragment() {
     }
 
     private fun render(state: FilterScreenState) {
+        currentScreen = state
         when (state) {
             is FilterScreenState.MainScreen -> showMain()
             is FilterScreenState.IndustryScreen -> showIndustry(state.industry)
@@ -499,5 +513,15 @@ class FiltersFragment : Fragment() {
             binding.filterWorkPlaceChooseButton.visibility = View.VISIBLE
         else
             binding.filterWorkPlaceChooseButton.visibility = View.GONE
+    }
+
+    private fun navigateOut() {
+        when (currentScreen) {
+            is FilterScreenState.MainScreen -> findNavController().navigateUp()
+            is FilterScreenState.IndustryScreen -> render(FilterScreenState.MainScreen)
+            is FilterScreenState.WorkPlaceScreen -> render(FilterScreenState.MainScreen)
+            is FilterScreenState.CountryScreen -> render(FilterScreenState.WorkPlaceScreen(null, null))
+            is FilterScreenState.RegionScreen -> render(FilterScreenState.WorkPlaceScreen(null, null))
+        }
     }
 }
