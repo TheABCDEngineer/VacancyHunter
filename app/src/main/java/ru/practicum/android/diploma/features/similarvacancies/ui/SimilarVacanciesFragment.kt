@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -18,11 +18,12 @@ import ru.practicum.android.diploma.features.similarvacancies.presentation.Simil
 import ru.practicum.android.diploma.features.similarvacancies.presentation.models.SimilarVacanciesState
 import ru.practicum.android.diploma.root.presentation.model.VacancyShortUiModel
 import ru.practicum.android.diploma.root.presentation.ui.adapters.VacanciesAdapter
-import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.util.debounce
 
 class SimilarVacanciesFragment : Fragment() {
+
+    val args:SimilarVacanciesFragmentArgs by navArgs()
 
     private val viewModel by viewModel<SimilarVacanciesViewModel>()
 
@@ -48,7 +49,7 @@ class SimilarVacanciesFragment : Fragment() {
 
         setAdapter()
 
-        viewModel.getSimilarVacancies(getIdFromArgs())
+        viewModel.getSimilarVacancies(args.vacancyId)
 
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
@@ -111,8 +112,9 @@ class SimilarVacanciesFragment : Fragment() {
         ) { vacancy ->
             findNavController()
                 .navigate(
-                    R.id.action_similarVacanciesFragment_to_vacancyDetailsFragment,
-                    VacancyDetailsFragment.createArgs(vacancy.vacancyId)
+                    SimilarVacanciesFragmentDirections.actionSimilarVacanciesFragmentToVacancyDetailsFragment(
+                        vacancy.vacancyId
+                    )
                 )
         }
 
@@ -139,15 +141,7 @@ class SimilarVacanciesFragment : Fragment() {
         }
     }
 
-    private fun getIdFromArgs(): String {
-        return requireArguments().getString(ARGS_VACANCY_ID) ?: ""
-    }
-
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
-        private const val ARGS_VACANCY_ID = "ARGS_VACANCY_ID"
-        fun createArgs(id: String): Bundle =
-            bundleOf(ARGS_VACANCY_ID to id)
     }
-
 }
