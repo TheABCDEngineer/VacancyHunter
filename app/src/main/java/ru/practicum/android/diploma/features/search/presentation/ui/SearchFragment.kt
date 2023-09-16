@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -137,6 +138,7 @@ class SearchFragment : Fragment() {
         binding?.vacancyFeed?.isVisible = state.isFeed
         binding?.progressBar?.isVisible = state.isProgressBar
         binding?.feedPlaceholder?.isVisible = state.isPlaceholder
+        if (state == SearchScreenState.SEARCHING) binding?.vacancyFeed?.layoutManager?.scrollToPosition(0)
     }
 
     private fun updateFeed(model: VacancyFactoryModel) {
@@ -154,5 +156,10 @@ class SearchFragment : Fragment() {
     private fun updateFilterState(state: FilterState) {
         binding?.filterChip?.text  = state.filterRequirementsCount.toString()
         binding?.filterChip?.isVisible = state is FilterState.Active
+        val icon = when(state) {
+            is FilterState.Active -> AppCompatResources.getDrawable(requireContext(),R.drawable.filter_active_icon)
+            is FilterState.Inactive -> AppCompatResources.getDrawable(requireContext(),R.drawable.filter_inactive_icon)
+        }
+        binding?.filterButton?.setImageDrawable(icon)
     }
 }
