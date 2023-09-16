@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.features.favorites.domain
 
+import androidx.paging.PagingData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
@@ -39,4 +41,9 @@ class FavoritesInteractorImpl(
         }
     }
 
+    override suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>> {
+        return withContext(Dispatchers.IO) {
+            favoritesRepository.getPagedFavorites()
+        }
+    }
 }
