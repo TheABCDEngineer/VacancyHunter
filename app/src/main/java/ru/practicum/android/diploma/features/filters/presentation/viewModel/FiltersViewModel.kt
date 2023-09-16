@@ -163,8 +163,6 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
     fun getIndustry() = filterIndustry
 
-    fun getFilterRegion() = filterRegion
-
     fun getSalary() = filterSalary
 
     fun getDoNotShowWithoutSalary() = filterDoNotShowWithoutSalary

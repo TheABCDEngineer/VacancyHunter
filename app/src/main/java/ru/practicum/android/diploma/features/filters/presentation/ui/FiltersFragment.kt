@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.features.filters.presentation.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -181,8 +180,21 @@ class FiltersFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                val currentIndustry = viewModel.getIndustry()
                 industriesAdapter.industries.clear()
-                industriesAdapter.industries.addAll(viewModel.filterIndustries(s.toString()))
+                var filteredIndustries = viewModel.filterIndustries(s.toString())
+                if (currentIndustry != null) {
+                    var position = 0
+                    while (position < filteredIndustries.size) {
+                        if (filteredIndustries[position] == currentIndustry) {
+                            Collections.swap(filteredIndustries, 0, position)
+                            break
+                        }
+                        position++
+                    }
+                }
+                industriesAdapter.industries.addAll(filteredIndustries)
+                binding.filterIndustriesRecyclerView.smoothScrollToPosition(0)
                 industriesAdapter.notifyDataSetChanged()
             }
         }
@@ -245,8 +257,21 @@ class FiltersFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                val currentRegion = viewModel.getRegion()
                 regionsAdapter.regions.clear()
-                regionsAdapter.regions.addAll(viewModel.filterRegions(s.toString()))
+                var filteredRegions = viewModel.filterRegions(s.toString())
+                if (currentRegion != null) {
+                    var position = 0
+                    while (position < filteredRegions.size) {
+                        if (filteredRegions[position] == currentRegion) {
+                            Collections.swap(filteredRegions, 0, position)
+                            break
+                        }
+                        position++
+                    }
+                }
+                regionsAdapter.regions.addAll(filteredRegions)
+                binding.filterRegionsRecyclerView.smoothScrollToPosition(0)
                 regionsAdapter.notifyDataSetChanged()
             }
         }
@@ -418,6 +443,7 @@ class FiltersFragment : Fragment() {
                 position++
             }
         }
+        binding.filterIndustriesRecyclerView.smoothScrollToPosition(0)
         industriesAdapter.notifyDataSetChanged()
     }
 
@@ -490,7 +516,6 @@ class FiltersFragment : Fragment() {
 
     private fun showRegionContent(regions: List<Area>) {
         val currentRegion = viewModel.getRegion()
-        Log.d("test", "$currentRegion")
         binding.filterRegionProgressBar.visibility = View.GONE
         regionsAdapter.regions = regions.toMutableList()
         if (currentRegion != null) {
@@ -503,6 +528,7 @@ class FiltersFragment : Fragment() {
                 position++
             }
         }
+        binding.filterRegionsRecyclerView.smoothScrollToPosition(0)
         regionsAdapter.notifyDataSetChanged()
     }
 

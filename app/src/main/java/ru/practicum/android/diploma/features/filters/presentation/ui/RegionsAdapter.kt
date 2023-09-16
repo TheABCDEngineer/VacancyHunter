@@ -23,7 +23,7 @@ class RegionsAdapter: RecyclerView.Adapter<RegionsViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RegionsViewHolder, position: Int) {
-        if (position == 0 && checkedRegion != null) {
+        if (position == 0 && checkedRegion == regions[position]) {
             holder.bind(regions[position], true)
             lastCheckedRadioButton = holder.itemView.findViewById<RadioButton>(R.id.filter_radioButton)
         } else

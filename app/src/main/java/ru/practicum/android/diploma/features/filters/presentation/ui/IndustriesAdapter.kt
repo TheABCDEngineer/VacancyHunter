@@ -23,7 +23,7 @@ class IndustriesAdapter: RecyclerView.Adapter<IndustriesViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
-        if (position == 0 && checkedIndustry != null) {
+        if (position == 0 && checkedIndustry == industries[position]) {
             holder.bind(industries[position], true)
             lastCheckedRadioButton = holder.itemView.findViewById<RadioButton>(R.id.filter_radioButton)
         } else
