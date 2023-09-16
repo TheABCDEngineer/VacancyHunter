@@ -100,8 +100,8 @@ val dataModule = module {
             simParamsMapper = get(),
             similarVacanciesMapper = get(),
             responseProcessor = get(),
-            networkClient = get(),
-            gson = get())
+            networkClient = get()
+        )
     }
 
     singleOf(::FilterRepositoryImpl).bind<FilterRepository>()

@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.root.data
 
-import com.google.gson.Gson
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesMapper
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesRequest
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarityParamsMapper
@@ -19,8 +18,7 @@ class VacancyRepositoryImpl(
     private val simParamsMapper: SimilarityParamsMapper,
     private val similarVacanciesMapper: SimilarVacanciesMapper,
     private val responseProcessor: ResponseProcessor,
-    private val networkClient: NetworkSearch,
-    val gson: Gson
+    private val networkClient: NetworkSearch
 ) : VacancyRepository {
     override suspend fun getVacancyById(id: String): Outcome<VacancyDetails> {
         val response = networkClient.getVacancyById(dto = VacancyDetailsRequest(id))
