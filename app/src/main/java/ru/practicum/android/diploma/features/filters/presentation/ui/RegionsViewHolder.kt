@@ -9,8 +9,8 @@ import ru.practicum.android.diploma.features.filters.domain.models.Area
 class RegionsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
     private val regionRB: RadioButton = itemView.findViewById(R.id.filter_radioButton)
 
-    fun bind(region: Area) {
+    fun bind(region: Area, isChecked: Boolean = false) {
         regionRB.text = region.name
-        regionRB.isChecked = false
+        regionRB.isChecked = isChecked
     }
 }

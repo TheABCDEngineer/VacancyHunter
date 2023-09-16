@@ -23,6 +23,7 @@ import ru.practicum.android.diploma.features.filters.presentation.models.FilterS
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.RegionScreenState
 import ru.practicum.android.diploma.features.filters.presentation.viewModel.FiltersViewModel
+import java.util.Collections
 
 class FiltersFragment : Fragment() {
     private var _binding: FragmentFiltersBinding? = null
@@ -123,6 +124,7 @@ class FiltersFragment : Fragment() {
 
         binding.filterWorkPlaceClear.setOnClickListener {
             viewModel.clearWorkPlace()
+            regionsAdapter.clearCheckedRegion()
             setFilterButtonsVisibility()
             binding.filterMainWorkPlaceEmpty.visibility = View.VISIBLE
             binding.filterMainWorkPlaceFilled.visibility = View.GONE
@@ -134,6 +136,7 @@ class FiltersFragment : Fragment() {
 
         binding.filterIndustryClear.setOnClickListener {
             viewModel.setFilterIndustry(null)
+            industriesAdapter.clearCheckedIndustry()
             setFilterButtonsVisibility()
             render(FilterScreenState.MainScreen)
         }
@@ -177,8 +180,21 @@ class FiltersFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                val currentIndustry = viewModel.getIndustry()
                 industriesAdapter.industries.clear()
-                industriesAdapter.industries.addAll(viewModel.filterIndustries(s.toString()))
+                var filteredIndustries = viewModel.filterIndustries(s.toString())
+                if (currentIndustry != null) {
+                    var position = 0
+                    while (position < filteredIndustries.size) {
+                        if (filteredIndustries[position] == currentIndustry) {
+                            Collections.swap(filteredIndustries, 0, position)
+                            break
+                        }
+                        position++
+                    }
+                }
+                industriesAdapter.industries.addAll(filteredIndustries)
+                binding.filterIndustriesRecyclerView.smoothScrollToPosition(0)
                 industriesAdapter.notifyDataSetChanged()
             }
         }
@@ -202,6 +218,7 @@ class FiltersFragment : Fragment() {
 
         binding.filterWorkPlaceRegionClear.setOnClickListener {
             viewModel.setRegion(null)
+            regionsAdapter.clearCheckedRegion()
             render(FilterScreenState.WorkPlaceScreen)
         }
 
@@ -240,8 +257,21 @@ class FiltersFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                val currentRegion = viewModel.getRegion()
                 regionsAdapter.regions.clear()
-                regionsAdapter.regions.addAll(viewModel.filterRegions(s.toString()))
+                var filteredRegions = viewModel.filterRegions(s.toString())
+                if (currentRegion != null) {
+                    var position = 0
+                    while (position < filteredRegions.size) {
+                        if (filteredRegions[position] == currentRegion) {
+                            Collections.swap(filteredRegions, 0, position)
+                            break
+                        }
+                        position++
+                    }
+                }
+                regionsAdapter.regions.addAll(filteredRegions)
+                binding.filterRegionsRecyclerView.smoothScrollToPosition(0)
                 regionsAdapter.notifyDataSetChanged()
             }
         }
@@ -400,8 +430,20 @@ class FiltersFragment : Fragment() {
     }
 
     private fun showIndustryContent(industries: List<Industry>) {
+        val currentIndustry = viewModel.getIndustry()
         binding.filterIndustriesProgressBar.visibility = View.GONE
         industriesAdapter.industries = industries.toMutableList()
+        if (currentIndustry != null) {
+            var position = 0
+            while (position < industriesAdapter.industries.size) {
+                if (industriesAdapter.industries[position] == currentIndustry) {
+                    Collections.swap(industriesAdapter.industries, 0, position)
+                    break
+                }
+                position++
+            }
+        }
+        binding.filterIndustriesRecyclerView.smoothScrollToPosition(0)
         industriesAdapter.notifyDataSetChanged()
     }
 
@@ -473,8 +515,20 @@ class FiltersFragment : Fragment() {
     }
 
     private fun showRegionContent(regions: List<Area>) {
+        val currentRegion = viewModel.getRegion()
         binding.filterRegionProgressBar.visibility = View.GONE
         regionsAdapter.regions = regions.toMutableList()
+        if (currentRegion != null) {
+            var position = 0
+            while (position < regionsAdapter.regions.size) {
+                if (regionsAdapter.regions[position] == currentRegion) {
+                    Collections.swap(regionsAdapter.regions, 0, position)
+                    break
+                }
+                position++
+            }
+        }
+        binding.filterRegionsRecyclerView.smoothScrollToPosition(0)
         regionsAdapter.notifyDataSetChanged()
     }
 
