@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.features.filters.presentation.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import ru.practicum.android.diploma.features.filters.presentation.models.FilterS
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.RegionScreenState
 import ru.practicum.android.diploma.features.filters.presentation.viewModel.FiltersViewModel
+import java.util.Collections
 
 class FiltersFragment : Fragment() {
     private var _binding: FragmentFiltersBinding? = null
@@ -123,6 +125,7 @@ class FiltersFragment : Fragment() {
 
         binding.filterWorkPlaceClear.setOnClickListener {
             viewModel.clearWorkPlace()
+            regionsAdapter.clearCheckedRegion()
             setFilterButtonsVisibility()
             binding.filterMainWorkPlaceEmpty.visibility = View.VISIBLE
             binding.filterMainWorkPlaceFilled.visibility = View.GONE
@@ -134,6 +137,7 @@ class FiltersFragment : Fragment() {
 
         binding.filterIndustryClear.setOnClickListener {
             viewModel.setFilterIndustry(null)
+            industriesAdapter.clearCheckedIndustry()
             setFilterButtonsVisibility()
             render(FilterScreenState.MainScreen)
         }
@@ -202,6 +206,7 @@ class FiltersFragment : Fragment() {
 
         binding.filterWorkPlaceRegionClear.setOnClickListener {
             viewModel.setRegion(null)
+            regionsAdapter.clearCheckedRegion()
             render(FilterScreenState.WorkPlaceScreen)
         }
 
@@ -400,8 +405,19 @@ class FiltersFragment : Fragment() {
     }
 
     private fun showIndustryContent(industries: List<Industry>) {
+        val currentIndustry = viewModel.getIndustry()
         binding.filterIndustriesProgressBar.visibility = View.GONE
         industriesAdapter.industries = industries.toMutableList()
+        if (currentIndustry != null) {
+            var position = 0
+            while (position < industriesAdapter.industries.size) {
+                if (industriesAdapter.industries[position] == currentIndustry) {
+                    Collections.swap(industriesAdapter.industries, 0, position)
+                    break
+                }
+                position++
+            }
+        }
         industriesAdapter.notifyDataSetChanged()
     }
 
@@ -473,8 +489,20 @@ class FiltersFragment : Fragment() {
     }
 
     private fun showRegionContent(regions: List<Area>) {
+        val currentRegion = viewModel.getRegion()
+        Log.d("test", "$currentRegion")
         binding.filterRegionProgressBar.visibility = View.GONE
         regionsAdapter.regions = regions.toMutableList()
+        if (currentRegion != null) {
+            var position = 0
+            while (position < regionsAdapter.regions.size) {
+                if (regionsAdapter.regions[position] == currentRegion) {
+                    Collections.swap(regionsAdapter.regions, 0, position)
+                    break
+                }
+                position++
+            }
+        }
         regionsAdapter.notifyDataSetChanged()
     }
 

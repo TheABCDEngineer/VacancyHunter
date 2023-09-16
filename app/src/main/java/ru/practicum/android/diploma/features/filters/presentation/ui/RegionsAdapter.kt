@@ -23,7 +23,11 @@ class RegionsAdapter: RecyclerView.Adapter<RegionsViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RegionsViewHolder, position: Int) {
-        holder.bind(regions[position])
+        if (position == 0 && checkedRegion != null) {
+            holder.bind(regions[position], true)
+            lastCheckedRadioButton = holder.itemView.findViewById<RadioButton>(R.id.filter_radioButton)
+        } else
+            holder.bind(regions[position])
 
         val radioButton = holder.itemView.findViewById<RadioButton>(R.id.filter_radioButton)
         radioButton.setOnClickListener {
@@ -39,7 +43,10 @@ class RegionsAdapter: RecyclerView.Adapter<RegionsViewHolder>() {
     fun reload() {
         regions.clear()
         lastCheckedRadioButton = null
-        checkedRegion = null
         notifyDataSetChanged()
+    }
+
+    fun clearCheckedRegion() {
+        checkedRegion = null
     }
 }
