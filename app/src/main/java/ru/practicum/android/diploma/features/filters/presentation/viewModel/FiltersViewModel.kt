@@ -115,12 +115,16 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
 
     fun setRegion(chosenRegion: Area?) {
         region = chosenRegion
+        if (region != null)
+            country = chosenRegion?.country
     }
 
     fun getRegion() = region
 
     fun setCountry(chosenCountry: Area?) {
         country = chosenCountry
+        if (country != region?.country)
+            region = null
     }
 
     fun getCountry() = country
