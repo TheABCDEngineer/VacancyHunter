@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -36,6 +37,8 @@ class FiltersFragment : Fragment() {
     private val industriesAdapter = IndustriesAdapter()
     private val countriesAdapter = CountriesAdapter()
     private val regionsAdapter = RegionsAdapter()
+
+    private var currentScreen: FilterScreenState = FilterScreenState.MainScreen
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -126,7 +129,7 @@ class FiltersFragment : Fragment() {
         }
 
         binding.filterMainBack.setOnClickListener {
-            findNavController().navigateUp()
+            navigateOut()
         }
 
         binding.filterIndustryClear.setOnClickListener {
@@ -154,6 +157,15 @@ class FiltersFragment : Fragment() {
             viewModel.clearFilter()
             render(FilterScreenState.MainScreen)
         }
+
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navigateOut()
+                }
+            }
+            )
     }
 
     private fun setIndustryScreenListeners() {
@@ -173,7 +185,7 @@ class FiltersFragment : Fragment() {
         binding.filterIndustrySearchField.addTextChangedListener(industrySearchTextWatcher)
 
         binding.filterIndustryBack.setOnClickListener {
-            render(FilterScreenState.MainScreen)
+            navigateOut()
         }
 
         binding.filterIndustriesChooseButton.setOnClickListener {
@@ -184,17 +196,18 @@ class FiltersFragment : Fragment() {
 
     private fun setWorkPlaceScreenListeners() {
         binding.filterWorkPlaceBack.setOnClickListener {
-            render(FilterScreenState.MainScreen)
+            viewModel.setCountry(null)
+            navigateOut()
         }
 
         binding.filterWorkPlaceRegionClear.setOnClickListener {
             viewModel.setRegion(null)
-            render(FilterScreenState.WorkPlaceScreen(null, null))
+            render(FilterScreenState.WorkPlaceScreen)
         }
 
         binding.filterWorkPlaceCountryClear.setOnClickListener {
             viewModel.setCountry(null)
-            render(FilterScreenState.WorkPlaceScreen(null, null))
+            render(FilterScreenState.WorkPlaceScreen)
         }
 
         binding.filterWorkPlaceChooseButton.setOnClickListener {
@@ -206,7 +219,7 @@ class FiltersFragment : Fragment() {
 
     private fun setCountryScreenListeners() {
         binding.filterCountryBack.setOnClickListener {
-            render(FilterScreenState.WorkPlaceScreen(null, null))
+            navigateOut()
         }
 
         binding.filterWorkPlaceCountryEmpty.setOnClickListener {
@@ -235,12 +248,12 @@ class FiltersFragment : Fragment() {
         binding.filterRegionSearchField.addTextChangedListener(regionSearchTextWatcher)
 
         binding.filterRegionBack.setOnClickListener {
-            render(FilterScreenState.WorkPlaceScreen(null, null))
+            navigateOut()
         }
 
         binding.filterRegionsChooseButton.setOnClickListener {
             viewModel.setRegion(regionsAdapter.getCheckedArea())
-            render(FilterScreenState.WorkPlaceScreen(null, null))
+            render(FilterScreenState.WorkPlaceScreen)
         }
 
         binding.filterWorkPlaceRegionEmpty.setOnClickListener {
@@ -269,7 +282,7 @@ class FiltersFragment : Fragment() {
 
         countriesAdapter.onItemClick = { country ->
             viewModel.setCountry(country)
-            render(FilterScreenState.WorkPlaceScreen(null, null))
+            render(FilterScreenState.WorkPlaceScreen)
         }
 
         regionsAdapter.onItemClick = { region ->
@@ -281,25 +294,25 @@ class FiltersFragment : Fragment() {
         binding.filterIndustriesChooseButton.visibility = View.GONE
         industriesAdapter.reload()
         viewModel.getIndustries()
-        render(FilterScreenState.IndustryScreen(viewModel.getIndustry()))
+        render(FilterScreenState.IndustryScreen)
     }
 
     private fun filterMainWorkPlaceClickListener() {
-        render(FilterScreenState.WorkPlaceScreen(null, null))
+        render(FilterScreenState.WorkPlaceScreen)
     }
 
     private fun filterWorkPlaceCountryClickListener() {
         countriesAdapter.countries.clear()
         countriesAdapter.notifyDataSetChanged()
         viewModel.getCountries()
-        render(FilterScreenState.CountryScreen(viewModel.getCountry()))
+        render(FilterScreenState.CountryScreen)
     }
 
     private fun filterWorkPlaceRegionClickListener() {
         binding.filterRegionsChooseButton.visibility = View.GONE
         regionsAdapter.reload()
         viewModel.getRegions()
-        render(FilterScreenState.RegionScreen(viewModel.getRegion()))
+        render(FilterScreenState.RegionScreen)
     }
 
     private fun setEditTextColors(textInputLayout: TextInputLayout, text: CharSequence?) {
@@ -316,12 +329,13 @@ class FiltersFragment : Fragment() {
     }
 
     private fun render(state: FilterScreenState) {
+        currentScreen = state
         when (state) {
             is FilterScreenState.MainScreen -> showMain()
-            is FilterScreenState.IndustryScreen -> showIndustry(state.industry)
+            is FilterScreenState.IndustryScreen -> showIndustry()
             is FilterScreenState.WorkPlaceScreen -> showWorkPlace()
-            is FilterScreenState.CountryScreen -> showCountry(state.country)
-            is FilterScreenState.RegionScreen -> showRegion(state.region)
+            is FilterScreenState.CountryScreen -> showCountry()
+            is FilterScreenState.RegionScreen -> showRegion()
         }
     }
 
@@ -378,7 +392,7 @@ class FiltersFragment : Fragment() {
         setFilterButtonsVisibility()
     }
 
-    private fun showIndustry(industry: Industry?) {
+    private fun showIndustry() {
         binding.filterMainLayout.visibility = View.GONE
         binding.filterWorkPlaceLayout.visibility = View.GONE
         binding.filterIndustryLayout.visibility = View.VISIBLE
@@ -429,7 +443,7 @@ class FiltersFragment : Fragment() {
         setWorkPlaceChooseButtonVisibility()
     }
 
-    private fun showCountry(country: Area?) {
+    private fun showCountry() {
         binding.filterCountryLayout.visibility = View.VISIBLE
         binding.filterRegionLayout.visibility = View.GONE
         binding.filterWorkPlaceLayout.visibility = View.GONE
@@ -444,14 +458,14 @@ class FiltersFragment : Fragment() {
     private fun showCountryError() {
         binding.filterCountriesProgressBar.visibility = View.GONE
         showMessage(getString(R.string.something_went_wrong))
-        render(FilterScreenState.WorkPlaceScreen(null, null))
+        render(FilterScreenState.WorkPlaceScreen)
     }
 
     private fun showCountryLoading() {
         binding.filterCountriesProgressBar.visibility = View.VISIBLE
     }
 
-    private fun showRegion(region: Area?) {
+    private fun showRegion() {
         binding.filterRegionLayout.visibility = View.VISIBLE
         binding.filterCountryLayout.visibility = View.GONE
         binding.filterWorkPlaceLayout.visibility = View.GONE
@@ -467,7 +481,7 @@ class FiltersFragment : Fragment() {
     private fun showRegionError() {
         binding.filterRegionProgressBar.visibility = View.GONE
         showMessage(getString(R.string.something_went_wrong))
-        render(FilterScreenState.WorkPlaceScreen(null, null))
+        render(FilterScreenState.WorkPlaceScreen)
     }
 
     private fun showRegionLoading() {
@@ -499,5 +513,15 @@ class FiltersFragment : Fragment() {
             binding.filterWorkPlaceChooseButton.visibility = View.VISIBLE
         else
             binding.filterWorkPlaceChooseButton.visibility = View.GONE
+    }
+
+    private fun navigateOut() {
+        when (currentScreen) {
+            is FilterScreenState.MainScreen -> findNavController().navigateUp()
+            is FilterScreenState.IndustryScreen -> render(FilterScreenState.MainScreen)
+            is FilterScreenState.WorkPlaceScreen -> render(FilterScreenState.MainScreen)
+            is FilterScreenState.CountryScreen -> render(FilterScreenState.WorkPlaceScreen)
+            is FilterScreenState.RegionScreen -> render(FilterScreenState.WorkPlaceScreen)
+        }
     }
 }

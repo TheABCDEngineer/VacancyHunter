@@ -4,9 +4,9 @@ import ru.practicum.android.diploma.features.filters.domain.models.Area
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 
 sealed interface FilterScreenState {
-    object MainScreen : FilterScreenState
-    data class IndustryScreen(val industry:Industry?) : FilterScreenState
-    data class WorkPlaceScreen(val country: Area?, val region: Area?) : FilterScreenState
-    data class CountryScreen(val country: Area?): FilterScreenState
-    data class RegionScreen(val region: Area?): FilterScreenState
+    object MainScreen: FilterScreenState
+    object IndustryScreen: FilterScreenState
+    object WorkPlaceScreen: FilterScreenState
+    object CountryScreen: FilterScreenState
+    object RegionScreen: FilterScreenState
 }
