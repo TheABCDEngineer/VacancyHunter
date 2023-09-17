@@ -15,8 +15,8 @@ import ru.practicum.android.diploma.features.favorites.data.FavoritesRepositoryI
 import ru.practicum.android.diploma.features.favorites.domain.FavoritesRepository
 import ru.practicum.android.diploma.features.filters.data.models.FiltersMapper
 import ru.practicum.android.diploma.features.search.data.SearchVacancyRepositoryImplNetwork
-import ru.practicum.android.diploma.features.search.data.network.NetworkClient
-import ru.practicum.android.diploma.features.search.data.network.NetworkClientImplRetrofit
+import ru.practicum.android.diploma.root.data.network.NetworkClient
+import ru.practicum.android.diploma.root.data.network.NetworkClientImplRetrofit
 import ru.practicum.android.diploma.features.search.domain.repository.SearchVacancyRepository
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarVacanciesMapper
 import ru.practicum.android.diploma.features.similarvacancies.data.models.SimilarityParamsMapper
@@ -30,9 +30,7 @@ import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.root.data.db.AppDatabase
 import ru.practicum.android.diploma.root.data.network.HeadHunterApi
 import ru.practicum.android.diploma.root.data.network.HeaderInterceptor
-import ru.practicum.android.diploma.root.data.network.NetworkSearch
 import ru.practicum.android.diploma.root.data.network.ResponseProcessor
-import ru.practicum.android.diploma.root.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 import ru.practicum.android.diploma.features.filters.domain.FilterRepository
 import ru.practicum.android.diploma.root.domain.repository.FilterStorage
@@ -62,10 +60,6 @@ val dataModule = module {
             .client(get<OkHttpClient>())
             .build()
             .create(HeadHunterApi::class.java)
-    }
-
-    single<NetworkSearch> {
-        RetrofitNetworkClient(api = get(), context = androidContext())
     }
 
     single<Gson> {

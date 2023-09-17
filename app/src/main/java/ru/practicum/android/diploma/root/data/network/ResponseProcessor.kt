@@ -1,13 +1,13 @@
 package ru.practicum.android.diploma.root.data.network
 
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
-import ru.practicum.android.diploma.root.data.network.models.Response
+import ru.practicum.android.diploma.root.data.network.models.ResponseData
 import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class ResponseProcessor {
 
     fun <R, O> processResponse(
-        response: Response<R>,
+        response: ResponseData<R>,
         mapper: (R) -> O
     ): Outcome<O> {
 
