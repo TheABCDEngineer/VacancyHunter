@@ -16,13 +16,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/filter_header_height"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/filter_main_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
                 android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:background="@android:color/transparent"
@@ -41,8 +41,8 @@
         <FrameLayout
             android:id="@+id/filter_main_work_place_empty"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp">
 
             <TextView
@@ -66,8 +66,8 @@
         <FrameLayout
             android:id="@+id/filter_main_work_place_filled"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp"
             android:visibility="gone">
 
@@ -107,8 +107,8 @@
         <FrameLayout
             android:id="@+id/filter_main_industry_empty"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp">
 
             <TextView
@@ -132,8 +132,8 @@
         <FrameLayout
             android:id="@+id/filter_main_industry_filled"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp"
             android:visibility="gone">
 
@@ -173,7 +173,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
             android:layout_marginVertical="24dp">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -220,9 +220,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginHorizontal="@dimen/filter_margin_horizontal">
 
             <TextView
                 style="@style/font_regular_16"
@@ -255,7 +254,7 @@
                 style="@style/font_medium_16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
                 android:elevation="0dp"
                 android:paddingVertical="20dp"
                 android:text="@string/apply"
@@ -269,13 +268,13 @@
                 style="@style/font_medium_16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
                 android:stateListAnimator="@null"
                 android:elevation="0dp"
                 android:paddingVertical="20dp"
                 android:text="@string/reset"
                 android:textAllCaps="false"
-                android:textColor="?attr/colorAccent"
+                android:textColor="?attr/colorOnError"
                 app:backgroundTint="?attr/colorPrimary"
                 app:cornerRadius="12dp" />
         </LinearLayout>
@@ -292,13 +291,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/filter_header_height"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/filter_industry_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
                 android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:background="@android:color/transparent"
@@ -316,8 +315,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
             android:layout_marginVertical="8dp"
             android:background="@drawable/rounded_rectangle"
             android:orientation="horizontal"
@@ -376,7 +375,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
                 android:layout_marginBottom="24dp"
                 android:elevation="0dp"
                 android:paddingVertical="20dp"
@@ -397,13 +396,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/filter_header_height"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/filter_work_place_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
                 android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:background="@android:color/transparent"
@@ -422,8 +421,8 @@
         <FrameLayout
             android:id="@+id/filter_work_place_country_empty"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp">
 
             <TextView
@@ -447,8 +446,8 @@
         <FrameLayout
             android:id="@+id/filter_work_place_country_filled"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp"
             android:visibility="gone">
 
@@ -488,8 +487,8 @@
         <FrameLayout
             android:id="@+id/filter_work_place_region_empty"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp">
 
             <TextView
@@ -513,8 +512,8 @@
         <FrameLayout
             android:id="@+id/filter_work_place_region_filled"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp"
             android:visibility="gone">
 
@@ -561,7 +560,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
                 android:layout_marginBottom="24dp"
                 android:elevation="0dp"
                 android:paddingVertical="20dp"
@@ -582,13 +581,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/filter_header_height"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/filter_country_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
                 android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:background="@android:color/transparent"
@@ -633,13 +632,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/filter_header_height"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/filter_region_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
                 android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:background="@android:color/transparent"
@@ -657,8 +656,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
             android:layout_marginVertical="8dp"
             android:background="@drawable/rounded_rectangle"
             android:orientation="horizontal"
@@ -717,7 +716,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
                 android:layout_marginBottom="24dp"
                 android:elevation="0dp"
                 android:paddingVertical="20dp"

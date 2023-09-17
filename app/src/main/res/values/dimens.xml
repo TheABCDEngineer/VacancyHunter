@@ -15,4 +15,8 @@
     <dimen name="similar_horizontal_margin">16dp</dimen>
     <dimen name="favorites_horizontal_margin">16dp</dimen>
     <dimen name="details_paragraph_top_margin">24dp</dimen>
+    <dimen name="filter_header_height">64dp</dimen>
+    <dimen name="filter_back_icon_size">48dp</dimen>
+    <dimen name="filter_margin_horizontal">16dp</dimen>
+    <dimen name="filter_list_item_height">56dp</dimen>
 </resources>
