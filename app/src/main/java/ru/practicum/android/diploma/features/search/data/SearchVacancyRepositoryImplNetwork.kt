@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.features.search.data
 
 import ru.practicum.android.diploma.features.filters.domain.models.Filter
-import ru.practicum.android.diploma.features.search.data.network.NetworkClient
+import ru.practicum.android.diploma.root.data.network.NetworkClient
 import ru.practicum.android.diploma.features.search.data.network.dto.ShortVacancyRequest
 import ru.practicum.android.diploma.features.search.data.network.dto.VacancyResponse
 import ru.practicum.android.diploma.features.search.domain.model.ResponseModel

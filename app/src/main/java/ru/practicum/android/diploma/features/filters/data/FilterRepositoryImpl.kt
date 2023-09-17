@@ -1,23 +1,29 @@
 package ru.practicum.android.diploma.features.filters.data
 
+import ru.practicum.android.diploma.features.filters.data.dto.network.AreasRequest
+import ru.practicum.android.diploma.features.filters.data.dto.network.AreasResponse
+import ru.practicum.android.diploma.features.filters.data.dto.network.IndustriesRequest
+import ru.practicum.android.diploma.features.filters.data.dto.network.IndustriesResponse
 import ru.practicum.android.diploma.features.filters.data.models.FiltersMapper
 import ru.practicum.android.diploma.features.filters.domain.models.Area
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
-import ru.practicum.android.diploma.root.data.network.NetworkSearch
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.root.domain.model.Outcome
 import ru.practicum.android.diploma.features.filters.domain.FilterRepository
+import ru.practicum.android.diploma.root.data.network.NetworkClient
 
 class FilterRepositoryImpl(
     private val filtersMapper: FiltersMapper,
-    private val networkClient: NetworkSearch
+    private val networkClient: NetworkClient
 ) : FilterRepository {
     override suspend fun getIndustries(): Outcome<List<Industry>> {
-        val response = networkClient.getIndustries()
+        val response =
+            networkClient.executeRequest(IndustriesRequest())
         return when (response.resultCode) {
             NetworkResultCode.SUCCESS -> {
                 if (response.data != null) {
-                    val industries = filtersMapper.getIndustriesFromSubindustries(response.data!!)
+                    val data = response.data as IndustriesResponse
+                    val industries = filtersMapper.getIndustriesFromSubindustries(data.industries)
                     Outcome.Success(data = industries)
                 } else {
                     Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
@@ -35,14 +41,16 @@ class FilterRepositoryImpl(
     }
 
     override suspend fun getRegions(parentId: Int?): Outcome<List<Area>> {
-        val response = networkClient.getAreas()
+        val response =
+            networkClient.executeRequest(AreasRequest())
         return when (response.resultCode) {
             NetworkResultCode.SUCCESS -> {
                 if (response.data != null) {
+                    val data = response.data as AreasResponse
                     val areas = if (parentId == null)
-                        filtersMapper.convertAreaTreeDto(response.data!!)
+                        filtersMapper.convertAreaTreeDto(data.areas)
                     else
-                        filtersMapper.convertAreaTreeByParentIdDto(response.data!!, parentId)
+                        filtersMapper.convertAreaTreeByParentIdDto(data.areas, parentId)
                     Outcome.Success(data = areas.sortedBy { it.name })
                 } else {
                     Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
@@ -61,11 +69,13 @@ class FilterRepositoryImpl(
     }
 
     override suspend fun getCountries(): Outcome<List<Area>> {
-        val response = networkClient.getAreas()
+        val response =
+            networkClient.executeRequest(AreasRequest())
         return when (response.resultCode) {
             NetworkResultCode.SUCCESS -> {
                 if (response.data != null) {
-                    val areas = filtersMapper.convertAreaTreeFirstLevelDto(response.data!!)
+                    val data = response.data as AreasResponse
+                    val areas = filtersMapper.convertAreaTreeFirstLevelDto(data.areas)
                     Outcome.Success(data = areas)
                 } else {
                     Outcome.Error(status = NetworkResultCode.SERVER_ERROR, data = null)
