@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.features.vacancydetails.presentation.models.
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsState
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
 import ru.practicum.android.diploma.root.domain.model.Outcome
+import ru.practicum.android.diploma.root.presentation.Event
 import ru.practicum.android.diploma.util.debounce
 
 class VacancyDetailsViewModel(

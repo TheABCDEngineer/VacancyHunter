@@ -53,6 +53,8 @@ class FiltersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getSavedFilters()
+
         setMainScreenListeners()
         setIndustryScreenListeners()
         setWorkPlaceScreenListeners()
@@ -71,6 +73,12 @@ class FiltersFragment : Fragment() {
         viewModel.regionsScreenState.observe(viewLifecycleOwner) {
             renderRegion(it)
         }
+
+        viewModel.mainScreenRenderEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { action ->
+                if (action is FilterScreenState.MainScreen) render(action)
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -81,6 +89,10 @@ class FiltersFragment : Fragment() {
         regionSearchTextWatcher.let { binding.filterRegionSearchField.removeTextChangedListener(it) }
 
         _binding = null
+    }
+
+    private fun getSavedFilters() {
+        viewModel.getSavedFilters()
     }
 
     private fun setMainScreenListeners() {
