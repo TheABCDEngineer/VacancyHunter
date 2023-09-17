@@ -7,10 +7,13 @@ import ru.practicum.android.diploma.root.data.network.NetworkSearch
 import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.root.domain.model.Outcome
 import ru.practicum.android.diploma.features.filters.domain.FilterRepository
+import ru.practicum.android.diploma.features.filters.domain.models.Filter
+import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 
 class FilterRepositoryImpl(
     private val filtersMapper: FiltersMapper,
-    private val networkClient: NetworkSearch
+    private val networkClient: NetworkSearch,
+    private val filterStorage: FilterStorage
 ) : FilterRepository {
     override suspend fun getIndustries(): Outcome<List<Industry>> {
         val response = networkClient.getIndustries()
@@ -80,6 +83,14 @@ class FilterRepositoryImpl(
                 Outcome.Error(status = NetworkResultCode.UNKNOWN_ERROR, data = null)
 
             }
+        }
+    }
+
+    override fun getSavedFilters(): Outcome<Filter> {
+        val savedFilters = filterStorage.getFilter()
+        return when(savedFilters) {
+            null -> Outcome.Error(status = NetworkResultCode.UNKNOWN_ERROR, data = null)
+            else -> Outcome.Success(data = savedFilters)
         }
     }
 }
