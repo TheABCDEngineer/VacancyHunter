@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.features.vacancydetails.presentation
+package ru.practicum.android.diploma.root.presentation
 
 class Event<out T>(private val content: T) {
 
