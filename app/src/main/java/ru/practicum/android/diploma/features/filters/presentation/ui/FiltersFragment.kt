@@ -147,7 +147,7 @@ class FiltersFragment : Fragment() {
         }
 
         binding.filterApplyButton.setOnClickListener {
-            val filter = viewModel.getFilter()
+            viewModel.saveFilter()
         }
 
         binding.filterResetButton.setOnClickListener {

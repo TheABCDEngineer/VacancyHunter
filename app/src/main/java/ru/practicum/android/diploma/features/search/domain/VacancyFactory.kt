@@ -42,9 +42,8 @@ class VacancyFactory(
         var count = 0
         val _filter = storage.getFilter() ?: return 0
         for (property in Filter::class.memberProperties) {
-            if (property.get(_filter) != null || property.get(_filter) == true) {
-                count += 1
-            }
+            if (property.get(_filter) != null) count += 1
+            if (property.get(_filter) == false) count -= 1
         }
         return count
     }
