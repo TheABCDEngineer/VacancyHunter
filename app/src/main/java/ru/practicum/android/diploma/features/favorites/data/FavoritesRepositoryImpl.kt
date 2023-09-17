@@ -1,5 +1,11 @@
 package ru.practicum.android.diploma.features.favorites.data
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.features.favorites.domain.FavoritesRepository
 import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
@@ -31,12 +37,18 @@ class FavoritesRepositoryImpl(
         return vacancyDbConverter.mapVacancyEntityToVacancyDetails(favVacancyEntity)
     }
 
-    override suspend fun getFavoriteVacancies(): Outcome<List<VacancyShortDomainModel>> {
-        val foundFavoriteVacancies = appDatabase.favVacancyDao().getFavoriteVacancies()
-        val listOfVacancies = foundFavoriteVacancies.map {
-            vacancyDbConverter.mapVacancyEntityToVacancyShort(it)
+    override suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>> {
+        val flowPagedEntities = Pager(
+            PagingConfig(pageSize = 20, enablePlaceholders = false)
+        ){
+            appDatabase.favVacancyDao().getPagedFavorites()
+        }.flow
+        val flowPagedVacancies = flowPagedEntities.map {pagingData ->
+            pagingData.map {
+                vacancyDbConverter.mapVacancyEntityToVacancyShort(it)
+            }
         }
-        return Outcome.Success(data = listOfVacancies)
+        return Outcome.Success(data = flowPagedVacancies)
     }
 
     private fun convertToVacancyEntity(vacancy: VacancyDetails): FavVacancyEntity {

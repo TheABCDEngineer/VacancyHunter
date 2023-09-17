@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.root.data.db.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -22,6 +23,6 @@ interface FavVacancyDao {
     fun getVacancyById(vacancyId: String): FavVacancyEntity
 
     @Query("SELECT * FROM fav_vacancies_table ORDER BY created_at DESC")
-    fun getFavoriteVacancies(): List<FavVacancyEntity>
+    fun getPagedFavorites(): PagingSource<Int, FavVacancyEntity>
 
 }
