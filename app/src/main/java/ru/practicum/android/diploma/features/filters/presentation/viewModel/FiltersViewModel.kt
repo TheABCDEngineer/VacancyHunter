@@ -10,8 +10,10 @@ import ru.practicum.android.diploma.features.filters.domain.models.Area
 import ru.practicum.android.diploma.features.filters.domain.models.Filter
 import ru.practicum.android.diploma.features.filters.domain.models.Industry
 import ru.practicum.android.diploma.features.filters.presentation.models.CountryScreenState
+import ru.practicum.android.diploma.features.filters.presentation.models.FilterScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.RegionScreenState
+import ru.practicum.android.diploma.root.presentation.Event
 import ru.practicum.android.diploma.root.domain.model.Outcome
 import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 import java.util.Locale
@@ -31,6 +33,9 @@ class FiltersViewModel(
 
     private val _regionsScreenState = MutableLiveData<RegionScreenState>()
     val regionsScreenState: LiveData<RegionScreenState> get() = _regionsScreenState
+
+    private val _mainScreenRenderEvent = MutableLiveData<Event<FilterScreenState>>()
+    val mainScreenRenderEvent: LiveData<Event<FilterScreenState>> get() = _mainScreenRenderEvent
 
     private var country: Area? = null
     private var region: Area? = null
@@ -206,4 +211,16 @@ class FiltersViewModel(
             )
 
     fun isWorkPlaceChooseButtonAvailable() = (country != null || region != null)
+
+    fun getSavedFilters() {
+        val result = filtersInteractor.getSavedFilters()
+        if (result is Outcome.Error || result.data == null) return
+        filterIndustry = result.data.industry
+        filterCountry = result.data.country
+        filterRegion = result.data.region
+        filterSalary = result.data.salary
+        filterDoNotShowWithoutSalary = result.data.doNotShowWithoutSalary
+
+        _mainScreenRenderEvent.postValue(Event(FilterScreenState.MainScreen))
+    }
 }
