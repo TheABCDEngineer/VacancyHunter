@@ -200,6 +200,7 @@ class FiltersViewModel(
         filterIndustry = null
         filterSalary = ""
         filterDoNotShowWithoutSalary = false
+        saveFilter()
     }
 
     fun isFilterButtonsAvailable() = (
@@ -220,6 +221,9 @@ class FiltersViewModel(
         filterRegion = result.data.region
         filterSalary = result.data.salary
         filterDoNotShowWithoutSalary = result.data.doNotShowWithoutSalary
+
+        setCountry(filterCountry)
+        setRegion(filterRegion)
 
         _mainScreenRenderEvent.postValue(Event(FilterScreenState.MainScreen))
     }
