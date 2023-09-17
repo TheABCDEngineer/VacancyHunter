@@ -13,9 +13,13 @@ import ru.practicum.android.diploma.features.filters.presentation.models.Country
 import ru.practicum.android.diploma.features.filters.presentation.models.IndustryScreenState
 import ru.practicum.android.diploma.features.filters.presentation.models.RegionScreenState
 import ru.practicum.android.diploma.root.domain.model.Outcome
+import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 import java.util.Locale
 
-class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewModel() {
+class FiltersViewModel(
+    private val filtersInteractor: FiltersInteractor,
+    private val filterStorage: FilterStorage
+): ViewModel() {
     lateinit var industriesFullList: List<Industry>
     lateinit var regionsFullList: List<Area>
 
@@ -174,13 +178,16 @@ class FiltersViewModel(private val filtersInteractor: FiltersInteractor): ViewMo
         setFilterRegion()
     }
 
-    fun getFilter() = Filter(
-        filterIndustry,
-        filterCountry,
-        filterRegion,
-        filterSalary,
-        filterDoNotShowWithoutSalary
-    )
+    fun saveFilter() {
+        val filter = Filter(
+            industry = filterIndustry,
+            country = filterCountry,
+            region = filterRegion,
+            salary = if (filterSalary.isNullOrEmpty()) null else filterSalary,
+            filterDoNotShowWithoutSalary
+        )
+        filterStorage.saveFilter(filter)
+    }
 
     fun clearFilter() {
         filterCountry = null

@@ -51,16 +51,21 @@ class SearchVacancyRepositoryImplNetwork(
         }
     }
 
-    private fun fetchRequest(requestJob: String, filter: Filter, perPage: Int, page: Int): ShortVacancyRequest {
+    private fun fetchRequest(
+        requestJob: String,
+        filter: Filter,
+        perPage: Int,
+        page: Int
+    ): ShortVacancyRequest {
         return ShortVacancyRequest(
-            requestJob = requestJob,
-            countryId = filter.country?.id.toString(),
-            regionId = if (filter.region != null) filter.region.id.toString() else null,
-            industryId = filter.industry?.id,
-            salary = filter.salary,
-            isSalary = filter.doNotShowWithoutSalary,
-            perPage = perPage,
-            page = page
-        )
+           requestJob = requestJob,
+           countryId = filter.country?.id.toString(),
+           regionId = if (filter.region != null) filter.region.id.toString() else null,
+           industryId = filter.industry?.id,
+           salary = filter.salary,
+           isSalary = filter.doNotShowWithoutSalary,
+           perPage = perPage,
+           page = page
+       )
     }
 }
