@@ -166,6 +166,7 @@ class FiltersFragment : Fragment() {
 
         binding.filterApplyButton.setOnClickListener {
             viewModel.saveFilter()
+            findNavController().popBackStack()
         }
 
         binding.filterResetButton.setOnClickListener {
