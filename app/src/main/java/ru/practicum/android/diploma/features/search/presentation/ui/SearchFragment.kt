@@ -20,7 +20,6 @@ import ru.practicum.android.diploma.features.search.presentation.screenState.Fil
 import ru.practicum.android.diploma.features.search.presentation.screenState.SearchScreenState
 import ru.practicum.android.diploma.features.search.presentation.screenState.SearchingCleanerState
 import ru.practicum.android.diploma.features.search.presentation.ui.model.VacancyFactoryModel
-import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
 import ru.practicum.android.diploma.features.search.presentation.ui.recyclerView.VacancyAdapter
 import ru.practicum.android.diploma.util.debounce
 import ru.practicum.android.diploma.util.hideKeyboard
@@ -32,7 +31,7 @@ class SearchFragment : Fragment() {
     private val rvAdapter = VacancyAdapter(
         vacancyList = ArrayList(),
         onItemClickedAction = debounce(
-            300L,
+            CLICK_DEBOUNCE_MILLIS,
             lifecycleScope,
             false
         ) { vacancyId: String ->
@@ -60,6 +59,7 @@ class SearchFragment : Fragment() {
         }
         configureObservers()
         configureSearchingField()
+        viewModel.setStringValues(requireContext())
     }
 
     override fun onResume() {
@@ -105,6 +105,7 @@ class SearchFragment : Fragment() {
 
         searchingCleaner?.setOnClickListener {
             editField?.setText("")
+            binding?.vacancyFeed?.isVisible = false
             viewModel.onSearchingFieldClean()
         }
     }
@@ -134,13 +135,16 @@ class SearchFragment : Fragment() {
 
     private fun updateScreenState(state: SearchScreenState) {
         binding?.chip?.isVisible = state.isChip
-        binding?.vacancyFeed?.isVisible = state.isFeed
         binding?.progressBar?.isVisible = state.isProgressBar
         binding?.feedPlaceholder?.isVisible = state.isPlaceholder
-        if (state == SearchScreenState.SEARCHING) binding?.vacancyFeed?.layoutManager?.scrollToPosition(0)
+        if (state == SearchScreenState.SEARCHING) {
+            binding?.vacancyFeed?.isVisible = false
+            binding?.vacancyFeed?.layoutManager?.scrollToPosition(0)
+        }
     }
 
     private fun updateFeed(model: VacancyFactoryModel) {
+        binding?.vacancyFeed?.isVisible = true
         if (model.isNewSearching) {
             rvAdapter.updateItems(model.items, model.isContinueLoading)
             return
@@ -160,5 +164,9 @@ class SearchFragment : Fragment() {
             is FilterState.Inactive -> AppCompatResources.getDrawable(requireContext(),R.drawable.filter_inactive_icon)
         }
         binding?.filterButton?.setImageDrawable(icon)
+    }
+
+    companion object {
+        const val CLICK_DEBOUNCE_MILLIS = 300L
     }
 }

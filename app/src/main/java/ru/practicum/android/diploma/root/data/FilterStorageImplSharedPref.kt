@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.root.ApplicationConstants
 import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 
 class FilterStorageImplSharedPref(
-    private val file: SharedPreferences,
+    private val sharedPreferences: SharedPreferences,
     private val gson: Gson,
 ): FilterStorage {
     private val key = ApplicationConstants.FILTERS_STORAGE_KEY
@@ -15,13 +15,13 @@ class FilterStorageImplSharedPref(
     override fun saveFilter(model: Filter?) {
         val json =
             if (model != null) gson.toJson(model) else null
-        file.edit()
+        sharedPreferences.edit()
             .putString(key, json)
             .apply()
     }
 
     override fun getFilter(): Filter? {
-        val json: String = file.getString(key, null) ?: return null
+        val json: String = sharedPreferences.getString(key, null) ?: return null
         return gson.fromJson(json, Filter::class.java)
     }
 }
