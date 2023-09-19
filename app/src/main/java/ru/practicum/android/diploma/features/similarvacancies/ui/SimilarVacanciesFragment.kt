@@ -107,17 +107,18 @@ class SimilarVacanciesFragment : Fragment() {
 
     private fun setAdapter() {
         onListItemClickDebounce = debounce<VacancyShortUiModel>(
-            CLICK_DEBOUNCE_DELAY_MILLIS,
-            viewLifecycleOwner.lifecycleScope,
-            true
-        ) { vacancy ->
-            findNavController()
-                .navigate(
-                    SimilarVacanciesFragmentDirections.actionSimilarVacanciesFragmentToVacancyDetailsFragment(
-                        vacancy.vacancyId
+            delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = true,
+            action = { vacancy ->
+                findNavController()
+                    .navigate(
+                        SimilarVacanciesFragmentDirections.actionSimilarVacanciesFragmentToVacancyDetailsFragment(
+                            vacancy.vacancyId
+                        )
                     )
-                )
-        }
+            }
+        )
 
         adapter = VacanciesAdapter(
             object : VacancyClickListener {

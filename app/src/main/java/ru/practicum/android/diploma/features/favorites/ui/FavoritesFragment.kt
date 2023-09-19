@@ -120,17 +120,18 @@ class FavoritesFragment : Fragment() {
 
     private fun setPagingAdapter() {
         onListItemClickDebounce = debounce<VacancyShortUiModel>(
-            CLICK_DEBOUNCE_DELAY_MILLIS,
-            viewLifecycleOwner.lifecycleScope,
-            true
-        ) { vacancy ->
-            findNavController()
-                .navigate(
-                    FavoritesFragmentDirections.actionFavoritesFragmentToVacancyDetailsFragment(
-                        vacancy.vacancyId
+            delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = true,
+            action = { vacancy ->
+                findNavController()
+                    .navigate(
+                        FavoritesFragmentDirections.actionFavoritesFragmentToVacancyDetailsFragment(
+                            vacancy.vacancyId
+                        )
                     )
-                )
-        }
+            }
+        )
 
         pagingAdapter = PagedFavoritesAdapter(
             object : VacancyClickListener {
