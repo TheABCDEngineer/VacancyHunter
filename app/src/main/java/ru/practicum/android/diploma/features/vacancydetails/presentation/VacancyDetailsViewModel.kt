@@ -30,7 +30,11 @@ class VacancyDetailsViewModel(
     val externalNavEvent: LiveData<Event<VacancyDetailsEvent>> get() = _externalNavEvent
 
     private val toggleFavoriteDebounce =
-        debounce(FAV_DEBOUNCE_DELAY_MILLIS, viewModelScope, false) {
+        debounce(
+            delayMillis = FAV_DEBOUNCE_DELAY_MILLIS,
+            coroutineScope = viewModelScope,
+            useLastParam = false
+        ) {
             executeToggleFavorite()
         }
 

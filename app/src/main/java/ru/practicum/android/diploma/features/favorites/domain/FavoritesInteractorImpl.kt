@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
-import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class FavoritesInteractorImpl(
     private val favoritesRepository: FavoritesRepository
@@ -35,7 +34,7 @@ class FavoritesInteractorImpl(
         }
     }
 
-    override suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>> {
+    override suspend fun getPagedFavorites(): Flow<PagingData<VacancyShortDomainModel>> {
         return withContext(Dispatchers.IO) {
             favoritesRepository.getPagedFavorites()
         }

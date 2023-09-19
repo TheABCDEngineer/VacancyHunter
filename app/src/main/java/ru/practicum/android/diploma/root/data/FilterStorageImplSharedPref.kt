@@ -3,13 +3,14 @@ package ru.practicum.android.diploma.root.data
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import ru.practicum.android.diploma.features.filters.domain.models.Filter
+import ru.practicum.android.diploma.root.ApplicationConstants
 import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 
 class FilterStorageImplSharedPref(
     private val file: SharedPreferences,
     private val gson: Gson,
 ): FilterStorage {
-    private val key = StorageKeys.FILTERS_STORAGE_KEY
+    private val key = ApplicationConstants.FILTERS_STORAGE_KEY
 
     override fun saveFilter(model: Filter?) {
         val json =

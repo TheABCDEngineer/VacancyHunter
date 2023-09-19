@@ -14,10 +14,10 @@ class VacanciesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShortVacancyViewHolder {
 
-        val view = LayoutInflater.from(parent.context)
+        val layoutInflater = LayoutInflater.from(parent.context)
 
         return ShortVacancyViewHolder(
-            ListItemVacancyBinding.inflate(view, parent, false),
+            ListItemVacancyBinding.inflate(layoutInflater, parent, false),
             clickListener
         )
     }
