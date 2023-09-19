@@ -2,34 +2,32 @@ package ru.practicum.android.diploma.features.search.presentation.screenState
 
 enum class SearchScreenState (
     val isChip: Boolean,
-    val isFeed: Boolean,
     val isProgressBar: Boolean = false,
     val isPlaceholder: Boolean = false
 ) {
     NEWBORN(
         isChip = false,
-        isFeed = false,
         isPlaceholder = true
     ),
 
     SEARCHING(
         isChip = false,
-        isFeed = false,
         isProgressBar = true
     ),
 
     EMPTY_RESULT(
-        isChip = true,
-        isFeed = false,
+        isChip = true
     ),
 
     SOMETHING_WENT_WRONG(
-        isChip = true,
-        isFeed = false,
+        isChip = true
     ),
 
     RESPONSE_RESULTS(
-        isChip = true,
-        isFeed = true,
+        isChip = true
+    ),
+
+    NO_INTERNET_CONNECTION(
+        isChip = true
     )
 }

@@ -32,7 +32,6 @@ class VacancyFactory(
     }
 
     override suspend fun getNextVacancyPage(): Outcome<VacancyFactoryModel> {
-        pagesCounter += 1
         return loadVacancies(isNewSearching = false)
     }
 
@@ -73,6 +72,7 @@ class VacancyFactory(
                     items = data.resultVacancyList,
                     isContinueLoading = pagesCounter < pagesCount - 1
                 )
+                pagesCounter += 1
 
                 return Outcome.Success(vacancyFactoryModel)
             }

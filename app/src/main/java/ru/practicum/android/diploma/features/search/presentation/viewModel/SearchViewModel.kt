@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.features.search.data.StringContainer
 import ru.practicum.android.diploma.features.search.domain.interactor.VacancyFactoryInteractor
 import ru.practicum.android.diploma.features.search.presentation.screenState.FilterState
 import ru.practicum.android.diploma.features.search.presentation.screenState.SearchScreenState
@@ -18,8 +18,7 @@ import ru.practicum.android.diploma.root.data.network.models.NetworkResultCode
 import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class SearchViewModel(
-    private val vacancyFactory: VacancyFactoryInteractor,
-    private val context: Context
+    private val vacancyFactory: VacancyFactoryInteractor
 ) : ViewModel() {
     private var previousSearchingRequest = ""
     private var previousFilterHash = vacancyFactory.getFilterHash()
@@ -86,18 +85,26 @@ class SearchViewModel(
         searchingCleanerState.postValue(SearchingCleanerState.INACTIVE)
     }
 
+    fun setStringValues(context: Context) {
+        StringContainer.setValues(context)
+    }
+
     private fun runSearching(delay: Long, action: suspend() -> Outcome<VacancyFactoryModel>) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(delay)
             handleSearchingResponse(
-                action.invoke()
+                response = action.invoke(),
+                action = action
             )
             searchJob = null
         }
     }
 
-    private fun handleSearchingResponse(response: Outcome<VacancyFactoryModel>) {
+    private fun handleSearchingResponse(
+        response: Outcome<VacancyFactoryModel>,
+        action: suspend() -> Outcome<VacancyFactoryModel>
+        ) {
         when (response.status) {
             NetworkResultCode.SUCCESS -> {
                 if (response.data == null) {
@@ -110,7 +117,15 @@ class SearchViewModel(
                 vacancyFeed.postValue(data)
             }
 
-            else -> provideScreenState(response.status)
+            else -> {
+                provideScreenState(response.status)
+                if (response.status == NetworkResultCode.CONNECTION_ERROR) {
+                    runSearching(
+                        delay = CLICK_DEBOUNCE_DELAY_MILLIS,
+                        action = action
+                    )
+                }
+            }
         }
     }
 
@@ -122,27 +137,27 @@ class SearchViewModel(
             NetworkResultCode.SUCCESS -> {
                 if (model ==  null) return
                 chipMessage =
-                    context.getString(R.string.found) + " " + modifyToStringVacancyQuantity(
+                    StringContainer.found + " " + modifyToStringVacancyQuantity(
                         vacancyFactory.getVacancyCount()
                     )
                 screenState = SearchScreenState.RESPONSE_RESULTS
 
                 if (model.items.isEmpty() && model.isNewSearching) {
                     screenState = SearchScreenState.EMPTY_RESULT
-                    chipMessage = context.getString(R.string.no_such_vacancies)
+                    chipMessage = StringContainer.no_such_vacancies
                 }
             }
             NetworkResultCode.SERVER_ERROR -> {
                 screenState = SearchScreenState.SOMETHING_WENT_WRONG
-                chipMessage = context.getString(R.string.server_error)
+                chipMessage = StringContainer.server_error
             }
             NetworkResultCode.CONNECTION_ERROR -> {
-                screenState = SearchScreenState.SOMETHING_WENT_WRONG
-                chipMessage = context.getString(R.string.no_internet_connection)
+                screenState = SearchScreenState.NO_INTERNET_CONNECTION
+                chipMessage = StringContainer.no_internet_connection
             }
             NetworkResultCode.UNKNOWN_ERROR -> {
                 screenState = SearchScreenState.SOMETHING_WENT_WRONG
-                chipMessage = context.getString(R.string.something_went_wrong)
+                chipMessage = StringContainer.something_went_wrong
             }
         }
 
@@ -152,9 +167,9 @@ class SearchViewModel(
 
     private fun modifyToStringVacancyQuantity(quantity: Int): String {
         val ending = when (quantity.toString().takeLast(1).toInt()) {
-            1 -> context.getString(R.string.vacancy_one)
-            2, 3, 4 -> context.getString(R.string.vacancy_2_3_4)
-            else -> context.getString(R.string.vacancy_many)
+            1 -> StringContainer.vacancies.one
+            2, 3, 4 -> StringContainer.vacancies.many
+            else -> StringContainer.vacancies.other
         }
         return "$quantity $ending"
     }
