@@ -4,7 +4,6 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
-import ru.practicum.android.diploma.root.domain.model.Outcome
 
 interface FavoritesRepository {
 
@@ -16,6 +15,6 @@ interface FavoritesRepository {
 
     suspend fun getVacancyById(vacancyId: String): VacancyDetails
 
-    suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>>
+    suspend fun getPagedFavorites(): Flow<PagingData<VacancyShortDomainModel>>
 
 }
