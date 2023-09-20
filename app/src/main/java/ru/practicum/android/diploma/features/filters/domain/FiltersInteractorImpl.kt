@@ -22,7 +22,7 @@ class FiltersInteractorImpl(private val filtersRepository: FilterRepository): Fi
         filtersRepository.saveFilters(filter)
     }
 
-    override fun getSavedFilters(): Outcome<Filter> {
+    override fun getSavedFilters(): Filter? {
         return filtersRepository.getSavedFilters()
     }
 }

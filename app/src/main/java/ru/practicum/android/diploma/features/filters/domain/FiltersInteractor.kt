@@ -10,5 +10,5 @@ interface FiltersInteractor {
     suspend fun getCountries(): Outcome<List<Area>>
     suspend fun getRegions(parentId: Int?): Outcome<List<Area>>
     fun saveFilter(filter: Filter?)
-    fun getSavedFilters(): Outcome<Filter>
+    fun getSavedFilters(): Filter?
 }

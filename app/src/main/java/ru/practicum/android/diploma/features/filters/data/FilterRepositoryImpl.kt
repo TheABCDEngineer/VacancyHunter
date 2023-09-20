@@ -100,11 +100,7 @@ class FilterRepositoryImpl(
         filterStorage.saveFilter(filter)
     }
 
-    override fun getSavedFilters(): Outcome<Filter> {
-        val savedFilters = filterStorage.getFilter()
-        return when(savedFilters) {
-            null -> Outcome.Error(status = NetworkResultCode.UNKNOWN_ERROR, data = null)
-            else -> Outcome.Success(data = savedFilters)
-        }
+    override fun getSavedFilters(): Filter? {
+        return filterStorage.getFilter()
     }
 }

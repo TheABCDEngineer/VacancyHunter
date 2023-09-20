@@ -212,13 +212,13 @@ class FiltersViewModel(
     fun isWorkPlaceChooseButtonAvailable() = (country != null || region != null)
 
     fun getSavedFilters() {
-        val result = filtersInteractor.getSavedFilters()
-        if (result is Outcome.Error || result.data == null) return
-        filterIndustry = result.data.industry
-        filterCountry = result.data.country
-        filterRegion = result.data.region
-        filterSalary = result.data.salary
-        filterDoNotShowWithoutSalary = result.data.doNotShowWithoutSalary
+        val filter = filtersInteractor.getSavedFilters()
+        if (filter == null) return
+        filterIndustry = filter.industry
+        filterCountry = filter.country
+        filterRegion = filter.region
+        filterSalary = filter.salary
+        filterDoNotShowWithoutSalary = filter.doNotShowWithoutSalary
 
         setCountry(filterCountry)
         setRegion(filterRegion)

@@ -14,5 +14,5 @@ interface FilterRepository {
 
     fun saveFilters(filter: Filter?)
 
-    fun getSavedFilters(): Outcome<Filter>
+    fun getSavedFilters(): Filter?
 }
