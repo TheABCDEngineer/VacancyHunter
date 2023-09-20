@@ -3,14 +3,14 @@ package ru.practicum.android.diploma.features.similarvacancies.domain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.features.similarvacancies.domain.models.SimilarityParams
-import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
+import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.root.domain.model.Outcome
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 
 class SimilarVacanciesInteractorImpl(
     private val vacancyRepository: VacancyRepository
 ) : SimilarVacanciesInteractor {
-    override suspend fun getSimilarVacancies(vacancyId: String): Flow<Outcome<List<VacancyShortSimilar>>> = flow {
+    override suspend fun getSimilarVacancies(vacancyId: String): Flow<Outcome<List<VacancyShortDomainModel>>> = flow {
 
         val similarityParams = getSimilarityParams(id = vacancyId)
 

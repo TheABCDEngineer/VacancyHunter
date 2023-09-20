@@ -8,11 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -20,7 +20,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancydetailsBinding
-import ru.practicum.android.diploma.features.similarvacancies.ui.SimilarVacanciesFragment
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Email
 import ru.practicum.android.diploma.features.vacancydetails.presentation.VacancyDetailsViewModel
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsEvent
@@ -31,13 +30,15 @@ import ru.practicum.android.diploma.util.debounce
 import ru.practicum.android.diploma.util.isInternetConnected
 
 class VacancyDetailsFragment : Fragment() {
+
+    private val arguments:VacancyDetailsFragmentArgs by navArgs()
+
     private val viewModel by viewModel<VacancyDetailsViewModel>()
     private val externalNavigator: ExternalNavigator by inject()
 
     private var _binding: FragmentVacancydetailsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var vacancy: VacancyDetailsUiModel
     private var phonesAdapter: PhonesAdapter? = null
     private lateinit var onListItemClickDebounce: (String) -> Unit
 
@@ -53,7 +54,7 @@ class VacancyDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getVacancyById(getIdFromArgs())
+        viewModel.getVacancyById(arguments.vacancyId)
 
         viewModel.screenState.observe(viewLifecycleOwner) {
             render(it)
@@ -67,9 +68,6 @@ class VacancyDetailsFragment : Fragment() {
                 }
             }
         }
-
-        setClickListeners()
-
     }
 
     override fun onDestroyView() {
@@ -83,29 +81,59 @@ class VacancyDetailsFragment : Fragment() {
             is VacancyDetailsState.Content -> renderContent(screenState.vacancy)
             is VacancyDetailsState.Loading -> renderLoading()
             is VacancyDetailsState.Error -> renderError()
+            is VacancyDetailsState.ToggleFavorite -> {
+                renderFavorite(screenState.isFavorite)
+            }
         }
     }
 
     private fun renderContent(foundVacancy: VacancyDetailsUiModel) {
-        vacancy = foundVacancy
-        setPhonesAdapter()
+
+        setPhonesAdapter(foundVacancy)
+
         binding.progressBar.isVisible = false
 
-        renderVacancyName()
-        renderSalary()
-        renderEmployerCard()
-        renderExperience()
-        renderEmployment()
-        renderDescription()
-        renderKeySkills()
-        renderContacts()
+        renderVacancyName(foundVacancy)
+        renderSalary(foundVacancy)
+        renderEmployerCard(foundVacancy)
+        renderExperience(foundVacancy)
+        renderEmployment(foundVacancy)
+        renderDescription(foundVacancy)
+        renderKeySkills(foundVacancy)
+        renderContacts(foundVacancy)
+        renderFavorite(foundVacancy.isFavorite)
+        renderTopBarButtons()
+
+        setClickListeners(foundVacancy)
 
         binding.similarVacanciesButton.isVisible = isInternetConnected(requireContext())
 
     }
 
-    private fun renderContacts() {
-        if (vacancy.contactsPhones.isNotEmpty() || vacancy.contactsName.isNotEmpty() || vacancy.contactsEmail.isNotEmpty()) {
+    private fun renderTopBarButtons() {
+        binding.favButton.isVisible = true
+        binding.shareButton.isVisible = true
+    }
+
+    private fun renderFavorite(isFavorite: Boolean) {
+        when (isFavorite) {
+            true -> {
+                binding.favButton.setImageResource(R.drawable.ic_favorites_on)
+                binding.favButton.setColorFilter(requireContext().getColor(R.color.yp_red))
+            }
+            false -> {
+                binding.favButton.setImageResource(R.drawable.ic_favorites_off)
+                binding.favButton.clearColorFilter()
+            }
+        }
+    }
+
+    private fun renderContacts(vacancy: VacancyDetailsUiModel) {
+        if (
+            vacancy.contactsPhones.isNotEmpty() ||
+            vacancy.contactsName.isNotEmpty() ||
+            vacancy.contactsEmail.isNotEmpty()
+            ) {
             binding.contactsTitle.isVisible = true
         }
         if (vacancy.contactsName.isNotEmpty()) {
@@ -120,7 +148,7 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-    private fun renderKeySkills() {
+    private fun renderKeySkills(vacancy: VacancyDetailsUiModel) {
         if (vacancy.keySkills.isNotEmpty()) {
             binding.keySkills.text = vacancy.keySkills
             binding.keySkillsTitle.isVisible = true
@@ -128,7 +156,7 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-    private fun renderDescription() {
+    private fun renderDescription(vacancy: VacancyDetailsUiModel) {
         if (vacancy.vacancyDescription.isNotEmpty()) {
 
             binding.vacancyDescription.text =
@@ -139,14 +167,14 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-    private fun renderEmployment() {
+    private fun renderEmployment(vacancy: VacancyDetailsUiModel) {
         if (vacancy.employmentTypes.isNotEmpty()) {
             binding.employment.text = vacancy.employmentTypes
             binding.employment.isVisible = true
         }
     }
 
-    private fun renderExperience() {
+    private fun renderExperience(vacancy: VacancyDetailsUiModel) {
         if (vacancy.experience.isNotEmpty()) {
             binding.experience.text = vacancy.experience
             binding.experienceReq.isVisible = true
@@ -154,8 +182,11 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-    private fun renderEmployerCard() {
-        val cardIsEmpty = vacancy.logoUrl.isEmpty() && vacancy.employerName.isEmpty() && vacancy.employerAddress.isEmpty()
+    private fun renderEmployerCard(vacancy: VacancyDetailsUiModel) {
+        val cardIsEmpty: Boolean =
+            vacancy.logoUrl.isEmpty() &&
+            vacancy.employerName.isEmpty() &&
+            vacancy.employerAddress.isEmpty()
         if (cardIsEmpty) {
             binding.employerCard.isVisible = false
             return
@@ -167,7 +198,9 @@ class VacancyDetailsFragment : Fragment() {
             Glide.with(binding.logoImage)
                 .load(vacancy.logoUrl)
                 .centerInside()
-                .transform(RoundedCorners(dpToPx(R.dimen.logo_corner_radius)))
+                .transform(RoundedCorners(
+                    resources.getDimensionPixelSize(R.dimen.logo_corner_radius)
+                ))
                 .placeholder(R.drawable.placeholder)
                 .into(binding.logoImage)
         }
@@ -176,26 +209,26 @@ class VacancyDetailsFragment : Fragment() {
             binding.employerName.isVisible = true
         }
         if (vacancy.employerAddress.isNotEmpty()) {
-            binding.city.text = vacancy.employerAddress
-            binding.city.isVisible = true
+            binding.address.text = vacancy.employerAddress
+            binding.address.isVisible = true
         }
     }
 
-    private fun renderSalary() {
+    private fun renderSalary(vacancy: VacancyDetailsUiModel) {
         if (vacancy.salary.isNotEmpty()) {
             binding.salary.text = vacancy.salary
             binding.salary.isVisible = true
         }
     }
 
-    private fun renderVacancyName() {
+    private fun renderVacancyName(vacancy: VacancyDetailsUiModel) {
         if (vacancy.vacancyName.isNotEmpty()) {
             binding.vacancyName.text = vacancy.vacancyName
             binding.vacancyName.isVisible = true
         }
     }
 
-    private fun setPhonesAdapter() {
+    private fun setPhonesAdapter(vacancy: VacancyDetailsUiModel) {
         onListItemClickDebounce = debounce<String>(
             CLICK_DEBOUNCE_DELAY_MILLIS,
             viewLifecycleOwner.lifecycleScope,
@@ -228,20 +261,21 @@ class VacancyDetailsFragment : Fragment() {
         findNavController().navigateUp()
     }
 
-    private fun setClickListeners() {
+    private fun setClickListeners(vacancy: VacancyDetailsUiModel) {
         binding.returnArrow.setOnClickListener { findNavController().navigateUp() }
 
         binding.shareButton.setOnClickListener {
-            generateShareText()
+            generateShareText(vacancy)
         }
 
-        binding.favButton.setOnClickListener { }
+        binding.favButton.setOnClickListener { viewModel.toggleFavorites() }
 
         binding.similarVacanciesButton.setOnClickListener {
             if (isInternetConnected(requireContext())) {
                 findNavController().navigate(
-                    R.id.action_vacancyDetailsFragment_to_similarVacanciesFragment,
-                    SimilarVacanciesFragment.createArgs(vacancy.vacancyId)
+                    VacancyDetailsFragmentDirections.actionVacancyDetailsFragmentToSimilarVacanciesFragment(
+                        arguments.vacancyId
+                    )
                 )
             } else {
                 binding.similarVacanciesButton.isVisible = false
@@ -250,19 +284,12 @@ class VacancyDetailsFragment : Fragment() {
         }
 
         binding.email.setOnClickListener {
-            viewModel.composeEmail(vacancy.contactsEmail, vacancy.vacancyName)
+            viewModel.composeEmail()
         }
     }
 
-    private fun generateShareText() {
-        val strings = listOf(
-            vacancy.vacancyName,
-            vacancy.salary,
-            vacancy.employerName,
-            vacancy.employerAddress,
-            vacancy.shareVacancyUrl
-        )
-        viewModel.generateShareText(strings)
+    private fun generateShareText(vacancy: VacancyDetailsUiModel) {
+        viewModel.generateShareText(vacancy.salary, vacancy.employerAddress)
     }
 
     private fun shareVacancy(message: String) {
@@ -296,18 +323,7 @@ class VacancyDetailsFragment : Fragment() {
         ).show()
     }
 
-    private fun dpToPx(dp: Int): Int {
-        val density = resources.displayMetrics.density
-        return (dp * density).toInt()
-    }
-
-    private fun getIdFromArgs(): String {
-        return requireArguments().getString(ARGS_VACANCY_ID) ?: ""
-    }
-
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
-        private const val ARGS_VACANCY_ID = "ARGS_VACANCY_ID"
-        fun createArgs(id: String): Bundle = bundleOf(ARGS_VACANCY_ID to id)
     }
 }

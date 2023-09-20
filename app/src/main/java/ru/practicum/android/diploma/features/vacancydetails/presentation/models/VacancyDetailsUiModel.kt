@@ -16,5 +16,6 @@ data class VacancyDetailsUiModel(
     val contactsName: String,
     val contactsEmail: String,
     val contactsPhones: List<ContactPhone>,
-    val shareVacancyUrl: String
+    val shareVacancyUrl: String,
+    val isFavorite: Boolean
 )

@@ -10,19 +10,19 @@
     <LinearLayout
         android:id="@+id/filter_main_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/filter_header_height"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/filter_main_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
                 android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:background="@android:color/transparent"
@@ -41,8 +41,8 @@
         <FrameLayout
             android:id="@+id/filter_main_work_place_empty"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp">
 
             <TextView
@@ -66,8 +66,8 @@
         <FrameLayout
             android:id="@+id/filter_main_work_place_filled"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp"
             android:visibility="gone">
 
@@ -86,6 +86,7 @@
                     android:textColor="?attr/colorOnPrimary" />
 
                 <TextView
+                    android:id="@+id/filter_main_work_place"
                     style="@style/font_regular_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,6 +96,7 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/filter_work_place_clear"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical|end"
@@ -105,8 +107,8 @@
         <FrameLayout
             android:id="@+id/filter_main_industry_empty"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp">
 
             <TextView
@@ -130,8 +132,8 @@
         <FrameLayout
             android:id="@+id/filter_main_industry_filled"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
             android:layout_marginEnd="4dp"
             android:visibility="gone">
 
@@ -150,6 +152,7 @@
                     android:textColor="?attr/colorOnPrimary" />
 
                 <TextView
+                    android:id="@+id/filter_main_industry"
                     style="@style/font_regular_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -159,6 +162,7 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/filter_industry_clear"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical|end"
@@ -166,12 +170,17 @@
                 app:tint="?attr/colorOnPrimary" />
         </FrameLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
+            android:layout_marginVertical="24dp">
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/expectedSalaryText"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="24dp"
+
             android:background="@drawable/rounded_rectangle"
             android:backgroundTint="?attr/colorSecondary"
             android:gravity="center_vertical"
@@ -188,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ys_display_regular"
                 android:hint="@string/enter_sum"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:maxLines="1"
                 android:paddingTop="0dp"
                 android:textColor="@color/yp_black"
@@ -198,11 +207,21 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+            <ImageView
+                android:id="@+id/filter_salary_clear"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical|end"
+                android:src="@drawable/search_cancel_icon"
+                app:tint="@color/yp_black"
+                android:visibility="gone"/>
+
+        </FrameLayout>
+
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginHorizontal="@dimen/filter_margin_horizontal">
 
             <TextView
                 style="@style/font_regular_16"
@@ -220,6 +239,47 @@
                 android:buttonTint="@color/yp_blue"
                 android:checked="false" />
         </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/filter_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/filter_apply_button"
+                style="@style/font_medium_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
+                android:elevation="0dp"
+                android:paddingVertical="20dp"
+                android:text="@string/apply"
+                android:textAllCaps="false"
+                android:textColor="@color/yp_white"
+                app:backgroundTint="@color/yp_blue"
+                app:cornerRadius="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/filter_reset_button"
+                style="@style/font_medium_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
+                android:stateListAnimator="@null"
+                android:elevation="0dp"
+                android:paddingVertical="20dp"
+                android:text="@string/reset"
+                android:textAllCaps="false"
+                android:textColor="?attr/colorOnError"
+                app:backgroundTint="?attr/colorPrimary"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -231,13 +291,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/filter_header_height"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/filter_industry_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
                 android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:background="@android:color/transparent"
@@ -255,8 +315,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
             android:layout_marginVertical="8dp"
             android:background="@drawable/rounded_rectangle"
             android:orientation="horizontal"
@@ -287,6 +347,15 @@
                 android:src="@drawable/search_lens_icon" />
         </FrameLayout>
 
+        <ProgressBar
+            android:id="@+id/filter_industries_progressBar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="56dp"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateTint="@color/yp_blue"
+            android:visibility="gone"/>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -298,14 +367,357 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:height="0dp"
-                tools:listitem="@layout/filter_industry_list_view" />
+                tools:listitem="@layout/filter_radio_button_list_view" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/filter_industries_choose_button"
                 style="@style/font_medium_16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
+                android:layout_marginBottom="24dp"
+                android:elevation="0dp"
+                android:paddingVertical="20dp"
+                android:text="@string/choose"
+                android:textAllCaps="false"
+                android:textColor="@color/yp_white"
+                app:backgroundTint="@color/yp_blue"
+                app:cornerRadius="12dp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/filter_work_place_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_header_height"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/filter_work_place_back"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="?attr/colorOnPrimary" />
+
+            <TextView
+                style="@style/font_medium_22"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/choice_work_place"
+                android:textColor="?attr/colorOnPrimary" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/filter_work_place_country_empty"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
+            android:layout_marginEnd="4dp">
+
+            <TextView
+                style="@style/font_regular_16"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:gravity="center_vertical"
+                android:text="@string/country"
+                android:textColor="@color/yp_gray" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_arrow_forward"
+                app:tint="?attr/colorOnPrimary" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/filter_work_place_country_filled"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/font_regular_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="@string/country"
+                    android:textColor="?attr/colorOnPrimary" />
+
+                <TextView
+                    android:id="@+id/filter_work_place_country"
+                    style="@style/font_regular_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:textColor="?attr/colorOnPrimary"
+                    tools:text="Россия" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/filter_work_place_country_clear"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|end"
+                android:src="@drawable/search_cancel_icon"
+                app:tint="?attr/colorOnPrimary" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/filter_work_place_region_empty"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
+            android:layout_marginEnd="4dp">
+
+            <TextView
+                style="@style/font_regular_16"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:gravity="center_vertical"
+                android:text="@string/region"
+                android:textColor="@color/yp_gray" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_arrow_forward"
+                app:tint="?attr/colorOnPrimary" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/filter_work_place_region_filled"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginStart="@dimen/filter_margin_horizontal"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/font_regular_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="@string/region"
+                    android:textColor="?attr/colorOnPrimary" />
+
+                <TextView
+                    android:id="@+id/filter_work_place_region"
+                    style="@style/font_regular_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:textColor="?attr/colorOnPrimary"
+                    tools:text="Москва" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/filter_work_place_region_clear"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|end"
+                android:src="@drawable/search_cancel_icon"
+                app:tint="?attr/colorOnPrimary" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/filter_work_place_choose_button"
+                style="@style/font_medium_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
+                android:layout_marginBottom="24dp"
+                android:elevation="0dp"
+                android:paddingVertical="20dp"
+                android:text="@string/choose"
+                android:textAllCaps="false"
+                android:textColor="@color/yp_white"
+                app:backgroundTint="@color/yp_blue"
+                app:cornerRadius="12dp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/filter_country_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_header_height"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/filter_country_back"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="?attr/colorOnPrimary" />
+
+            <TextView
+                style="@style/font_medium_22"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/choice_country"
+                android:textColor="?attr/colorOnPrimary" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/filter_countries_progressBar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="56dp"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateTint="@color/yp_blue"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/filter_countries_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:height="0dp"
+            tools:listitem="@layout/filter_country_list_view" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/filter_region_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_header_height"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/filter_region_back"
+                android:layout_width="@dimen/filter_back_icon_size"
+                android:layout_height="@dimen/filter_back_icon_size"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="?attr/colorOnPrimary" />
+
+            <TextView
+                style="@style/font_medium_22"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/choice_region"
+                android:textColor="?attr/colorOnPrimary" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_list_item_height"
+            android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/rounded_rectangle"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <EditText
+                android:id="@+id/filter_region_search_field"
+                style="@style/font_regular_16"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_rectangle"
+                android:backgroundTint="?attr/colorSecondary"
+                android:hint="@string/enter_region"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:lines="1"
+                android:paddingStart="16dp"
+                android:singleLine="true"
+                android:textColor="@color/yp_black"
+                android:textColorHint="?attr/colorSecondaryVariant"
+                android:textCursorDrawable="@drawable/blue_cursor" />
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="4dp"
+                android:layout_gravity="center_vertical|end"
+                android:src="@drawable/search_lens_icon" />
+        </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/filter_region_progressBar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="56dp"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateTint="@color/yp_blue"
+            android:visibility="gone"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/filter_regions_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:height="0dp"
+                tools:listitem="@layout/filter_radio_button_list_view" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/filter_regions_choose_button"
+                style="@style/font_medium_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="@dimen/filter_margin_horizontal"
+                android:layout_marginBottom="24dp"
                 android:elevation="0dp"
                 android:paddingVertical="20dp"
                 android:text="@string/choose"

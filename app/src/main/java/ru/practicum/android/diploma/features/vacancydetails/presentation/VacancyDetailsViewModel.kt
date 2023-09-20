@@ -5,17 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.features.favorites.domain.FavoritesInteractor
 import ru.practicum.android.diploma.features.vacancydetails.domain.SharingInteractor
 import ru.practicum.android.diploma.features.vacancydetails.domain.VacancyDetailsInteractor
+import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsEvent
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsState
 import ru.practicum.android.diploma.features.vacancydetails.presentation.models.VacancyDetailsUiMapper
 import ru.practicum.android.diploma.root.domain.model.Outcome
+import ru.practicum.android.diploma.root.presentation.Event
+import ru.practicum.android.diploma.util.debounce
 
 class VacancyDetailsViewModel(
     private val sharingInteractor: SharingInteractor,
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
-    private val vacancyDetailsUiMapper: VacancyDetailsUiMapper
+    private val vacancyDetailsUiMapper: VacancyDetailsUiMapper,
+    private val favoritesInteractor: FavoritesInteractor
 ) : ViewModel() {
 
     private val _screenState = MutableLiveData<VacancyDetailsState>()
@@ -24,35 +29,41 @@ class VacancyDetailsViewModel(
     private val _externalNavEvent = MutableLiveData<Event<VacancyDetailsEvent>>()
     val externalNavEvent: LiveData<Event<VacancyDetailsEvent>> get() = _externalNavEvent
 
+    private val toggleFavoriteDebounce =
+        debounce(FAV_DEBOUNCE_DELAY_MILLIS, viewModelScope, false) {
+            executeToggleFavorite()
+        }
+
+    private lateinit var domainModel: VacancyDetails
 
     fun getVacancyById(id: String) {
-        if (id.isNotEmpty()) {
-            viewModelScope.launch {
+        if (id.isEmpty()) return
 
-                _screenState.postValue(VacancyDetailsState.Loading)
+        viewModelScope.launch {
 
-                val result = vacancyDetailsInteractor.getVacancyById(id)
-                when (result) {
-                    is Outcome.Success -> {
-                        result.data?.let {
-                            _screenState.postValue(
-                                VacancyDetailsState.Content(
-                                    vacancyDetailsUiMapper(it)
-                                )
-                            )
-                        }
+            _screenState.postValue(VacancyDetailsState.Loading)
+
+            val result = vacancyDetailsInteractor.getVacancyById(id)
+            when (result) {
+                is Outcome.Success -> {
+                    result.data?.let {
+                        domainModel = it
+                        _screenState.postValue(VacancyDetailsState.Content(vacancyDetailsUiMapper(it)))
                     }
+                }
 
-                    else -> {
-                        _screenState.postValue(VacancyDetailsState.Error)
-                    }
+                else -> {
+                    _screenState.postValue(VacancyDetailsState.Error)
                 }
             }
         }
     }
 
-    fun composeEmail(address: String, vacancyName: String) {
-        val email = sharingInteractor.createEmailObject(address, vacancyName)
+    fun composeEmail() {
+        val email = sharingInteractor.createEmailObject(
+            domainModel.contactsEmail,
+            domainModel.vacancyName
+        )
         email?.let {
             _externalNavEvent.postValue(
                 Event(VacancyDetailsEvent.ComposeEmail(email))
@@ -60,11 +71,32 @@ class VacancyDetailsViewModel(
         }
     }
 
-    fun generateShareText(strings: List<String>) {
+    fun generateShareText(salary: String, address: String) {
+        val strings = listOf(
+            domainModel.vacancyName,
+            salary,
+            domainModel.employerName,
+            address,
+            domainModel.shareVacancyUrl)
         val message = sharingInteractor.generateShareText(strings)
         _externalNavEvent.postValue(
             Event(VacancyDetailsEvent.ShareVacancy(message))
         )
     }
 
+    fun toggleFavorites() {
+        toggleFavoriteDebounce()
+    }
+
+    private fun executeToggleFavorite() {
+        viewModelScope.launch {
+            val isFavorite = favoritesInteractor.toggleFavorites(domainModel)
+            domainModel = domainModel.copy(isFavorite = isFavorite)
+            _screenState.postValue(VacancyDetailsState.ToggleFavorite(isFavorite))
+        }
+    }
+
+    companion object {
+        private const val FAV_DEBOUNCE_DELAY_MILLIS = 300L
+    }
 }

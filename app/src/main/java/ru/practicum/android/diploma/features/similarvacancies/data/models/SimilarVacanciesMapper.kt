@@ -1,14 +1,16 @@
 package ru.practicum.android.diploma.features.similarvacancies.data.models
 
-import ru.practicum.android.diploma.features.similarvacancies.domain.models.VacancyShortSimilar
+import ru.practicum.android.diploma.root.domain.model.VacancyShortDomainModel
 import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyDetailsDto
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
+import ru.practicum.android.diploma.root.data.network.models.Response
 
-class SimilarVacanciesMapper : (SimilarVacanciesResponse) -> List<VacancyShortSimilar> {
+class SimilarVacanciesMapper : (Response) -> List<VacancyShortDomainModel> {
 
-    override fun invoke(dto: SimilarVacanciesResponse): List<VacancyShortSimilar> {
+    override fun invoke(dto: Response): List<VacancyShortDomainModel> {
+        dto as SimilarVacanciesResponse
         return dto.similarVacanciesList.map { vacancy ->
-            VacancyShortSimilar(
+            VacancyShortDomainModel(
                 vacancyId = vacancy.vacancyId,
                 vacancyName = vacancy.vacancyName ?: "",
                 salary = getSalary(vacancy.salary),

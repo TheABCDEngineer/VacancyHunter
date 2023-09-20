@@ -5,10 +5,12 @@ import ru.practicum.android.diploma.features.vacancydetails.domain.models.Contac
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Metro
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.Salary
 import ru.practicum.android.diploma.features.vacancydetails.domain.models.VacancyDetails
+import ru.practicum.android.diploma.root.data.network.models.Response
 
-class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
+class VacancyDetailsMapper : (Response) -> VacancyDetails {
 
-    override fun invoke(dto: VacancyDetailsDto): VacancyDetails {
+    override fun invoke(dto: Response): VacancyDetails {
+        dto as VacancyDetailsDto
         return VacancyDetails(
             vacancyId = dto.vacancyId,
             vacancyName = dto.vacancyName ?: "",
@@ -25,7 +27,8 @@ class VacancyDetailsMapper : (VacancyDetailsDto) -> VacancyDetails {
             contactsEmail = dto.contacts?.contactsEmail ?: "",
             contactsPhones = getPhones(dto.contacts?.phones),
             shareVacancyUrl = dto.alternateUrl ?: "",
-            employerAddress = getAddress(dto.address)
+            employerAddress = getAddress(dto.address),
+            isFavorite = false
         )
     }
 

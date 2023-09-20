@@ -25,7 +25,8 @@ class RootActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.vacancyDetailsFragment,
-                R.id.similarVacanciesFragment-> {
+                R.id.similarVacanciesFragment,
+                R.id.filtersFragment -> {
                     navigationMenu.isVisible = false
                 }
                 else -> {
