@@ -96,6 +96,10 @@ class FilterRepositoryImpl(
         }
     }
 
+    override fun saveFilters(filter: Filter?) {
+        filterStorage.saveFilter(filter)
+    }
+
     override fun getSavedFilters(): Outcome<Filter> {
         val savedFilters = filterStorage.getFilter()
         return when(savedFilters) {

@@ -18,6 +18,10 @@ class FiltersInteractorImpl(private val filtersRepository: FilterRepository): Fi
         return filtersRepository.getCountries()
     }
 
+    override fun saveFilter(filter: Filter?) {
+        filtersRepository.saveFilters(filter)
+    }
+
     override fun getSavedFilters(): Outcome<Filter> {
         return filtersRepository.getSavedFilters()
     }
