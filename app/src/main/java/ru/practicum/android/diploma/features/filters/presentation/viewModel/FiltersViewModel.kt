@@ -15,12 +15,10 @@ import ru.practicum.android.diploma.features.filters.presentation.models.Industr
 import ru.practicum.android.diploma.features.filters.presentation.models.RegionScreenState
 import ru.practicum.android.diploma.root.presentation.Event
 import ru.practicum.android.diploma.root.domain.model.Outcome
-import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 import java.util.Locale
 
 class FiltersViewModel(
-    private val filtersInteractor: FiltersInteractor,
-    private val filterStorage: FilterStorage
+    private val filtersInteractor: FiltersInteractor
 ): ViewModel() {
     lateinit var industriesFullList: List<Industry>
     lateinit var regionsFullList: List<Area>
@@ -191,7 +189,7 @@ class FiltersViewModel(
             salary = if (filterSalary.isNullOrEmpty()) null else filterSalary,
             filterDoNotShowWithoutSalary
         )
-        filterStorage.saveFilter(filter)
+        filtersInteractor.saveFilter(filter)
     }
 
     fun clearFilter() {
@@ -214,13 +212,13 @@ class FiltersViewModel(
     fun isWorkPlaceChooseButtonAvailable() = (country != null || region != null)
 
     fun getSavedFilters() {
-        val result = filtersInteractor.getSavedFilters()
-        if (result is Outcome.Error || result.data == null) return
-        filterIndustry = result.data.industry
-        filterCountry = result.data.country
-        filterRegion = result.data.region
-        filterSalary = result.data.salary
-        filterDoNotShowWithoutSalary = result.data.doNotShowWithoutSalary
+        val filter = filtersInteractor.getSavedFilters()
+        if (filter == null) return
+        filterIndustry = filter.industry
+        filterCountry = filter.country
+        filterRegion = filter.region
+        filterSalary = filter.salary
+        filterDoNotShowWithoutSalary = filter.doNotShowWithoutSalary
 
         setCountry(filterCountry)
         setRegion(filterRegion)

@@ -26,7 +26,7 @@ val uiModule = module {
     }
     
     viewModel<FiltersViewModel>{
-        FiltersViewModel(get(), get())
+        FiltersViewModel(get())
     }
 
     single<ExternalNavigator> {

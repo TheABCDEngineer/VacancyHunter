@@ -12,5 +12,7 @@ interface FilterRepository {
 
     suspend fun getRegions(parentId: Int?): Outcome<List<Area>>
 
-    fun getSavedFilters(): Outcome<Filter>
+    fun saveFilters(filter: Filter?)
+
+    fun getSavedFilters(): Filter?
 }
