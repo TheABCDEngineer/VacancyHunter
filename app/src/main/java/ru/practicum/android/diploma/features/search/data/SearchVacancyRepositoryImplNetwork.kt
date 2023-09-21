@@ -60,7 +60,7 @@ class SearchVacancyRepositoryImplNetwork(
         return ShortVacancyRequest(
            requestJob = requestJob,
            countryId = filter.country?.id.toString(),
-           regionId = if (filter.region != null) filter.region.id.toString() else null,
+           regionId = filter.region?.id?.toString(),
            industryId = filter.industry?.id,
            salary = filter.salary,
            isSalary = filter.doNotShowWithoutSalary,

@@ -24,7 +24,6 @@ import ru.practicum.android.diploma.features.vacancydetails.data.models.VacancyD
 import ru.practicum.android.diploma.root.data.DataConverter
 import ru.practicum.android.diploma.features.filters.data.FilterRepositoryImpl
 import ru.practicum.android.diploma.root.data.FilterStorageImplSharedPref
-import ru.practicum.android.diploma.root.data.StorageKeys
 import ru.practicum.android.diploma.root.data.VacancyDbConverter
 import ru.practicum.android.diploma.root.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.root.data.db.AppDatabase
@@ -33,12 +32,13 @@ import ru.practicum.android.diploma.root.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.root.data.network.ResponseProcessor
 import ru.practicum.android.diploma.root.domain.VacancyRepository
 import ru.practicum.android.diploma.features.filters.domain.FilterRepository
+import ru.practicum.android.diploma.root.ApplicationConstants
 import ru.practicum.android.diploma.root.domain.repository.FilterStorage
 
 val dataModule = module {
 
     single<AppDatabase> {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, ApplicationConstants.DATABASE_NAME)
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -55,7 +55,7 @@ val dataModule = module {
 
     single<HeadHunterApi> {
         Retrofit.Builder()
-            .baseUrl("https://api.hh.ru")
+            .baseUrl(ApplicationConstants.API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(get<OkHttpClient>())
             .build()
@@ -67,7 +67,7 @@ val dataModule = module {
     }
 
     single<SharedPreferences> {
-        androidContext().getSharedPreferences(StorageKeys.VACANCY_HUNTER_PREFERENCES, Context.MODE_PRIVATE)
+        androidContext().getSharedPreferences(ApplicationConstants.VACANCY_HUNTER_PREFERENCES_KEY, Context.MODE_PRIVATE)
     }
 
     single<VacancyDetailsMapper>  {
@@ -103,7 +103,7 @@ val dataModule = module {
     singleOf(::DataConverter).bind()
 
     singleOf(::NetworkClientImplRetrofit).bind<NetworkClient>()
-    
+
     single<FiltersMapper> {
         FiltersMapper()
     }

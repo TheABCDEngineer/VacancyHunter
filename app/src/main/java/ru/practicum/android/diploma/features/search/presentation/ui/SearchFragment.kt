@@ -20,7 +20,6 @@ import ru.practicum.android.diploma.features.search.presentation.screenState.Fil
 import ru.practicum.android.diploma.features.search.presentation.screenState.SearchScreenState
 import ru.practicum.android.diploma.features.search.presentation.screenState.SearchingCleanerState
 import ru.practicum.android.diploma.features.search.presentation.ui.model.VacancyFactoryModel
-import ru.practicum.android.diploma.features.vacancydetails.ui.VacancyDetailsFragment
 import ru.practicum.android.diploma.features.search.presentation.ui.recyclerView.VacancyAdapter
 import ru.practicum.android.diploma.util.debounce
 import ru.practicum.android.diploma.util.hideKeyboard
@@ -32,7 +31,7 @@ class SearchFragment : Fragment() {
     private val rvAdapter = VacancyAdapter(
         vacancyList = ArrayList(),
         onItemClickedAction = debounce(
-            300L,
+            CLICK_DEBOUNCE_MILLIS,
             lifecycleScope,
             false
         ) { vacancyId: String ->
@@ -105,6 +104,7 @@ class SearchFragment : Fragment() {
 
         searchingCleaner?.setOnClickListener {
             editField?.setText("")
+            binding?.vacancyFeed?.isVisible = false
             viewModel.onSearchingFieldClean()
         }
     }
@@ -134,13 +134,31 @@ class SearchFragment : Fragment() {
 
     private fun updateScreenState(state: SearchScreenState) {
         binding?.chip?.isVisible = state.isChip
-        binding?.vacancyFeed?.isVisible = state.isFeed
         binding?.progressBar?.isVisible = state.isProgressBar
         binding?.feedPlaceholder?.isVisible = state.isPlaceholder
-        if (state == SearchScreenState.SEARCHING) binding?.vacancyFeed?.layoutManager?.scrollToPosition(0)
+        if (state == SearchScreenState.SEARCHING) {
+            binding?.vacancyFeed?.isVisible = false
+            binding?.vacancyFeed?.layoutManager?.scrollToPosition(0)
+        }
+        binding?.chip?.text = when(state) {
+            SearchScreenState.EMPTY_RESULT ->
+                requireContext().getString(R.string.no_such_vacancies)
+            SearchScreenState.RESPONSE_RESULTS ->
+                requireContext().getString(R.string.found) + " " + modifyToStringVacancyQuantity(
+                    viewModel.getFoundVacancyCount()
+                )
+            SearchScreenState.SOMETHING_WENT_WRONG ->
+                requireContext().getString(R.string.something_went_wrong)
+            SearchScreenState.NO_INTERNET_CONNECTION ->
+                requireContext().getString(R.string.no_internet_connection)
+            SearchScreenState.SERVER_ERROR ->
+                requireContext().getString(R.string.server_error)
+            else -> ""
+        }
     }
 
     private fun updateFeed(model: VacancyFactoryModel) {
+        binding?.vacancyFeed?.isVisible = true
         if (model.isNewSearching) {
             rvAdapter.updateItems(model.items, model.isContinueLoading)
             return
@@ -160,5 +178,21 @@ class SearchFragment : Fragment() {
             is FilterState.Inactive -> AppCompatResources.getDrawable(requireContext(),R.drawable.filter_inactive_icon)
         }
         binding?.filterButton?.setImageDrawable(icon)
+    }
+
+    private fun modifyToStringVacancyQuantity(quantity: Int): String {
+        var ending = when (quantity.toString().takeLast(1).toInt()) {
+            1 -> requireContext().getString(R.string.vacancy_one)
+            2, 3, 4 -> requireContext().getString(R.string.vacancy_2_3_4)
+            else -> requireContext().getString(R.string.vacancy_many)
+        }
+        if (quantity.toString().takeLast(2).dropLast(1).toInt() == 1)
+            ending = requireContext().getString(R.string.vacancy_many)
+
+        return "$quantity $ending"
+    }
+
+    companion object {
+        const val CLICK_DEBOUNCE_MILLIS = 300L
     }
 }

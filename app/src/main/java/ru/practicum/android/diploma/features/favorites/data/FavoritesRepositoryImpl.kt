@@ -12,7 +12,6 @@ import ru.practicum.android.diploma.features.vacancydetails.domain.models.Vacanc
 import ru.practicum.android.diploma.root.data.VacancyDbConverter
 import ru.practicum.android.diploma.root.data.db.AppDatabase
 import ru.practicum.android.diploma.root.data.db.entity.FavVacancyEntity
-import ru.practicum.android.diploma.root.domain.model.Outcome
 
 class FavoritesRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -37,9 +36,9 @@ class FavoritesRepositoryImpl(
         return vacancyDbConverter.mapVacancyEntityToVacancyDetails(favVacancyEntity)
     }
 
-    override suspend fun getPagedFavorites(): Outcome<Flow<PagingData<VacancyShortDomainModel>>> {
+    override suspend fun getPagedFavorites(): Flow<PagingData<VacancyShortDomainModel>> {
         val flowPagedEntities = Pager(
-            PagingConfig(pageSize = 20, enablePlaceholders = false)
+            PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false)
         ){
             appDatabase.favVacancyDao().getPagedFavorites()
         }.flow
@@ -48,7 +47,7 @@ class FavoritesRepositoryImpl(
                 vacancyDbConverter.mapVacancyEntityToVacancyShort(it)
             }
         }
-        return Outcome.Success(data = flowPagedVacancies)
+        return flowPagedVacancies
     }
 
     private fun convertToVacancyEntity(vacancy: VacancyDetails): FavVacancyEntity {
@@ -58,6 +57,8 @@ class FavoritesRepositoryImpl(
     companion object {
         private const val NUMBER_OF_LINES_WHEN_OPERATION_FAILED = 0
         private const val CODE_WHEN_INSERT_FAILED = -1L
+
+        private const val PAGE_SIZE = 20
     }
 
 }

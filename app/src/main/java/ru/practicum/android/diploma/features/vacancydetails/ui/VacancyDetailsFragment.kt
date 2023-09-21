@@ -230,13 +230,14 @@ class VacancyDetailsFragment : Fragment() {
 
     private fun setPhonesAdapter(vacancy: VacancyDetailsUiModel) {
         onListItemClickDebounce = debounce<String>(
-            CLICK_DEBOUNCE_DELAY_MILLIS,
-            viewLifecycleOwner.lifecycleScope,
-            true
-        ) { phoneNumber ->
-            val intent = externalNavigator.getDialIntent(phoneNumber)
-            tryStartActivity(intent)
-        }
+            delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = true,
+            action = { phoneNumber ->
+                val intent = externalNavigator.getDialIntent(phoneNumber)
+                tryStartActivity(intent)
+            }
+        )
 
         phonesAdapter = PhonesAdapter(
             phones = vacancy.contactsPhones,
