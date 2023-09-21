@@ -59,7 +59,6 @@ class SearchFragment : Fragment() {
         }
         configureObservers()
         configureSearchingField()
-        viewModel.setStringValues(requireContext())
     }
 
     override fun onResume() {
@@ -141,6 +140,21 @@ class SearchFragment : Fragment() {
             binding?.vacancyFeed?.isVisible = false
             binding?.vacancyFeed?.layoutManager?.scrollToPosition(0)
         }
+        binding?.chip?.text = when(state) {
+            SearchScreenState.EMPTY_RESULT ->
+                requireContext().getString(R.string.no_such_vacancies)
+            SearchScreenState.RESPONSE_RESULTS ->
+                requireContext().getString(R.string.found) + " " + modifyToStringVacancyQuantity(
+                    viewModel.getFoundVacancyCount()
+                )
+            SearchScreenState.SOMETHING_WENT_WRONG ->
+                requireContext().getString(R.string.something_went_wrong)
+            SearchScreenState.NO_INTERNET_CONNECTION ->
+                requireContext().getString(R.string.no_internet_connection)
+            SearchScreenState.SERVER_ERROR ->
+                requireContext().getString(R.string.server_error)
+            else -> ""
+        }
     }
 
     private fun updateFeed(model: VacancyFactoryModel) {
@@ -164,6 +178,18 @@ class SearchFragment : Fragment() {
             is FilterState.Inactive -> AppCompatResources.getDrawable(requireContext(),R.drawable.filter_inactive_icon)
         }
         binding?.filterButton?.setImageDrawable(icon)
+    }
+
+    private fun modifyToStringVacancyQuantity(quantity: Int): String {
+        var ending = when (quantity.toString().takeLast(1).toInt()) {
+            1 -> requireContext().getString(R.string.vacancy_one)
+            2, 3, 4 -> requireContext().getString(R.string.vacancy_2_3_4)
+            else -> requireContext().getString(R.string.vacancy_many)
+        }
+        if (quantity.toString().takeLast(2).dropLast(1).toInt() == 1)
+            ending = requireContext().getString(R.string.vacancy_many)
+
+        return "$quantity $ending"
     }
 
     companion object {

@@ -29,5 +29,9 @@ enum class SearchScreenState (
 
     NO_INTERNET_CONNECTION(
         isChip = true
+    ),
+
+    SERVER_ERROR(
+        isChip = true
     )
 }

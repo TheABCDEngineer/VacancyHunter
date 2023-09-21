@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.features.search.presentation.viewModel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.features.search.data.StringContainer
 import ru.practicum.android.diploma.features.search.domain.interactor.VacancyFactoryInteractor
 import ru.practicum.android.diploma.features.search.presentation.screenState.FilterState
 import ru.practicum.android.diploma.features.search.presentation.screenState.SearchScreenState
@@ -85,9 +83,7 @@ class SearchViewModel(
         searchingCleanerState.postValue(SearchingCleanerState.INACTIVE)
     }
 
-    fun setStringValues(context: Context) {
-        StringContainer.setValues(context)
-    }
+    fun getFoundVacancyCount() = vacancyFactory.getVacancyCount()
 
     private fun runSearching(delay: Long, action: suspend() -> Outcome<VacancyFactoryModel>) {
         searchJob?.cancel()
@@ -131,47 +127,26 @@ class SearchViewModel(
 
     private fun provideScreenState(networkResultCode: NetworkResultCode, model: VacancyFactoryModel? = null) {
         var screenState = SearchScreenState.RESPONSE_RESULTS
-        var chipMessage = ""
 
         when (networkResultCode) {
             NetworkResultCode.SUCCESS -> {
                 if (model ==  null) return
-                chipMessage =
-                    StringContainer.found + " " + modifyToStringVacancyQuantity(
-                        vacancyFactory.getVacancyCount()
-                    )
+
                 screenState = SearchScreenState.RESPONSE_RESULTS
 
                 if (model.items.isEmpty() && model.isNewSearching) {
                     screenState = SearchScreenState.EMPTY_RESULT
-                    chipMessage = StringContainer.no_such_vacancies
                 }
             }
-            NetworkResultCode.SERVER_ERROR -> {
+            NetworkResultCode.SERVER_ERROR ->
                 screenState = SearchScreenState.SOMETHING_WENT_WRONG
-                chipMessage = StringContainer.server_error
-            }
-            NetworkResultCode.CONNECTION_ERROR -> {
+            NetworkResultCode.CONNECTION_ERROR ->
                 screenState = SearchScreenState.NO_INTERNET_CONNECTION
-                chipMessage = StringContainer.no_internet_connection
-            }
-            NetworkResultCode.UNKNOWN_ERROR -> {
+            NetworkResultCode.UNKNOWN_ERROR ->
                 screenState = SearchScreenState.SOMETHING_WENT_WRONG
-                chipMessage = StringContainer.something_went_wrong
-            }
         }
 
         this.searchScreenState.postValue(screenState)
-        this.chipMessage.postValue(chipMessage)
-    }
-
-    private fun modifyToStringVacancyQuantity(quantity: Int): String {
-        val ending = when (quantity.toString().takeLast(1).toInt()) {
-            1 -> StringContainer.vacancies.one
-            2, 3, 4 -> StringContainer.vacancies.many
-            else -> StringContainer.vacancies.other
-        }
-        return "$quantity $ending"
     }
 
     companion object {
